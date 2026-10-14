@@ -1,4 +1,5 @@
 import {ratingVisibility} from './rating-visibility.mjs';
+import {armoryStore} from './armory.mjs';
 import {clientIP} from './client-ip.mjs';
 import {adminAction,adminView,heartbeat,monitor} from './operations.mjs';
 import {combatStats} from './combat.mjs';
@@ -31,6 +32,7 @@ CREATE TABLE IF NOT EXISTS worlds(id TEXT PRIMARY KEY, body TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS sessions(id TEXT PRIMARY KEY, body TEXT NOT NULL, expires INTEGER NOT NULL);
 CREATE TABLE IF NOT EXISTS login_states(id TEXT PRIMARY KEY, return_to TEXT NOT NULL, expires INTEGER NOT NULL);
 CREATE TABLE IF NOT EXISTS nonces(id TEXT PRIMARY KEY, expires INTEGER NOT NULL);`);
+const armory=armoryStore(db);
 const hash=x=>createHash('sha256').update(x).digest('hex'),random=()=>randomBytes(32).toString('hex');
 function world(id){const row=db.prepare('SELECT body FROM worlds WHERE id=?').get(id);const s=row?JSON.parse(row.body):game.empty();s.matchFormat=MATCH_FORMAT;s.ratingRule=id==='ranked'?'blmm-class-v1':'elo-team-v1';return s;}
 function save(id,s){db.prepare('INSERT INTO worlds VALUES(?,?) ON CONFLICT(id) DO UPDATE SET body=excluded.body').run(id,JSON.stringify(s));}
@@ -86,17 +88,23 @@ assets['/calradia-banner.png']='calradia-banner.png';
 for(const map of game.IDLE_MAPS)assets[map.image]=map.image.slice(1);
 for(const name of ['Joker','Peasant','Guard','Knight','MasterKnight','Lord','Duke','Prince','King','Emperor'])assets['/ranks/tarot/'+name+'.png']='ranks/tarot/'+name+'.png';
 assets['/image-assets.js']='image-assets.js';
+for(const file of ['armory.js','armory.css','armory-catalog.json'])assets['/'+file]=file;
 const immutableImages=new Set([...Object.values(imageAssets.backgrounds),...Object.values(imageAssets.ranks).flatMap(Object.values),...Object.values(imageAssets.maps)]);
 for(const url of immutableImages)assets[url]=url.slice(1);
 assets['/fonts/unifrakturcook-latin.woff2']='fonts/unifrakturcook-latin.woff2';
 assets['/fonts/OFL.txt']='fonts/OFL.txt';
-const types={woff2:'font/woff2',txt:'text/plain; charset=utf-8',webp:'image/webp',jpg:'image/jpeg',png:'image/png',html:'text/html; charset=utf-8',js:'text/javascript; charset=utf-8',css:'text/css; charset=utf-8',svg:'image/svg+xml'};
+const types={json:'application/json; charset=utf-8',woff2:'font/woff2',txt:'text/plain; charset=utf-8',webp:'image/webp',jpg:'image/jpeg',png:'image/png',html:'text/html; charset=utf-8',js:'text/javascript; charset=utf-8',css:'text/css; charset=utf-8',svg:'image/svg+xml'};
 export const server=http.createServer(async(req,res)=>{
  res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','same-origin');res.setHeader('X-Frame-Options','DENY');
  res.setHeader('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://avatars.steamstatic.com https://avatars.akamai.steamstatic.com https://avatars.cloudflare.steamstatic.com; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self' https://steamcommunity.com");
  try{
   rate(req);const url=new URL(req.url,ORIGIN),ses=session(req),p=url.pathname;
   if(req.method==='GET'&&p==='/api/state')return json(res,200,view(ses));
+  if(p==='/api/armory'){
+   if(ses?.mode!=='ranked')game.fail('请先使用 Steam 登录',401);
+   if(req.method==='GET')return json(res,200,{classes:armory.get(ses.userId)});
+   if(req.method==='POST'){protectedPost(req,ses);return json(res,200,{classes:armory.save(ses.userId,await body(req))});}
+  }
   if(p.startsWith('/api/admin/')){
    if(!isAdmin(ses))game.fail('仅站点管理员可以操作',403);
    if(req.method==='GET'&&p==='/api/admin/state')return json(res,200,adminView(world('ranked')));
@@ -126,6 +134,7 @@ export const server=http.createServer(async(req,res)=>{
   if(p.startsWith('/api/bridge/')){
    const token=process.env.BRIDGE_TOKEN||'',supplied=(req.headers.authorization||'').replace(/^Bearer /,'');
    if(token.length<32||!timingSafeEqual(Buffer.from(hash(supplied)),Buffer.from(hash(token))))game.fail('Unauthorized bridge',401);
+   if(req.method==='POST'&&p==='/api/bridge/armory'){const b=await body(req);return json(res,200,{profiles:armory.batch(b.ids)});}
    if(req.method==='POST'&&p==='/api/bridge/heartbeat'){const b=await body(req);return json(res,200,mutate('ranked',s=>heartbeat(s,b)));}
    if(req.method==='GET'&&p==='/api/bridge/jobs')return json(res,200,world('ranked').matches.filter(m=>m.phase==='awaiting_server').sort((a,b)=>a.createdAt-b.createdAt||(a.number||0)-(b.number||0)).map(game.job));
    if(req.method==='POST'&&p==='/api/bridge/claim'){const b=await body(req);return json(res,200,mutate('ranked',s=>game.claim(s,b)));}

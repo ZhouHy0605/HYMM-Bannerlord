@@ -21,6 +21,7 @@
 !/public/*.js
 !/public/*.css
 !/public/index.html
+!/public/armory-catalog.json
 !/public/favicon.svg
 !/public/calradia-banner.png
 !/public/fonts/
@@ -60,6 +61,9 @@
 !/deploy/build-images.mjs
 !/deploy/Collect-Diagnostics.ps1
 !/deploy/Caddyfile.example
+!/tools/
+/tools/*
+!/tools/export-armory.py
 
 **/node_modules/
 **/bin/

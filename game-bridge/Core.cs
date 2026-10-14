@@ -9,6 +9,7 @@ public sealed class Config
     public string ServerId { get; set; } = "skirmish-1";
     public string Token { get; set; } = "";
     public int ArrivalTimeoutSeconds { get; set; } = 300;
+    public bool EnableArmory {get;set;} = false;
     public string[] JoinMessages {get;set;}=Array.Empty<string>();
     // Explicit pool excludes native developer scenes; custom entries must also be registered.
     public string[] IdleMaps {get;set;}=new[]{"mp_skirmish_map_002f","mp_skirmish_map_003_skinc","mp_skirmish_map_010","mp_skirmish_map_007","mp_skirmish_map_008_skin","mp_skirmish_map_009","mp_skirmish_map_014","mp_skirmish_map_020"};
@@ -218,10 +219,16 @@ public sealed class Transport : IDisposable
         return JsonSerializer.Deserialize<Job>(await claimed.Content.ReadAsStringAsync(),Json);
     }
     public void Dispose()=>http.Dispose();
+    public async Task<Dictionary<string,Dictionary<string,string[]>>> FetchArmory(string[] ids)
+    {
+        using var response=await http.PostAsync("api/bridge/armory",Content(new{ids}));
+        response.EnsureSuccessStatusCode();
+        return JsonSerializer.Deserialize<ArmoryReply>(await response.Content.ReadAsStringAsync(),Json)?.Profiles??new();
+    }
     void PollHeartbeat()
     {
         if(heartbeat?.IsCompleted==true){try{using var response=heartbeat.GetAwaiter().GetResult();if(response.IsSuccessStatusCode){var payload=JsonSerializer.Deserialize<ControlReply>(response.Content.ReadAsStringAsync().GetAwaiter().GetResult(),Json);if(payload?.Control!=null&&payload.Control.Id!=State.LastControlId)Control=payload.Control;}}catch(Exception e){log("Heartbeat retry: "+e.GetType().Name);}heartbeat=null;}
-        if(heartbeat==null&&DateTime.UtcNow>=nextHeartbeat){nextHeartbeat=DateTime.UtcNow.AddSeconds(5);heartbeat=http.PostAsync("api/bridge/heartbeat",Content(new{serverId=Config.ServerId,matchId=State.Active?.MatchId,blocked=State.Blocked!=null,version="arena-0.4.3",ackId=State.LastControlId,idleMapSupported=true,currentMap=CurrentMap,controlResult=State.ControlResult,controlError=State.ControlError}));}
+        if(heartbeat==null&&DateTime.UtcNow>=nextHeartbeat){nextHeartbeat=DateTime.UtcNow.AddSeconds(5);heartbeat=http.PostAsync("api/bridge/heartbeat",Content(new{serverId=Config.ServerId,matchId=State.Active?.MatchId,blocked=State.Blocked!=null,version="arena-0.4.4",ackId=State.LastControlId,idleMapSupported=true,currentMap=CurrentMap,controlResult=State.ControlResult,controlError=State.ControlError}));}
     }
     public void CompleteMapControl(StopCommand command,string? error=null){State.LastControlId=command.Id;State.ControlResult=error==null?"ok":"failed";State.ControlError=error;Save();Control=null;nextHeartbeat=DateTime.MinValue;}
     public bool AcknowledgeStop(StopCommand command)
@@ -235,3 +242,4 @@ public sealed class Transport : IDisposable
 }
 public sealed class StopCommand{public string Id {get;set;}="";public string MatchId{get;set;}="";public string Type{get;set;}="";public string Map{get;set;}="";public long ExpiresAt{get;set;}}
 public sealed class ControlReply{public StopCommand? Control{get;set;}}
+public sealed class ArmoryReply{public Dictionary<string,Dictionary<string,string[]>> Profiles{get;set;}=new();}

@@ -19,7 +19,7 @@ public sealed class SubModule : MBSubModuleBase
             logPath=Path.Combine(Path.GetDirectoryName(configPath)!,"bridge.log");
             var config=JsonSerializer.Deserialize<Config>(File.ReadAllText(configPath),Transport.Json)!;
             Link=new Transport(config,Path.Combine(Path.GetDirectoryName(configPath)!,"bridge-state.json"),Log);
-            Log("Loaded v0.4.3; custom ranked map registration; native scoreboard ADR; native Skirmish round duration; disconnects do not interrupt play; arrival timeout="+config.ArrivalTimeoutSeconds+"s; asynchronous map preparation, in-place halftime, combat v2; explicit identity mappings="+config.GameIdToSteamId.Count);
+            Log("Loaded v0.4.4; custom ranked map registration; native scoreboard ADR; native Skirmish round duration; disconnects do not interrupt play; arrival timeout="+config.ArrivalTimeoutSeconds+"s; asynchronous map preparation, in-place halftime, combat v2; explicit identity mappings="+config.GameIdToSteamId.Count);
         }
         catch(Exception e){Log("DISABLED: "+e.Message);}
     }
@@ -36,6 +36,7 @@ public sealed class SubModule : MBSubModuleBase
         mission.AddMissionBehavior(selector);
         selector.OnAfterMissionCreated(); // The mission creation callback has already run.
         if(Link!=null){mission.AddMissionBehavior(new ArenaBehavior(Link));mission.AddMissionBehavior(new ServerNotices(Link.Config));}
+        if(Link?.Config.EnableArmory==true)mission.AddMissionBehavior(new Armory(Link));
         Log("Team selection installed; idle free play, ranked roster enforcement");
     }
     internal static void Log(string s)

@@ -5,6 +5,7 @@
 - UnifrakturCook 字体保留 `public/fonts/OFL.txt` 和 `licenses/UnifrakturCook-OFL.txt`。
 - `public/media/castle-*`、`campaign-map.*`、`calradia-banner.*`、`sidebar-war-banner-v1.webp` 以及 `public/calradia-banner.png` 是项目使用的 AI 生成装饰背景。
 - `public/maps/*.svg` 是项目生成的地图布局示意图，并非可游玩场景。
+- `public/armory-catalog.json` 是由本机原版 XML 导出的物品 ID、中文名称和兵种适配元数据；`tools/export-armory.py` 可重新生成。军械库的 SVG 是部位示意，不包含游戏模型、贴图或截图。
 - 不随仓库分发：游戏提取的原版地图加载图片、第三方段位插画及其压缩版本、游戏 DLL、自定义地图包。
 
 段位参考图来自 `Oshibuki/client`，本地来源记录未确认其分发许可，因此原图和衍生 WebP 均排除。原版地图加载图取自本地 Bannerlord 安装，也未随仓库分发。

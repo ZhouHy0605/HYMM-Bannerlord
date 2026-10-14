@@ -1,0 +1,4610 @@
+{
+  "version": 1,
+  "sourceHash": "5de552078a32f8ab4f00f71dd7e14b7d3a69731b2369bf582135ac99a3b665e1",
+  "cultures": [
+    {
+      "id": "empire",
+      "name": "帝国"
+    },
+    {
+      "id": "vlandia",
+      "name": "瓦兰迪亚"
+    },
+    {
+      "id": "sturgia",
+      "name": "斯特吉亚"
+    },
+    {
+      "id": "battania",
+      "name": "巴旦尼亚"
+    },
+    {
+      "id": "aserai",
+      "name": "阿塞莱"
+    },
+    {
+      "id": "khuzait",
+      "name": "库赛特"
+    }
+  ],
+  "slots": [
+    {
+      "id": "Head",
+      "name": "头部"
+    },
+    {
+      "id": "Body",
+      "name": "上身"
+    },
+    {
+      "id": "Cape",
+      "name": "肩部"
+    },
+    {
+      "id": "Gloves",
+      "name": "手部"
+    },
+    {
+      "id": "Leg",
+      "name": "腿部"
+    }
+  ],
+  "classes": [
+    {
+      "id": "mp_light_infantry_vlandia",
+      "name": "征召农民",
+      "culture": "vlandia",
+      "group": "Infantry",
+      "items": [
+        "mp_cloth_tunic",
+        "mp_aketon",
+        "mp_sackcloth_tunic",
+        "mp_arming_coif",
+        "mp_cloth_headwrap",
+        "mp_laced_coif",
+        "mp_open_padded_coif",
+        "mp_padded_cap",
+        "mp_padded_coif",
+        "mp_padded_leather_cape",
+        "mp_padded_leather_shoulders",
+        "mp_battania_woodland_cloak",
+        "mp_leather_cavalier_boots",
+        "mp_leather_gloves",
+        "mp_padded_mitten",
+        "mp_fine_town_boots",
+        "mp_folded_town_boots"
+      ],
+      "defaults": {
+        "Body": "平民衬衫",
+        "Head": "皮帽",
+        "Leg": "骏骑兵靴"
+      }
+    },
+    {
+      "id": "mp_shock_infantry_vlandia",
+      "name": "刎戟兵",
+      "culture": "vlandia",
+      "group": "Infantry",
+      "items": [
+        "mp_padded_short_coat",
+        "mp_gambeson_b",
+        "mp_padded_coat",
+        "mp_padded_leather_shirt",
+        "mp_sleeveless_padded_coat",
+        "mp_banded_leather_over_mail",
+        "mp_peaked_helmet_over_padded_cloth",
+        "mp_peaked_helmet_over_laced_coif",
+        "mp_peaked_helmet_over_mail",
+        "mp_peaked_helmet_over_mail_coif",
+        "mp_segmented_skullcap_over_mail_coif",
+        "mp_cervelliere_over_arming_coif",
+        "mp_cervelliere_over_padded_cap",
+        "mp_nasal_cervelliere_over_laced_coif",
+        "mp_nasal_cervelliere_over_mail_coif",
+        "mp_nasal_cervelliere_over_padded_cap",
+        "mp_nasal_cervelliere_over_padded_coif",
+        "mp_segmented_cervelliere_over_laced_coif",
+        "mp_segmented_cervelliere_over_mail",
+        "mp_segmented_cervelliere_over_mail_coif",
+        "mp_segmented_skullcap_over_padded_cloth",
+        "mp_segmented_skullcap_over_padded_coif",
+        "mp_padded_leather_shoulders",
+        "mp_battania_woodland_cloak",
+        "mp_mail_cavalier_boots",
+        "mp_segmented_cervelliere_over_padded_cloth",
+        "mp_pauldron_cape_b",
+        "mp_mail_mitten",
+        "mp_reinforced_padded_mitten",
+        "mp_fine_town_boots",
+        "mp_empire_horseman_boots",
+        "mp_folded_town_boots",
+        "mp_plated_strip_boots",
+        "mp_mail_chausses",
+        "mp_eastern_leather_boots",
+        "mp_khuzait_curved_boots",
+        "mp_leather_boots",
+        "mp_steppe_leather_boots",
+        "mp_strapped_mail_chausses"
+      ],
+      "defaults": {
+        "Head": "分段头盖盔衬系带围帽",
+        "Body": "无袖填充短摆外套",
+        "Leg": "皮制骑兵靴",
+        "Gloves": "填充连指手套"
+      }
+    },
+    {
+      "id": "mp_heavy_infantry_vlandia",
+      "name": "军士",
+      "culture": "vlandia",
+      "group": "Infantry",
+      "items": [
+        "mp_white_coat_over_mail",
+        "mp_hauberk",
+        "mp_full_helm_over_padded_cloth",
+        "mp_western_crowned_plated_helmet",
+        "mp_visored_helmet_over_mail_coif",
+        "mp_padded_leather_shoulders",
+        "mp_battania_woodland_cloak",
+        "mp_lordly_mail_mitten",
+        "mp_reinforced_mail_mitten",
+        "mp_mail_cavalier_boots",
+        "mp_pauldron_cape_b",
+        "mp_fine_town_boots",
+        "mp_empire_horseman_boots",
+        "mp_folded_town_boots",
+        "mp_plated_strip_boots",
+        "mp_mail_chausses",
+        "mp_eastern_leather_boots",
+        "mp_khuzait_curved_boots",
+        "mp_leather_boots",
+        "mp_steppe_leather_boots",
+        "mp_strapped_mail_chausses"
+      ],
+      "defaults": {
+        "Head": "全覆盔衬填充帽",
+        "Body": "瓦兰迪亚锁甲",
+        "Leg": "皮制骑兵靴",
+        "Gloves": "链甲连指手套"
+      }
+    },
+    {
+      "id": "mp_light_ranged_vlandia",
+      "name": "劲弩手",
+      "culture": "vlandia",
+      "group": "Ranged",
+      "items": [
+        "mp_aketon",
+        "mp_leather_coat_over_cloth",
+        "mp_long_hemp_tunic",
+        "mp_guards_kettle_over_laced_coif",
+        "mp_spangenhelm_with_padded_cloth",
+        "mp_spangenhelm_with_leather",
+        "mp_kettle_helmet_with_leather",
+        "mp_guards_kettle_over_padded_coif",
+        "mp_kettle_hat_over_padded_cloth",
+        "mp_kettle_hat_over_padded_coif",
+        "mp_leather_cavalier_boots",
+        "mp_leather_gloves",
+        "mp_guarded_padded_vambrace",
+        "mp_fine_town_boots",
+        "mp_folded_town_boots"
+      ],
+      "defaults": {
+        "Head": "锅盔衬填充布",
+        "Body": "廉价填充衣",
+        "Leg": "骏骑兵靴"
+      }
+    },
+    {
+      "id": "mp_heavy_ranged_vlandia",
+      "name": "狙击弩手",
+      "culture": "vlandia",
+      "group": "Ranged",
+      "items": [
+        "mp_hauberk",
+        "mp_nordic_sloven_over_mail",
+        "mp_sturgian_fortified_armor",
+        "mp_banded_leather_over_mail",
+        "mp_guards_kettle_over_laced_coif",
+        "mp_guards_kettle_over_mail_coif",
+        "mp_kettle_helmet_with_leather",
+        "mp_guards_kettle_over_padded_coif",
+        "mp_kettle_hat_over_padded_cloth",
+        "mp_kettle_hat_over_padded_coif",
+        "mp_kettle_helmet_over_arming_coif",
+        "mp_kettle_hat_over_mail_coif",
+        "mp_kettle_helmet_over_laced_coif",
+        "mp_kettle_helmet_over_padded_cap",
+        "mp_kettle_helmet_over_padded_cloth",
+        "mp_kettle_helmet_over_padded_coif",
+        "mp_padded_leather_shoulders",
+        "mp_battania_woodland_cloak",
+        "mp_mail_cavalier_boots",
+        "mp_pauldron_cape_b",
+        "mp_guarded_padded_vambrace",
+        "mp_mail_mitten",
+        "mp_fine_town_boots",
+        "mp_empire_horseman_boots",
+        "mp_folded_town_boots",
+        "mp_plated_strip_boots",
+        "mp_mail_chausses",
+        "mp_eastern_leather_boots",
+        "mp_khuzait_curved_boots",
+        "mp_leather_boots",
+        "mp_steppe_leather_boots",
+        "mp_strapped_mail_chausses"
+      ],
+      "defaults": {
+        "Head": "锅盔衬链甲",
+        "Body": "链甲衫",
+        "Gloves": "皮手套",
+        "Leg": "皮制骑兵靴"
+      }
+    },
+    {
+      "id": "mp_light_cavalry_vlandia",
+      "name": "先锋骑兵",
+      "culture": "vlandia",
+      "group": "Cavalry",
+      "items": [
+        "mp_leather_scale_armor",
+        "mp_nordic_sloven_leather",
+        "mp_veteran_mercenary_armor",
+        "mp_nasal_helmet_over_cloth_headwrap",
+        "mp_nasal_helmet_over_mail",
+        "mp_nasal_helmet_over_mail_coif",
+        "mp_nasal_helmet_over_padded_cloth",
+        "mp_nasal_helmet_over_padded_coif",
+        "mp_hood",
+        "mp_mail_cavalier_boots",
+        "mp_pauldron_cape_b",
+        "mp_guarded_padded_vambrace",
+        "mp_reinforced_padded_mitten",
+        "mp_fine_town_boots",
+        "mp_empire_horseman_boots",
+        "mp_folded_town_boots",
+        "mp_plated_strip_boots",
+        "mp_mail_chausses",
+        "mp_studded_leather_over_aketon",
+        "mp_eastern_leather_boots",
+        "mp_khuzait_curved_boots",
+        "mp_leather_boots",
+        "mp_steppe_leather_boots",
+        "mp_strapped_mail_chausses"
+      ],
+      "defaults": {
+        "Head": "护鼻盔衬系带围帽",
+        "Body": "多层束腰皮衣",
+        "Leg": "皮制骑兵靴"
+      }
+    },
+    {
+      "id": "mp_heavy_cavalry_vlandia",
+      "name": "骑士",
+      "culture": "vlandia",
+      "group": "Cavalry",
+      "items": [
+        "mp_vlandia_chainmail",
+        "mp_coat_of_plates_over_mail",
+        "mp_hauberk",
+        "mp_nasal_helmet_over_cloth_headwrap",
+        "mp_nasal_helmet_over_laced_coif",
+        "mp_nasal_helmet_over_mail",
+        "mp_nasal_helmet_over_mail_coif",
+        "mp_nasal_helmet_over_padded_cloth",
+        "mp_nasal_helmet_over_padded_coif",
+        "mp_western_crowned_plated_helmet",
+        "mp_visored_helmet_over_mail_coif",
+        "mp_visored_helmet_over_laced_coif",
+        "mp_visored_helmet_over_padded_cloth",
+        "mp_visored_helmet_over_padded_coif",
+        "mp_vlandian_faceguard_helmet_a",
+        "mp_vlandian_faceguard_helmet_b",
+        "mp_padded_leather_shoulders",
+        "mp_battania_woodland_cloak",
+        "mp_lordly_mail_mitten",
+        "mp_reinforced_mail_mitten",
+        "mp_pauldron_cape_b",
+        "mp_mail_chausses",
+        "mp_strapped_mail_chausses"
+      ],
+      "defaults": {
+        "Head": "尖顶头盖盔衬链甲",
+        "Body": "白罩袍衬链铠",
+        "Gloves": "链甲连指手套",
+        "Leg": "链甲骑兵靴"
+      }
+    },
+    {
+      "id": "mp_skirmisher_empire",
+      "name": "新兵",
+      "culture": "empire",
+      "group": "Infantry",
+      "items": [
+        "mp_leather_cavalier_boots",
+        "mp_empire_short_dress",
+        "mp_empire_warrior_padded_armor_f",
+        "mp_empire_warrior_padded_armor_d",
+        "mp_merchants_hat",
+        "mp_leather_cap",
+        "mp_padded_vambrace",
+        "mp_padded_mitten",
+        "mp_fine_town_boots",
+        "mp_folded_town_boots"
+      ],
+      "defaults": {
+        "Body": "垫肩束腰衣",
+        "Leg": "骏骑兵靴",
+        "Head": "系带围帽"
+      }
+    },
+    {
+      "id": "mp_shock_infantry_empire",
+      "name": "双刃枪兵",
+      "culture": "empire",
+      "group": "Infantry",
+      "items": [
+        "mp_leather_cavalier_boots",
+        "mp_mail_cavalier_boots",
+        "mp_empire_warrior_padded_armor_c",
+        "mp_empire_legion_a",
+        "mp_imperial_mail_over_stripped_leather",
+        "mp_roundkettle_over_imperial_cloth",
+        "mp_ironlame_nasalhelm_over_imperial_mail",
+        "mp_segmented_cervelliere_over_padded_cloth",
+        "mp_ironlame_roundkettle_over_imperial_mail",
+        "mp_varangian_bra_basic",
+        "mp_varangian_bra_padded",
+        "mp_varangian_bra_scale",
+        "mp_varangian_bra_royal",
+        "mp_pauldron_cape_a",
+        "mp_leather_gloves",
+        "mp_padded_vambrace",
+        "mp_padded_mitten",
+        "mp_guarded_padded_vambrace",
+        "mp_reinforced_padded_mitten",
+        "mp_a_battania_cloak_a",
+        "mp_khuzait_curved_boots"
+      ],
+      "defaults": {
+        "Body": "辅兵甲配扎带",
+        "Leg": "皮靴"
+      }
+    },
+    {
+      "id": "mp_heavy_infantry_empire",
+      "name": "军团步兵",
+      "culture": "empire",
+      "group": "Infantry",
+      "items": [
+        "mp_mail_cavalier_boots",
+        "mp_imperial_lamellar_over_leather",
+        "mp_northern_brass_lamellar_over_mail",
+        "mp_lamellar_with_scale_skirt",
+        "mp_mail_shirt",
+        "mp_heavy_nasalhelm_over_imperial_mail",
+        "mp_empire_battle_crown_west",
+        "mp_plumed_helmet",
+        "mp_lamellar_plate_gauntlets",
+        "mp_decorated_imperial_gauntlets",
+        "mp_plated_strip_gauntlets",
+        "mp_decorated_imperial_boots",
+        "mp_lamellar_plate_boots",
+        "mp_strapped_mail_chausses"
+      ],
+      "defaults": {
+        "Head": "铁制鼻护盔衬链甲",
+        "Body": "军团链甲",
+        "Leg": "链甲护腿",
+        "Gloves": "强化皮护臂"
+      }
+    },
+    {
+      "id": "mp_light_ranged_empire",
+      "name": "民兵射手",
+      "culture": "empire",
+      "group": "Ranged",
+      "items": [
+        "mp_leather_cavalier_boots",
+        "mp_tunic_with_rolled_cloth",
+        "mp_leather_tunic",
+        "mp_imperial_robes",
+        "mp_laced_cloth_coif",
+        "mp_leather_gloves",
+        "mp_guarded_padded_vambrace",
+        "mp_fine_town_boots",
+        "mp_folded_town_boots"
+      ],
+      "defaults": {
+        "Body": "军用束腰衣",
+        "Leg": "骏骑兵靴",
+        "Head": "皮制围帽"
+      }
+    },
+    {
+      "id": "mp_heavy_ranged_empire",
+      "name": "禁卫射手",
+      "culture": "empire",
+      "group": "Ranged",
+      "items": [
+        "mp_imperial_scale_armor",
+        "mp_imperial_mail_over_leather",
+        "mp_mail_coif",
+        "mp_ironlame_roundkettle_over_imperial_mail",
+        "mp_varangian_bra_basic",
+        "mp_varangian_bra_padded",
+        "mp_varangian_bra_scale",
+        "mp_varangian_bra_royal",
+        "mp_pauldron_cape_a",
+        "mp_lamellar_plate_gauntlets",
+        "mp_decorated_imperial_gauntlets",
+        "mp_plated_strip_gauntlets",
+        "mp_decorated_imperial_boots",
+        "mp_a_battania_cloak_a",
+        "mp_mail_chausses"
+      ],
+      "defaults": {
+        "Head": "开面链甲围帽",
+        "Body": "步兵链甲背心",
+        "Gloves": "强化皮护臂",
+        "Leg": "优质市民靴"
+      }
+    },
+    {
+      "id": "mp_light_cavalry_empire",
+      "name": "骏骑兵",
+      "culture": "empire",
+      "group": "Cavalry",
+      "items": [
+        "mp_mail_cavalier_boots",
+        "mp_imperial_lamellar_over_leather",
+        "mp_eastern_studded_leather",
+        "mp_empire_legion_b",
+        "mp_ironlame_roundkettle_over_imperial_mail",
+        "mp_ironlame_feathered_spangenhelm_over_mail",
+        "mp_helmet_with_faceguard",
+        "mp_varangian_bra_basic",
+        "mp_varangian_bra_padded",
+        "mp_varangian_bra_scale",
+        "mp_varangian_bra_royal",
+        "mp_pauldron_cape_a",
+        "mp_guarded_padded_vambrace",
+        "mp_mail_mitten",
+        "mp_fine_town_boots",
+        "mp_empire_horseman_boots",
+        "mp_folded_town_boots",
+        "mp_plated_strip_boots",
+        "mp_a_battania_cloak_a",
+        "mp_mail_chausses",
+        "mp_eastern_leather_boots",
+        "mp_khuzait_curved_boots",
+        "mp_leather_boots",
+        "mp_steppe_leather_boots",
+        "mp_strapped_mail_chausses"
+      ],
+      "defaults": {
+        "Head": "分段碗盔衬填充布",
+        "Body": "帝国皮甲",
+        "Gloves": "皮手套",
+        "Leg": "皮制骑兵靴"
+      }
+    },
+    {
+      "id": "mp_heavy_cavalry_empire",
+      "name": "具装骑兵",
+      "culture": "empire",
+      "group": "Cavalry",
+      "items": [
+        "mp_northern_brass_lamellar_over_mail",
+        "mp_lamellar_with_scale_skirt",
+        "mp_empire_battle_crown_north",
+        "mp_imperial_lamellar_shoulders",
+        "mp_varangian_bra_scale",
+        "mp_varangian_bra_royal",
+        "mp_pauldron_cape_a",
+        "mp_decorated_imperial_gauntlets",
+        "mp_plated_strip_gauntlets",
+        "mp_plated_strip_boots",
+        "mp_decorated_imperial_boots"
+      ],
+      "defaults": {
+        "Head": "帝国眼眶盔",
+        "Body": "具装骑兵扎甲",
+        "Gloves": "扎板臂铠",
+        "Leg": "扎板靴"
+      }
+    },
+    {
+      "id": "mp_light_infantry_khuzait",
+      "name": "杂牌军",
+      "culture": "khuzait",
+      "group": "Infantry",
+      "items": [
+        "mp_buttoned_leather_bracers",
+        "mp_khuzait_leather_stitched",
+        "mp_plumed_fur_lined_helmet",
+        "mp_upturned_fur_cap",
+        "mp_eastern_wrapped_armguards",
+        "mp_studded_vambraces",
+        "mp_khuzait_curved_boots",
+        "mp_leather_boots",
+        "mp_steppe_leather_boots"
+      ],
+      "defaults": {
+        "Head": "游牧填充风帽",
+        "Body": "奢华厚外套",
+        "Leg": "弯靴"
+      }
+    },
+    {
+      "id": "mp_heavy_infantry_khuzait",
+      "name": "持矛步兵",
+      "culture": "khuzait",
+      "group": "Infantry",
+      "items": [
+        "mp_guarded_padded_vambrace",
+        "mp_eastern_stitched_leather_coat",
+        "mp_eastern_plated_leather",
+        "mp_eastern_plated_leather_vest",
+        "mp_studded_leather_over_aketon",
+        "mp_plumed_lamellar_helmet",
+        "mp_plumed_nomad_helmet",
+        "mp_khuzait_leather_pauldron",
+        "mp_reinforced_suede_shoulders",
+        "mp_steppe_leather_shoulders",
+        "mp_eastern_plated_leather_vambraces",
+        "mp_steppe_leather_vambraces",
+        "mp_studded_leather_vambraces",
+        "mp_studded_vambraces",
+        "mp_woven_leather_boots",
+        "mp_eastern_leather_boots",
+        "mp_leather_boots",
+        "mp_steppe_leather_boots"
+      ],
+      "defaults": {
+        "Body": "强化护心镜甲",
+        "Leg": "草原弯靴",
+        "Head": "草原盔"
+      }
+    },
+    {
+      "id": "mp_light_ranged_khuzait",
+      "name": "草原弓手",
+      "culture": "khuzait",
+      "group": "Ranged",
+      "items": [
+        "mp_studded_steppe_leather",
+        "mp_fur_hat",
+        "mp_decorated_nomad_cap",
+        "mp_fur_hood",
+        "mp_peaked_fur_hood",
+        "mp_eastern_plated_leather_vambraces",
+        "mp_eastern_wrapped_armguards",
+        "mp_steppe_leather_vambraces",
+        "mp_studded_leather_vambraces",
+        "mp_studded_vambraces",
+        "mp_eastern_leather_boots",
+        "mp_khuzait_curved_boots",
+        "mp_leather_boots",
+        "mp_steppe_leather_boots"
+      ],
+      "defaults": {
+        "Head": "遮颈帽",
+        "Body": "滚边外套",
+        "Leg": "编织皮靴",
+        "Gloves": "纽扣皮护腕"
+      }
+    },
+    {
+      "id": "mp_heavy_ranged_khuzait",
+      "name": "可汗卫士",
+      "culture": "khuzait",
+      "group": "Ranged",
+      "items": [
+        "mp_leather_cavalier_boots",
+        "mp_mail_cavalier_boots",
+        "mp_rough_tied_bracers",
+        "mp_guarded_padded_vambrace",
+        "mp_plated_strip_gauntlets",
+        "mp_fine_town_boots",
+        "mp_empire_horseman_boots",
+        "mp_folded_town_boots",
+        "mp_plated_strip_boots",
+        "mp_brass_lamellar_over_mail",
+        "mp_eastern_lamellar_armor",
+        "mp_khuzait_lamellar_strapped",
+        "mp_khuzait_noble_helmet_with_feathers",
+        "mp_khuzait_battle_crown",
+        "mp_steppe_leather_vambraces",
+        "mp_woven_leather_boots",
+        "mp_eastern_leather_boots",
+        "mp_khuzait_curved_boots",
+        "mp_leather_boots"
+      ],
+      "defaults": {
+        "Head": "护颈贵族盔",
+        "Body": "结实的草原甲",
+        "Leg": "草原皮靴",
+        "Gloves": "夹板皮护臂"
+      }
+    },
+    {
+      "id": "mp_light_cavalry_khuzait",
+      "name": "游牧民",
+      "culture": "khuzait",
+      "group": "Cavalry",
+      "items": [
+        "mp_crude_leather_armor",
+        "mp_khuzait_lamellar_strapped",
+        "mp_khuzait_sturdy_armor",
+        "mp_plumed_lamellar_helmet",
+        "mp_plumed_nomad_helmet",
+        "mp_khuzait_leather_pauldron",
+        "mp_reinforced_suede_shoulders",
+        "mp_steppe_leather_shoulders",
+        "mp_eastern_plated_leather_vambraces",
+        "mp_eastern_wrapped_armguards",
+        "mp_steppe_leather_vambraces",
+        "mp_studded_leather_vambraces",
+        "mp_studded_vambraces",
+        "mp_woven_leather_boots",
+        "mp_eastern_leather_boots",
+        "mp_leather_boots",
+        "mp_steppe_leather_boots"
+      ],
+      "defaults": {
+        "Body": "护镜腰带外套",
+        "Gloves": "纽扣皮护腕",
+        "Leg": "草原弯靴",
+        "Head": "游牧盔"
+      }
+    },
+    {
+      "id": "mp_horse_archer_khuzait",
+      "name": "弓骑兵",
+      "culture": "khuzait",
+      "group": "HorseArcher",
+      "items": [
+        "mp_khuzait_fortified_armor",
+        "mp_khuzait_sturdy_armor",
+        "mp_plumed_nomad_helmet",
+        "mp_eastern_studded_shoulders",
+        "mp_eastern_plated_leather_vambraces",
+        "mp_eastern_wrapped_armguards",
+        "mp_steppe_leather_vambraces",
+        "mp_studded_leather_vambraces",
+        "mp_studded_vambraces",
+        "mp_eastern_leather_boots",
+        "mp_khuzait_curved_boots",
+        "mp_leather_boots",
+        "mp_steppe_leather_boots"
+      ],
+      "defaults": {
+        "Gloves": "纽扣皮护腕",
+        "Head": "缨饰扎甲盔",
+        "Cape": "皮扎甲护肩",
+        "Body": "硬皮扎甲",
+        "Leg": "编织皮靴"
+      }
+    },
+    {
+      "id": "mp_heavy_cavalry_khuzait",
+      "name": "枪骑兵",
+      "culture": "khuzait",
+      "group": "Cavalry",
+      "items": [
+        "mp_leather_cavalier_boots",
+        "mp_mail_cavalier_boots",
+        "mp_rough_tied_bracers",
+        "mp_northern_brass_lamellar_over_mail",
+        "mp_guarded_padded_vambrace",
+        "mp_plated_strip_gauntlets",
+        "mp_fine_town_boots",
+        "mp_empire_horseman_boots",
+        "mp_folded_town_boots",
+        "mp_plated_strip_boots",
+        "mp_brass_lamellar_over_mail",
+        "mp_brass_lamellar_shoulder",
+        "mp_steppe_leather_vambraces",
+        "mp_woven_leather_boots",
+        "mp_eastern_leather_boots",
+        "mp_khuzait_curved_boots",
+        "mp_leather_boots",
+        "mp_brass_lamellar_shoulder_white"
+      ],
+      "defaults": {
+        "Head": "尖刺盔",
+        "Cape": "扎甲护肩",
+        "Body": "枪骑兵扎甲",
+        "Leg": "草原皮靴",
+        "Gloves": "夹板皮护臂"
+      }
+    },
+    {
+      "id": "mp_light_infantry_aserai",
+      "name": "部落勇士",
+      "culture": "aserai",
+      "group": "Infantry",
+      "items": [
+        "mp_guarded_padded_vambrace",
+        "mp_leather_strips_over_padded_robe",
+        "mp_aserai_civil_c_head",
+        "mp_desert_helmet",
+        "mp_loose_wrapped_desert_helmet",
+        "mp_open_desert_helmet",
+        "mp_closed_desert_helmet",
+        "mp_buttoned_leather_bracers",
+        "mp_eastern_studded_shoulders",
+        "mp_woven_leather_boots",
+        "mp_eastern_leather_boots",
+        "mp_leather_boots",
+        "mp_steppe_leather_boots"
+      ],
+      "defaults": {
+        "Head": "布带库菲耶头巾",
+        "Body": "填充长袍",
+        "Leg": "草原弯靴"
+      }
+    },
+    {
+      "id": "mp_skirmisher_aserai",
+      "name": "游击兵",
+      "culture": "aserai",
+      "group": "Infantry",
+      "items": [
+        "mp_aserai_civil_c",
+        "mp_aserai_civil_d",
+        "mp_open_head_scarf",
+        "mp_buttoned_leather_bracers",
+        "mp_strapped_leather_bracers",
+        "mp_khuzait_curved_boots",
+        "mp_leather_boots",
+        "mp_steppe_leather_boots"
+      ],
+      "defaults": {
+        "Head": "缠裹库菲耶头巾",
+        "Body": "长衫配皮腰带",
+        "Leg": "弯靴"
+      }
+    },
+    {
+      "id": "mp_shock_infantry_aserai",
+      "name": "卫士",
+      "culture": "aserai",
+      "group": "Infantry",
+      "items": [
+        "mp_leather_cavalier_boots",
+        "mp_mail_cavalier_boots",
+        "mp_plated_strip_gauntlets",
+        "mp_fine_town_boots",
+        "mp_empire_horseman_boots",
+        "mp_folded_town_boots",
+        "mp_plated_strip_boots",
+        "mp_aserai_archer_armor",
+        "mp_aserai_armor_02",
+        "mp_aserai_armor_02_b",
+        "mp_brass_lamellar_over_mail",
+        "mp_emirs_helmet",
+        "mp_aserai_crown",
+        "mp_closed_desert_helmet_with_mail",
+        "mp_pointed_skullcap_over_laced_coif",
+        "mp_desert_scale_shoulders",
+        "mp_woven_leather_boots",
+        "mp_eastern_leather_boots",
+        "mp_khuzait_curved_boots",
+        "mp_leather_boots",
+        "mp_brass_lamellar_shoulder_white"
+      ],
+      "defaults": {
+        "Head": "沙漠链甲围帽",
+        "Body": "铜扎甲背心衬软甲",
+        "Leg": "草原皮靴"
+      }
+    },
+    {
+      "id": "mp_light_ranged_aserai",
+      "name": "弓箭手",
+      "culture": "aserai",
+      "group": "Ranged",
+      "items": [
+        "mp_guarded_padded_vambrace",
+        "mp_aserai_civil_a",
+        "mp_desert_padded_cloth",
+        "mp_aserai_civil_d_hscarf",
+        "mp_a_battania_cloak_a",
+        "mp_buttoned_leather_bracers",
+        "mp_strapped_leather_bracers",
+        "mp_khuzait_curved_boots",
+        "mp_leather_boots",
+        "mp_steppe_leather_boots"
+      ],
+      "defaults": {
+        "Head": "沙漠帽",
+        "Body": "扫卜衫",
+        "Leg": "弯靴"
+      }
+    },
+    {
+      "id": "mp_heavy_ranged_aserai",
+      "name": "老兵",
+      "culture": "aserai",
+      "group": "Ranged",
+      "items": [
+        "mp_rough_tied_bracers",
+        "mp_guarded_padded_vambrace",
+        "mp_plated_strip_gauntlets",
+        "mp_plated_strip_boots",
+        "mp_aserai_scale_armor_on_cloth",
+        "mp_ringed_desert_armor",
+        "mp_aserai_robe_c_chain",
+        "mp_aserai_horseman_armor",
+        "mp_southern_lord_helmet",
+        "mp_a_aserai_scale_b_shoulder_d",
+        "mp_steppe_leather_vambraces"
+      ],
+      "defaults": {
+        "Head": "阿塞莱贵族盔",
+        "Body": "护心镜布面铁甲",
+        "Leg": "缠裹鞋",
+        "Gloves": "夹板皮护臂"
+      }
+    },
+    {
+      "id": "mp_light_cavalry_aserai",
+      "name": "贾瓦勒",
+      "culture": "aserai",
+      "group": "Cavalry",
+      "items": [
+        "mp_rough_tied_bracers",
+        "mp_eastern_silk_clothing",
+        "mp_crude_leather_armor",
+        "mp_tight_head_scarf",
+        "mp_woven_leather_bracers",
+        "mp_eastern_studded_shoulders",
+        "mp_studded_leather_vambraces",
+        "mp_eastern_leather_boots",
+        "mp_khuzait_curved_boots",
+        "mp_leather_boots",
+        "mp_steppe_leather_boots"
+      ],
+      "defaults": {
+        "Head": "粗纺库菲耶头巾",
+        "Body": "流苏袍",
+        "Leg": "编织皮靴"
+      }
+    },
+    {
+      "id": "mp_heavy_cavalry_aserai",
+      "name": "马穆鲁克",
+      "culture": "aserai",
+      "group": "Cavalry",
+      "items": [
+        "mp_rough_tied_bracers",
+        "mp_desert_scale_armor",
+        "mp_plated_strip_gauntlets",
+        "mp_plated_strip_boots",
+        "mp_brass_lamellar_over_mail",
+        "mp_aserai_battle_crown",
+        "mp_woven_leather_bracers",
+        "mp_brass_lamellar_shoulder",
+        "mp_wrapped_scarf"
+      ],
+      "defaults": {
+        "Head": "阿塞莱领主盔",
+        "Body": "缝制皮甲衬链甲",
+        "Gloves": "镶钉皮护臂",
+        "Leg": "缠裹鞋"
+      }
+    },
+    {
+      "id": "mp_light_infantry_sturgia",
+      "name": "勇士",
+      "culture": "sturgia",
+      "group": "Infantry",
+      "items": [
+        "mp_nordic_lamellar_vest",
+        "mp_wrapped_leather_boots",
+        "mp_highland_boots",
+        "mp_battania_fur_boots",
+        "mp_battania_woodland_boots",
+        "mp_battania_leather_boots",
+        "mp_ragged_boots",
+        "mp_leather_gloves",
+        "mp_strapped_leather_bracers",
+        "mp_heavy_nordic_tunic",
+        "mp_sturgia_light_armor_a",
+        "mp_northern_fur_cap",
+        "mp_nasalhelm_over_leather",
+        "mp_sturgian_helmet_base",
+        "mp_highland_gloves",
+        "mp_roughtied_leather_bracers"
+      ],
+      "defaults": {
+        "Body": "短摆软甲衬束腰衣",
+        "Leg": "高地绑腿",
+        "Head": "毛边帽"
+      }
+    },
+    {
+      "id": "mp_skirmisher_sturgia",
+      "name": "匪兵",
+      "culture": "sturgia",
+      "group": "Infantry",
+      "items": [
+        "mp_highland_boots",
+        "mp_battania_fur_boots",
+        "mp_battania_woodland_boots",
+        "mp_battania_leather_boots",
+        "mp_ragged_boots",
+        "mp_heavy_nordic_coat",
+        "mp_northern_padded_cloth",
+        "mp_sturgia_light_armor_c",
+        "mp_sturgia_light_armor_e",
+        "mp_nordic_fur_cap",
+        "mp_northern_fur_cap",
+        "mp_nasalhelm_over_leather",
+        "mp_sturgian_helmet_base",
+        "mp_highland_gloves",
+        "mp_roughtied_leather_bracers"
+      ],
+      "defaults": {
+        "Head": "粗兽皮帽",
+        "Body": "强化厚束腰衣",
+        "Leg": "缠裹皮靴"
+      }
+    },
+    {
+      "id": "mp_shock_infantry_sturgia",
+      "name": "狂战士",
+      "culture": "sturgia",
+      "group": "Infantry",
+      "items": [
+        "mp_armored_baggy_trunks",
+        "mp_bearskin",
+        "mp_battania_fur_boots",
+        "mp_battania_woodland_boots",
+        "mp_battania_leather_boots",
+        "mp_ragged_boots",
+        "mp_leather_gloves",
+        "mp_fur_skirt",
+        "mp_nordic_fur_cap",
+        "mp_northern_fur_cap",
+        "mp_roughhide_cap",
+        "mp_wolf_shoulder",
+        "mp_highland_gloves"
+      ],
+      "defaults": {
+        "Body": "宽裤",
+        "Leg": "高地靴",
+        "Head": "毛皮帽"
+      }
+    },
+    {
+      "id": "mp_heavy_infantry_sturgia",
+      "name": "瓦良格",
+      "culture": "sturgia",
+      "group": "Infantry",
+      "items": [
+        "mp_rough_tied_bracers",
+        "mp_wrapped_leather_boots",
+        "mp_highland_boots",
+        "mp_battania_fur_boots",
+        "mp_battania_woodland_boots",
+        "mp_ragged_boots",
+        "mp_northern_brass_lamellar_over_mail",
+        "mp_plated_strip_boots",
+        "mp_decorated_nordic_hauberk",
+        "mp_northern_coat_of_plates",
+        "mp_sturgian_chainmale_longsleeve",
+        "mp_sturgian_chainmale_shortsleeve",
+        "mp_sturgian_lamellar_base",
+        "mp_sturgian_lamellar_gambeson",
+        "mp_sturgian_lamellar_fortified",
+        "mp_sturgian_lamellar_gambeson_heavy",
+        "mp_sturgian_helmet_b_open",
+        "mp_goggled_helmet_over_mail",
+        "mp_nordic_helmet",
+        "mp_northern_warlord_helmet",
+        "mp_sturgian_helmet_b_close",
+        "mp_northern_plated_gloves",
+        "mp_northern_plated_boots"
+      ],
+      "defaults": {
+        "Head": "斯特吉亚重型骑兵盔",
+        "Body": "皇家侍卫链甲衫",
+        "Leg": "高地皮靴",
+        "Gloves": "板条臂铠"
+      }
+    },
+    {
+      "id": "mp_light_ranged_sturgia",
+      "name": "猎手",
+      "culture": "sturgia",
+      "group": "Ranged",
+      "items": [
+        "mp_nordic_sloven_leather",
+        "mp_guarded_armwraps",
+        "mp_highland_boots",
+        "mp_battania_fur_boots",
+        "mp_battania_woodland_boots",
+        "mp_battania_leather_boots",
+        "mp_ragged_boots",
+        "mp_leather_gloves",
+        "mp_buttoned_leather_bracers",
+        "mp_layered_leather_tunic",
+        "mp_northern_leather_tabard",
+        "mp_sturgia_light_armor_b",
+        "mp_sturgia_light_armor_d",
+        "mp_nordic_fur_cap",
+        "mp_northern_fur_cap",
+        "mp_roughhide_cap",
+        "mp_highland_gloves"
+      ],
+      "defaults": {
+        "Head": "遮耳毛皮帽",
+        "Body": "重磅外套",
+        "Leg": "缠裹皮靴"
+      }
+    },
+    {
+      "id": "mp_light_cavalry_sturgia",
+      "name": "掠袭者",
+      "culture": "sturgia",
+      "group": "Cavalry",
+      "items": [
+        "mp_rough_tied_bracers",
+        "mp_highland_boots",
+        "mp_rough_tied_boots",
+        "mp_northern_brass_bracers",
+        "mp_plated_strip_gauntlets",
+        "mp_studded_leather_vambraces",
+        "mp_northern_leather_tabard",
+        "mp_nordic_lamellar_armor",
+        "mp_sturgian_helmet_base",
+        "mp_nasalhelm_over_mail",
+        "mp_sturgian_helmet_open",
+        "mp_northern_plated_gloves",
+        "mp_roughtied_leather_bracers"
+      ],
+      "defaults": {
+        "Head": "鼻护盔衬皮革",
+        "Body": "硬皮扎甲衫",
+        "Leg": "高地毛皮靴"
+      }
+    },
+    {
+      "id": "mp_heavy_cavalry_sturgia",
+      "name": "亲卫骑兵",
+      "culture": "sturgia",
+      "group": "Cavalry",
+      "items": [
+        "mp_bearskin",
+        "mp_rough_tied_bracers",
+        "mp_battania_fur_boots",
+        "mp_battania_woodland_boots",
+        "mp_battania_leather_boots",
+        "mp_ragged_boots",
+        "mp_mail_chausses",
+        "mp_sturgian_lamellar_base",
+        "mp_sturgian_lamellar_gambeson",
+        "mp_sturgian_lamellar_fortified",
+        "mp_sturgian_lamellar_gambeson_heavy",
+        "mp_sturgian_helmet_b_close",
+        "mp_goggled_helmet_over_full_mail",
+        "mp_lendman_helmet_over_full_mail",
+        "mp_sturgian_helmet_closed",
+        "mp_wolf_shoulder",
+        "mp_northern_plated_gloves",
+        "mp_northern_plated_boots",
+        "mp_strapped_mail_chausses"
+      ],
+      "defaults": {
+        "Head": "草原掠袭者盔",
+        "Cape": "粗糙熊皮",
+        "Body": "重型铜扎甲衬链甲",
+        "Leg": "夹板靴",
+        "Gloves": "板条臂铠"
+      }
+    },
+    {
+      "id": "mp_light_infantry_battania",
+      "name": "氏族勇士",
+      "culture": "battania",
+      "group": "Infantry",
+      "items": [
+        "mp_battania_woodland_cloak",
+        "mp_battania_civil_a",
+        "mp_battania_light_armor_c",
+        "mp_battania_fur_helmet",
+        "mp_battania_earmuff_helmet_a",
+        "mp_battania_earmuff_helmet_a_brnz",
+        "mp_ridged_northernhelm",
+        "mp_battania_earmuff_helmet_b",
+        "mp_battania_earmuff_helmet_b_brnz",
+        "mp_battania_scarf_a",
+        "mp_battanian_leather_shoulder_a",
+        "mp_battania_cloak_furr",
+        "mp_guarded_armwraps",
+        "mp_ragged_armwraps",
+        "mp_rough_tied_bracers",
+        "mp_battania_fur_boots",
+        "mp_battania_woodland_boots",
+        "mp_battania_leather_boots",
+        "mp_ragged_boots",
+        "mp_northern_leather_vest",
+        "mp_northern_padded_cloth",
+        "mp_highland_gloves"
+      ],
+      "defaults": {
+        "Body": "村民束腰皮衣",
+        "Leg": "高地靴"
+      }
+    },
+    {
+      "id": "mp_shock_infantry_battania",
+      "name": "蛮人",
+      "culture": "battania",
+      "group": "Infantry",
+      "items": [
+        "mp_armored_baggy_trunks",
+        "mp_baggy_trunks",
+        "mp_battania_light_armor_d",
+        "mp_battania_light_armor_e",
+        "mp_battania_fur_helmet",
+        "mp_battania_earmuff_helmet_a",
+        "mp_battania_earmuff_helmet_a_brnz",
+        "mp_wolfhead",
+        "mp_bearhead",
+        "mp_battania_scarf_a",
+        "mp_battanian_leather_shoulder_a",
+        "mp_battanian_chainmail_shoulder_b",
+        "mp_battania_cloak_furr",
+        "mp_battania_shoulder_strap",
+        "mp_guarded_armwraps",
+        "mp_ragged_armwraps",
+        "mp_battania_fur_boots",
+        "mp_battania_woodland_boots",
+        "mp_battania_leather_boots",
+        "mp_ragged_boots",
+        "mp_sleeveless_studded_fur_armor",
+        "mp_highland_gloves"
+      ],
+      "defaults": {
+        "Body": "蛮人甲",
+        "Leg": "高地靴",
+        "Gloves": "绑臂"
+      }
+    },
+    {
+      "id": "mp_skirmisher_battania",
+      "name": "野人",
+      "culture": "battania",
+      "group": "Infantry",
+      "items": [
+        "mp_battania_woodland_chainmail",
+        "mp_battanian_chainmail_armor_a",
+        "mp_battanian_chainmail_armor_c",
+        "mp_battanian_chainmail_armor_b",
+        "mp_battania_earmuff_helmet_c",
+        "mp_battania_earmuff_helmet_c_brnz",
+        "mp_battania_earmuff_helmet_c_cpr",
+        "mp_battania_shoulder_furr",
+        "mp_battania_civil_cloak",
+        "mp_armored_bearskin",
+        "mp_bearskin",
+        "mp_battania_civil_cape",
+        "mp_guarded_armwraps",
+        "mp_battania_noble_bracers",
+        "mp_highland_boots",
+        "mp_rough_tied_boots",
+        "mp_wolf_shoulder",
+        "mp_rough_bearskin",
+        "mp_highland_gloves"
+      ],
+      "defaults": {
+        "Head": "缨饰盔",
+        "Cape": "肩带",
+        "Body": "链铠",
+        "Leg": "高地毛皮靴"
+      }
+    },
+    {
+      "id": "mp_heavy_infantry_battania",
+      "name": "誓约者",
+      "culture": "battania",
+      "group": "Infantry",
+      "items": [
+        "mp_battania_mercenary_armor",
+        "mp_kilt_over_plated_leather",
+        "mp_battania_noble_armor",
+        "mp_battanian_scale_armor_a",
+        "mp_battanian_chainmail_shoulder_b",
+        "mp_guarded_armwraps",
+        "mp_battania_noble_bracers",
+        "mp_rough_tied_boots"
+      ],
+      "defaults": {
+        "Head": "高地王冠盔",
+        "Body": "游侠链甲",
+        "Gloves": "毛边皮手套",
+        "Leg": "高地林地靴"
+      }
+    },
+    {
+      "id": "mp_light_ranged_battania",
+      "name": "游侠",
+      "culture": "battania",
+      "group": "Ranged",
+      "items": [
+        "mp_battania_woodland_cloak",
+        "mp_battania_light_armor_c",
+        "mp_battania_civil_b",
+        "mp_battanian_scale_armor_b",
+        "mp_battania_woodland_outfit",
+        "mp_thinhide_coif",
+        "mp_battania_scarf_a",
+        "mp_battanian_leather_shoulder_a",
+        "mp_battania_cloak_furr",
+        "mp_guarded_armwraps",
+        "mp_ragged_armwraps",
+        "mp_highland_boots",
+        "mp_battania_fur_boots",
+        "mp_battania_woodland_boots",
+        "mp_battania_leather_boots",
+        "mp_ragged_boots",
+        "mp_northern_lamellar_armor"
+      ],
+      "defaults": {
+        "Head": "布制风帽",
+        "Cape": "高地斗篷",
+        "Body": "格纹束腰衣",
+        "Leg": "缠裹皮靴"
+      }
+    },
+    {
+      "id": "mp_heavy_ranged_battania",
+      "name": "费奥纳勇士",
+      "culture": "battania",
+      "group": "Ranged",
+      "items": [
+        "mp_battanian_chainmail_armor_a",
+        "mp_battania_noble_armor",
+        "mp_battanian_chainmail_armor_d",
+        "mp_battania_earmuff_helmet_d",
+        "mp_battania_earmuff_helmet_d_brnz",
+        "mp_battania_battle_crown",
+        "mp_battania_scarf_a",
+        "mp_battanian_leather_shoulder_a",
+        "mp_battanian_chainmail_shoulder_b",
+        "mp_battania_cloak_furr",
+        "mp_battania_shoulder_strap",
+        "mp_ragged_armwraps",
+        "mp_battania_noble_bracers",
+        "mp_rough_tied_bracers",
+        "mp_highland_boots",
+        "mp_rough_tied_boots",
+        "mp_highland_gloves"
+      ],
+      "defaults": {
+        "Head": "护面盔",
+        "Body": "重型链甲衫配宽腰带",
+        "Gloves": "护板绑臂",
+        "Leg": "高地毛皮靴"
+      }
+    },
+    {
+      "id": "mp_light_cavalry_battania",
+      "name": "骑马勇士",
+      "culture": "battania",
+      "group": "Cavalry",
+      "items": [
+        "mp_battania_light_armor_c",
+        "mp_battania_civil_b",
+        "mp_battanian_scale_armor_b",
+        "mp_battania_woodland_outfit",
+        "mp_battania_earmuff_helmet_a",
+        "mp_ridged_northernhelm",
+        "mp_bearhead",
+        "mp_guarded_armwraps",
+        "mp_ragged_armwraps",
+        "mp_highland_boots",
+        "mp_rough_tied_boots",
+        "mp_northern_lamellar_armor",
+        "mp_highland_gloves"
+      ],
+      "defaults": {
+        "Body": "格纹束腰衣",
+        "Leg": "高地毛皮靴"
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "mp_vlandia_chainmail",
+      "name": "瓦兰迪亚锁甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_white_coat_over_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_white_coat_over_mail",
+      "name": "白罩袍衬链铠",
+      "slot": "Body",
+      "replaces": [
+        "mp_vlandia_chainmail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_coat_of_plates_over_mail",
+      "name": "板甲衣衬链甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_white_coat_over_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_cloth_tunic",
+      "name": "简易束腰布衣",
+      "slot": "Body",
+      "replaces": [
+        "mp_bandit_leather_water_flask"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_aketon",
+      "name": "武装衣",
+      "slot": "Body",
+      "replaces": [
+        "mp_bandit_leather_water_flask",
+        "mp_vlandia_bandit_a"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_padded_short_coat",
+      "name": "填充短摆外套",
+      "slot": "Body",
+      "replaces": [
+        "mp_sleeveless_padded_short_coat"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_gambeson_b",
+      "name": "重磅武装衣",
+      "slot": "Body",
+      "replaces": [
+        "mp_sleeveless_padded_short_coat"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_leather_coat_over_cloth",
+      "name": "皮外套衬布衣",
+      "slot": "Body",
+      "replaces": [
+        "mp_vlandia_bandit_a"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_hauberk",
+      "name": "链铠",
+      "slot": "Body",
+      "replaces": [
+        "mp_mail_shirt",
+        "mp_white_coat_over_mail",
+        "mp_vlandia_chainmail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_leather_scale_armor",
+      "name": "皮鳞甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_studded_leather_over_aketon",
+        "mp_layered_leather_tunic"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_long_hemp_tunic",
+      "name": "麻制束腰长衣",
+      "slot": "Body",
+      "replaces": [
+        "mp_vlandia_bandit_a"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_padded_coat",
+      "name": "填充步卒外套",
+      "slot": "Body",
+      "replaces": [
+        "mp_sleeveless_padded_short_coat"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_padded_leather_shirt",
+      "name": "填充皮衬衫",
+      "slot": "Body",
+      "replaces": [
+        "mp_sleeveless_padded_short_coat"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_sackcloth_tunic",
+      "name": "粗布束腰衣",
+      "slot": "Body",
+      "replaces": [
+        "mp_bandit_leather_water_flask"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_sleeveless_padded_coat",
+      "name": "无袖填充外套",
+      "slot": "Body",
+      "replaces": [
+        "mp_sleeveless_padded_short_coat"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_nordic_sloven_leather",
+      "name": "邋遢皮衣",
+      "slot": "Body",
+      "replaces": [
+        "mp_layered_leather_tunic",
+        "mp_heavy_nordic_coat"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_nordic_sloven_over_mail",
+      "name": "皮罩袍衬链甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_banded_leather_over_mail",
+        "mp_mail_shirt"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_sturgian_fortified_armor",
+      "name": "布面铁甲衬链铠",
+      "slot": "Body",
+      "replaces": [
+        "mp_mail_shirt"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_veteran_mercenary_armor",
+      "name": "加固佣兵甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_layered_leather_tunic"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_banded_leather_over_mail",
+      "name": "条纹皮甲衬链甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_mail_shirt",
+        "mp_sleeveless_padded_short_coat"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_peaked_helmet_over_padded_cloth",
+      "name": "檐盔衬填充布",
+      "slot": "Head",
+      "replaces": [
+        "mp_segmented_skullcap_over_laced_coif"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_peaked_helmet_over_laced_coif",
+      "name": "檐盔衬系带围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_segmented_skullcap_over_laced_coif"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_peaked_helmet_over_mail",
+      "name": "檐盔衬链甲",
+      "slot": "Head",
+      "replaces": [
+        "mp_segmented_skullcap_over_laced_coif"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_peaked_helmet_over_mail_coif",
+      "name": "檐盔衬链甲围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_segmented_skullcap_over_laced_coif"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_segmented_skullcap_over_mail_coif",
+      "name": "分段头盖盔衬链甲围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_segmented_skullcap_over_laced_coif"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_arming_coif",
+      "name": "皮制围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_leather_cap"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_cervelliere_over_arming_coif",
+      "name": "碗盔衬武装围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_segmented_skullcap_over_mail_coif",
+        "mp_segmented_skullcap_over_laced_coif"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_cervelliere_over_padded_cap",
+      "name": "碗盔衬填充帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_segmented_skullcap_over_laced_coif"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_cloth_headwrap",
+      "name": "布制缠头",
+      "slot": "Head",
+      "replaces": [
+        "mp_leather_cap"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_full_helm_over_padded_cloth",
+      "name": "全覆盔衬填充布",
+      "slot": "Head",
+      "replaces": [
+        "mp_full_helm_over_padded_cap"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_guards_kettle_over_laced_coif",
+      "name": "锅盔衬系带围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_kettle_helmet_over_padded_cloth",
+        "mp_kettle_helmet_over_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_guards_kettle_over_mail_coif",
+      "name": "锅盔衬链甲围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_kettle_helmet_over_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_spangenhelm_with_padded_cloth",
+      "name": "十字盔配填充布",
+      "slot": "Head",
+      "replaces": [
+        "mp_kettle_helmet_over_padded_cloth"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_spangenhelm_with_leather",
+      "name": "带皮革十字盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_kettle_helmet_over_padded_cloth"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_kettle_helmet_with_leather",
+      "name": "带皮革锅盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_kettle_helmet_over_padded_cloth",
+        "mp_kettle_helmet_over_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_guards_kettle_over_padded_coif",
+      "name": "锅盔衬填充围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_kettle_helmet_over_padded_cloth",
+        "mp_kettle_helmet_over_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_kettle_hat_over_padded_cloth",
+      "name": "锅帽衬填充布",
+      "slot": "Head",
+      "replaces": [
+        "mp_kettle_helmet_over_padded_cloth",
+        "mp_kettle_helmet_over_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_kettle_hat_over_padded_coif",
+      "name": "锅帽衬填充围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_kettle_helmet_over_padded_cloth",
+        "mp_kettle_helmet_over_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_kettle_helmet_over_arming_coif",
+      "name": "锅盔衬武装围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_kettle_hat_over_mail_coif",
+        "mp_kettle_helmet_over_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_kettle_hat_over_mail_coif",
+      "name": "锅帽衬链甲围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_kettle_helmet_over_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_kettle_helmet_over_laced_coif",
+      "name": "锅盔衬系带围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_kettle_hat_over_mail_coif",
+        "mp_kettle_helmet_over_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_kettle_helmet_over_padded_cap",
+      "name": "锅盔衬填充帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_kettle_hat_over_mail_coif",
+        "mp_kettle_helmet_over_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_kettle_helmet_over_padded_cloth",
+      "name": "锅盔衬填充布",
+      "slot": "Head",
+      "replaces": [
+        "mp_kettle_hat_over_mail_coif",
+        "mp_kettle_helmet_over_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_kettle_helmet_over_padded_coif",
+      "name": "锅盔衬填充围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_kettle_hat_over_mail_coif",
+        "mp_kettle_helmet_over_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_laced_coif",
+      "name": "系带围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_leather_cap"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_nasal_cervelliere_over_laced_coif",
+      "name": "护鼻碗盔衬系带围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_segmented_skullcap_over_laced_coif"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_nasal_cervelliere_over_mail_coif",
+      "name": "护鼻碗盔衬链甲围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_segmented_skullcap_over_laced_coif"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_nasal_cervelliere_over_padded_cap",
+      "name": "护鼻碗盔衬填充帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_segmented_skullcap_over_mail_coif",
+        "mp_segmented_skullcap_over_laced_coif"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_nasal_cervelliere_over_padded_coif",
+      "name": "护鼻碗盔衬填充围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_segmented_skullcap_over_mail_coif",
+        "mp_segmented_skullcap_over_laced_coif"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_nasal_helmet_over_cloth_headwrap",
+      "name": "护鼻盔衬布制缠头",
+      "slot": "Head",
+      "replaces": [
+        "mp_nasal_helmet_over_laced_coif",
+        "mp_pointed_skullcap_over_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_nasal_helmet_over_laced_coif",
+      "name": "护鼻盔衬系带围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_pointed_skullcap_over_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_nasal_helmet_over_mail",
+      "name": "护鼻盔衬链甲",
+      "slot": "Head",
+      "replaces": [
+        "mp_nasal_helmet_over_laced_coif",
+        "mp_pointed_skullcap_over_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_nasal_helmet_over_mail_coif",
+      "name": "护鼻盔衬链甲围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_pointed_skullcap_over_mail",
+        "mp_nasal_helmet_over_laced_coif"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_nasal_helmet_over_padded_cloth",
+      "name": "护鼻盔衬填充布",
+      "slot": "Head",
+      "replaces": [
+        "mp_nasal_helmet_over_mail_coif",
+        "mp_pointed_skullcap_over_mail",
+        "mp_nasal_helmet_over_laced_coif"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_nasal_helmet_over_padded_coif",
+      "name": "护鼻盔衬填充围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_nasal_helmet_over_mail_coif",
+        "mp_pointed_skullcap_over_mail",
+        "mp_nasal_helmet_over_laced_coif"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_western_crowned_plated_helmet",
+      "name": "王冠板甲盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_pointed_skullcap_over_mail",
+        "mp_full_helm_over_padded_cap"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_open_padded_coif",
+      "name": "开面填充围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_leather_cap"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_padded_cap",
+      "name": "填充帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_leather_cap"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_padded_coif",
+      "name": "填充半覆围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_leather_cap"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_padded_leather_cape",
+      "name": "填充皮帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_leather_cap"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_segmented_cervelliere_over_laced_coif",
+      "name": "分段碗盔衬系带围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_segmented_skullcap_over_laced_coif"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_segmented_cervelliere_over_mail",
+      "name": "分段碗盔衬链甲",
+      "slot": "Head",
+      "replaces": [
+        "mp_segmented_skullcap_over_laced_coif"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_segmented_cervelliere_over_mail_coif",
+      "name": "分段碗盔衬链甲围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_segmented_skullcap_over_laced_coif"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_segmented_skullcap_over_padded_cloth",
+      "name": "分段头盖盔衬填充布",
+      "slot": "Head",
+      "replaces": [
+        "mp_segmented_skullcap_over_mail_coif",
+        "mp_segmented_skullcap_over_laced_coif"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_segmented_skullcap_over_padded_coif",
+      "name": "分段头盖盔衬填充围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_segmented_skullcap_over_mail_coif",
+        "mp_segmented_skullcap_over_laced_coif"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_visored_helmet_over_mail_coif",
+      "name": "覆面盔衬链甲围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_pointed_skullcap_over_mail",
+        "mp_full_helm_over_padded_cap"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_visored_helmet_over_laced_coif",
+      "name": "覆面盔衬系带围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_visored_helmet_over_mail_coif",
+        "mp_pointed_skullcap_over_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_visored_helmet_over_padded_cloth",
+      "name": "覆面盔衬填充布",
+      "slot": "Head",
+      "replaces": [
+        "mp_visored_helmet_over_mail_coif",
+        "mp_pointed_skullcap_over_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_visored_helmet_over_padded_coif",
+      "name": "覆面盔衬填充围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_visored_helmet_over_mail_coif",
+        "mp_pointed_skullcap_over_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_vlandian_faceguard_helmet_a",
+      "name": "闭面骑士盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_visored_helmet_over_mail_coif",
+        "mp_pointed_skullcap_over_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_vlandian_faceguard_helmet_b",
+      "name": "铜护面骑士盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_visored_helmet_over_mail_coif",
+        "mp_pointed_skullcap_over_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_hood",
+      "name": "风帽",
+      "slot": "Cape",
+      "replaces": [
+        "mp_padded_leather_shoulders"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_padded_leather_shoulders",
+      "name": "填充皮护肩",
+      "slot": "Cape",
+      "replaces": [
+        "mp_hood",
+        "mp_peasant_hood"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battania_woodland_cloak",
+      "name": "高地林地斗篷",
+      "slot": "Cape",
+      "replaces": [
+        "mp_hood",
+        "mp_peasant_hood",
+        "mp_battania_civil_cloak"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_lordly_mail_mitten",
+      "name": "重型链甲连指手套",
+      "slot": "Gloves",
+      "replaces": [
+        "mp_reinforced_mail_mitten",
+        "mp_mail_mitten"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_reinforced_mail_mitten",
+      "name": "强化链甲连指手套",
+      "slot": "Gloves",
+      "replaces": [
+        "mp_mail_mitten"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_leather_cavalier_boots",
+      "name": "皮制骑兵靴",
+      "slot": "Leg",
+      "replaces": [
+        "mp_leather_boots",
+        "mp_empire_horseman_boots",
+        "mp_steppe_leather_boots"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_mail_cavalier_boots",
+      "name": "链甲骑兵靴",
+      "slot": "Leg",
+      "replaces": [
+        "mp_leather_boots",
+        "mp_leather_cavalier_boots",
+        "mp_mail_chausses",
+        "mp_steppe_leather_boots"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_armored_baggy_trunks",
+      "name": "覆甲宽裤",
+      "slot": "Body",
+      "replaces": [
+        "mp_battanian_savage_armor",
+        "mp_baggy_trunks"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_baggy_trunks",
+      "name": "宽裤",
+      "slot": "Body",
+      "replaces": [
+        "mp_battanian_savage_armor"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battania_light_armor_d",
+      "name": "高地裙衬格纹裤",
+      "slot": "Body",
+      "replaces": [
+        "mp_battanian_savage_armor"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battania_light_armor_e",
+      "name": "格纹托加",
+      "slot": "Body",
+      "replaces": [
+        "mp_battanian_savage_armor"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battania_civil_a",
+      "name": "格纹束腰衣",
+      "slot": "Body",
+      "replaces": [
+        "mp_battania_civil_b"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battania_light_armor_c",
+      "name": "加长高地格子呢",
+      "slot": "Body",
+      "replaces": [
+        "mp_battania_civil_b",
+        "mp_battania_civil_a"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battania_civil_b",
+      "name": "村民束腰皮衣",
+      "slot": "Body",
+      "replaces": [
+        "mp_battania_civil_a"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_nordic_lamellar_vest",
+      "name": "重型扎甲背心",
+      "slot": "Body",
+      "replaces": [
+        "mp_northern_padded_gambeson"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battania_woodland_chainmail",
+      "name": "重型链甲衫配宽腰带",
+      "slot": "Body",
+      "replaces": [
+        "mp_hauberk"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battanian_chainmail_armor_a",
+      "name": "重型链甲背心",
+      "slot": "Body",
+      "replaces": [
+        "mp_hauberk",
+        "mp_battania_woodland_chainmail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battanian_chainmail_armor_c",
+      "name": "高地强化链甲衬格子呢",
+      "slot": "Body",
+      "replaces": [
+        "mp_hauberk"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battanian_chainmail_armor_b",
+      "name": "高地链甲衫",
+      "slot": "Body",
+      "replaces": [
+        "mp_hauberk"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battania_mercenary_armor",
+      "name": "奢华布面铁甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_ranger_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_kilt_over_plated_leather",
+      "name": "高地裙衬夹板皮甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_ranger_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battania_noble_armor",
+      "name": "名门链甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_ranger_mail",
+        "mp_battania_woodland_chainmail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battanian_chainmail_armor_d",
+      "name": "高地强化费奥纳链甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_battania_woodland_chainmail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battanian_scale_armor_a",
+      "name": "高地鳞甲衬链甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_ranger_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battanian_scale_armor_b",
+      "name": "高地鳞甲衬布衣",
+      "slot": "Body",
+      "replaces": [
+        "mp_battania_civil_a"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battania_woodland_outfit",
+      "name": "林地服",
+      "slot": "Body",
+      "replaces": [
+        "mp_battania_civil_a"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battania_fur_helmet",
+      "name": "高地兽皮盔",
+      "slot": "Head",
+      "replaces": [],
+      "itemless": [
+        {
+          "classId": "mp_light_infantry_battania",
+          "slot": "Head"
+        },
+        {
+          "classId": "mp_shock_infantry_battania",
+          "slot": "Head"
+        }
+      ]
+    },
+    {
+      "id": "mp_battania_earmuff_helmet_a",
+      "name": "穗饰护颊钢帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_battania_fur_helmet"
+      ],
+      "itemless": [
+        {
+          "classId": "mp_light_infantry_battania",
+          "slot": "Head"
+        },
+        {
+          "classId": "mp_shock_infantry_battania",
+          "slot": "Head"
+        },
+        {
+          "classId": "mp_light_cavalry_battania",
+          "slot": "Head"
+        }
+      ]
+    },
+    {
+      "id": "mp_battania_earmuff_helmet_a_brnz",
+      "name": "穗饰护颊铜帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_battania_fur_helmet"
+      ],
+      "itemless": [
+        {
+          "classId": "mp_light_infantry_battania",
+          "slot": "Head"
+        },
+        {
+          "classId": "mp_shock_infantry_battania",
+          "slot": "Head"
+        }
+      ]
+    },
+    {
+      "id": "mp_ridged_northernhelm",
+      "name": "脊盔",
+      "slot": "Head",
+      "replaces": [],
+      "itemless": [
+        {
+          "classId": "mp_light_infantry_battania",
+          "slot": "Head"
+        },
+        {
+          "classId": "mp_light_cavalry_battania",
+          "slot": "Head"
+        }
+      ]
+    },
+    {
+      "id": "mp_battania_earmuff_helmet_b",
+      "name": "护颊钢帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_ridged_northernhelm"
+      ],
+      "itemless": [
+        {
+          "classId": "mp_light_infantry_battania",
+          "slot": "Head"
+        }
+      ]
+    },
+    {
+      "id": "mp_battania_earmuff_helmet_b_brnz",
+      "name": "护颊铜帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_ridged_northernhelm"
+      ],
+      "itemless": [
+        {
+          "classId": "mp_light_infantry_battania",
+          "slot": "Head"
+        }
+      ]
+    },
+    {
+      "id": "mp_battania_earmuff_helmet_c",
+      "name": "穗饰装饰护颊钢帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_plumed_helmet"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battania_earmuff_helmet_c_brnz",
+      "name": "穗饰装饰护颊铜帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_plumed_helmet"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battania_earmuff_helmet_c_cpr",
+      "name": "装饰护颊铜盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_plumed_helmet"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battania_earmuff_helmet_d",
+      "name": "脊状装饰护颊钢帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_helmet_with_faceguard"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battania_earmuff_helmet_d_brnz",
+      "name": "脊状装饰护颊铜帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_helmet_with_faceguard"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battania_battle_crown",
+      "name": "双叉铜王冠",
+      "slot": "Head",
+      "replaces": [
+        "mp_helmet_with_faceguard"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_wolfhead",
+      "name": "狼首",
+      "slot": "Head",
+      "replaces": [],
+      "itemless": [
+        {
+          "classId": "mp_shock_infantry_battania",
+          "slot": "Head"
+        }
+      ]
+    },
+    {
+      "id": "mp_bearhead",
+      "name": "熊首",
+      "slot": "Head",
+      "replaces": [],
+      "itemless": [
+        {
+          "classId": "mp_shock_infantry_battania",
+          "slot": "Head"
+        },
+        {
+          "classId": "mp_light_cavalry_battania",
+          "slot": "Head"
+        }
+      ]
+    },
+    {
+      "id": "mp_thinhide_coif",
+      "name": "薄兽皮围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_battania_civil_hood"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battania_scarf_a",
+      "name": "重磅格纹披风",
+      "slot": "Cape",
+      "replaces": [
+        "mp_battania_civil_cloak",
+        "mp_battania_cloak",
+        "mp_battania_shoulder_strap_cloak"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battanian_leather_shoulder_a",
+      "name": "硬皮肩衬",
+      "slot": "Cape",
+      "replaces": [
+        "mp_battania_civil_cloak",
+        "mp_battania_shoulder_strap_cloak"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battania_shoulder_furr",
+      "name": "高地毛皮披肩",
+      "slot": "Cape",
+      "replaces": [
+        "mp_battania_shoulder_strap"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battanian_chainmail_shoulder_b",
+      "name": "强化链甲护肩",
+      "slot": "Cape",
+      "replaces": [
+        "mp_battania_shoulder_furr",
+        "mp_battania_shoulder_strap_cloak"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battania_cloak_furr",
+      "name": "毛皮斗篷",
+      "slot": "Cape",
+      "replaces": [
+        "mp_battania_civil_cloak",
+        "mp_battania_cloak",
+        "mp_battania_shoulder_strap_cloak"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battania_shoulder_strap",
+      "name": "肩带",
+      "slot": "Cape",
+      "replaces": [
+        "mp_armored_bearskin",
+        "mp_battania_shoulder_strap_cloak"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battania_civil_cloak",
+      "name": "高地斗篷",
+      "slot": "Cape",
+      "replaces": [
+        "mp_battania_shoulder_strap"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_armored_bearskin",
+      "name": "配甲熊皮",
+      "slot": "Cape",
+      "replaces": [
+        "mp_battania_shoulder_strap"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_bearskin",
+      "name": "熊皮",
+      "slot": "Cape",
+      "replaces": [
+        "mp_battania_shoulder_strap",
+        "mp_rough_bearskin"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battania_civil_cape",
+      "name": "高地披风",
+      "slot": "Cape",
+      "replaces": [
+        "mp_battania_shoulder_strap"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_guarded_armwraps",
+      "name": "护板绑臂",
+      "slot": "Gloves",
+      "replaces": [
+        "mp_highland_gloves",
+        "mp_armwraps"
+      ],
+      "itemless": [
+        {
+          "classId": "mp_light_infantry_battania",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_skirmisher_battania",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_cavalry_battania",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_ranged_battania",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_ranged_sturgia",
+          "slot": "Gloves"
+        }
+      ]
+    },
+    {
+      "id": "mp_ragged_armwraps",
+      "name": "破旧绑臂",
+      "slot": "Gloves",
+      "replaces": [
+        "mp_armwraps",
+        "mp_guarded_armwraps"
+      ],
+      "itemless": [
+        {
+          "classId": "mp_light_ranged_battania",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_infantry_battania",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_cavalry_battania",
+          "slot": "Gloves"
+        }
+      ]
+    },
+    {
+      "id": "mp_battania_noble_bracers",
+      "name": "巴旦尼亚贵族护腕",
+      "slot": "Gloves",
+      "replaces": [
+        "mp_highland_gloves",
+        "mp_guarded_armwraps"
+      ],
+      "itemless": [
+        {
+          "classId": "mp_skirmisher_battania",
+          "slot": "Gloves"
+        }
+      ]
+    },
+    {
+      "id": "mp_rough_tied_bracers",
+      "name": "粗绑护腕",
+      "slot": "Gloves",
+      "replaces": [
+        "mp_guarded_armwraps",
+        "mp_studded_leather_vambraces",
+        "mp_plated_strip_gauntlets",
+        "mp_eastern_plated_leather_vambraces"
+      ],
+      "itemless": [
+        {
+          "classId": "mp_light_infantry_battania",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_cavalry_aserai",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_cavalry_sturgia",
+          "slot": "Gloves"
+        }
+      ]
+    },
+    {
+      "id": "mp_wrapped_leather_boots",
+      "name": "缠裹皮靴",
+      "slot": "Leg",
+      "replaces": [
+        "mp_highland_leg_wrappings",
+        "mp_battania_leather_boots"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_highland_boots",
+      "name": "高地靴",
+      "slot": "Leg",
+      "replaces": [
+        "mp_battania_fur_boots",
+        "mp_battania_leather_boots",
+        "mp_wrapped_leather_boots",
+        "mp_highland_leg_wrappings"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battania_fur_boots",
+      "name": "高地毛皮靴",
+      "slot": "Leg",
+      "replaces": [
+        "mp_plated_strip_boots",
+        "mp_highland_boots",
+        "mp_wrapped_leather_boots",
+        "mp_highland_leg_wrappings",
+        "mp_battania_leather_boots"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battania_woodland_boots",
+      "name": "高地林地靴",
+      "slot": "Leg",
+      "replaces": [
+        "mp_plated_strip_boots",
+        "mp_highland_boots",
+        "mp_wrapped_leather_boots",
+        "mp_highland_leg_wrappings",
+        "mp_battania_leather_boots"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battania_leather_boots",
+      "name": "高地皮靴",
+      "slot": "Leg",
+      "replaces": [
+        "mp_plated_strip_boots",
+        "mp_highland_boots",
+        "mp_wrapped_leather_boots",
+        "mp_highland_leg_wrappings"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_ragged_boots",
+      "name": "破旧靴",
+      "slot": "Leg",
+      "replaces": [
+        "mp_plated_strip_boots",
+        "mp_highland_boots",
+        "mp_wrapped_leather_boots",
+        "mp_highland_leg_wrappings",
+        "mp_battania_leather_boots"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_rough_tied_boots",
+      "name": "粗绑靴",
+      "slot": "Leg",
+      "replaces": [
+        "mp_battania_fur_boots",
+        "mp_battania_woodland_boots"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_empire_short_dress",
+      "name": "束腰短衣",
+      "slot": "Body",
+      "replaces": [
+        "mp_tunic_with_shoulder_pads"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_empire_warrior_padded_armor_f",
+      "name": "辅兵甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_tunic_with_shoulder_pads"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_empire_warrior_padded_armor_d",
+      "name": "步兵软甲配扎带",
+      "slot": "Body",
+      "replaces": [
+        "mp_tunic_with_shoulder_pads"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_empire_warrior_padded_armor_c",
+      "name": "步兵软甲配裙",
+      "slot": "Body",
+      "replaces": [
+        "mp_empire_warrior_padded_armor_g"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_empire_legion_a",
+      "name": "装饰军团链甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_empire_warrior_padded_armor_g"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_imperial_mail_over_stripped_leather",
+      "name": "步兵链甲衬条状皮革",
+      "slot": "Body",
+      "replaces": [
+        "mp_empire_warrior_padded_armor_g"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_imperial_lamellar_over_leather",
+      "name": "奢华扎甲背心衬皮衣",
+      "slot": "Body",
+      "replaces": [
+        "mp_legionary_mail",
+        "mp_basic_imperial_leather_armor"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_northern_brass_lamellar_over_mail",
+      "name": "重型铜扎甲衬链甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_imperial_lamellar_over_leather",
+        "mp_legionary_mail",
+        "mp_imperial_lamellar",
+        "mp_nordic_hauberk",
+        "mp_eastern_lamellar_armor"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_lamellar_with_scale_skirt",
+      "name": "扎甲配鳞甲裙",
+      "slot": "Body",
+      "replaces": [
+        "mp_imperial_lamellar_over_leather",
+        "mp_legionary_mail",
+        "mp_imperial_lamellar"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_tunic_with_rolled_cloth",
+      "name": "卷布束腰衣",
+      "slot": "Body",
+      "replaces": [
+        "mp_footmans_tunic"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_leather_tunic",
+      "name": "束腰皮衣",
+      "slot": "Body",
+      "replaces": [
+        "mp_footmans_tunic"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_imperial_robes",
+      "name": "托加",
+      "slot": "Body",
+      "replaces": [
+        "mp_footmans_tunic"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_imperial_scale_armor",
+      "name": "重型鳞甲衬链铠",
+      "slot": "Body",
+      "replaces": [
+        "mp_imperial_mail_vest"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_imperial_mail_over_leather",
+      "name": "步兵链甲衬皮衣",
+      "slot": "Body",
+      "replaces": [
+        "mp_imperial_mail_vest"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_desert_scale_armor",
+      "name": "奢华鳞甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_stitched_leather_over_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_mail_shirt",
+      "name": "链甲衫",
+      "slot": "Body",
+      "replaces": [
+        "mp_legionary_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_eastern_studded_leather",
+      "name": "草原镶钉皮革",
+      "slot": "Body",
+      "replaces": [
+        "mp_basic_imperial_leather_armor"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_empire_legion_b",
+      "name": "华丽军团鳞甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_basic_imperial_leather_armor"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_merchants_hat",
+      "name": "商人帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_laced_coif"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_leather_cap",
+      "name": "皮帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_laced_coif"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_mail_coif",
+      "name": "填充链甲围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_open_mail_coif"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_heavy_nasalhelm_over_imperial_mail",
+      "name": "重型鼻护盔衬链甲",
+      "slot": "Head",
+      "replaces": [
+        "mp_ironlame_nasalhelm_over_imperial_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_roundkettle_over_imperial_cloth",
+      "name": "圆顶锅盔衬布",
+      "slot": "Head",
+      "replaces": [],
+      "itemless": [
+        {
+          "classId": "mp_shock_infantry_empire",
+          "slot": "Head"
+        }
+      ]
+    },
+    {
+      "id": "mp_ironlame_nasalhelm_over_imperial_mail",
+      "name": "铁制鼻护盔衬链甲",
+      "slot": "Head",
+      "replaces": [],
+      "itemless": [
+        {
+          "classId": "mp_shock_infantry_empire",
+          "slot": "Head"
+        }
+      ]
+    },
+    {
+      "id": "mp_empire_battle_crown_west",
+      "name": "帝国缨饰盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_ironlame_nasalhelm_over_imperial_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_segmented_cervelliere_over_padded_cloth",
+      "name": "分段碗盔衬填充布",
+      "slot": "Head",
+      "replaces": [
+        "mp_segmented_skullcap_over_laced_coif"
+      ],
+      "itemless": [
+        {
+          "classId": "mp_shock_infantry_empire",
+          "slot": "Head"
+        }
+      ]
+    },
+    {
+      "id": "mp_plumed_helmet",
+      "name": "缨饰盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_ironlame_nasalhelm_over_imperial_mail"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_laced_cloth_coif",
+      "name": "系带布制围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_imperial_leather_coif"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_ironlame_roundkettle_over_imperial_mail",
+      "name": "铁制圆顶锅盔衬链甲",
+      "slot": "Head",
+      "replaces": [
+        "mp_segmented_cervelliere_over_padded_cloth",
+        "mp_open_mail_coif"
+      ],
+      "itemless": [
+        {
+          "classId": "mp_shock_infantry_empire",
+          "slot": "Head"
+        }
+      ]
+    },
+    {
+      "id": "mp_ironlame_feathered_spangenhelm_over_mail",
+      "name": "铁制羽饰十字盔衬链甲",
+      "slot": "Head",
+      "replaces": [
+        "mp_segmented_cervelliere_over_padded_cloth"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_helmet_with_faceguard",
+      "name": "护面盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_segmented_cervelliere_over_padded_cloth"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_empire_battle_crown_north",
+      "name": "缨饰珠宝战场王冠",
+      "slot": "Head",
+      "replaces": [
+        "mp_imperial_goggled_helmet"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_imperial_lamellar_shoulders",
+      "name": "扎甲护肩",
+      "slot": "Cape",
+      "replaces": [
+        "mp_pauldron_cape_a",
+        "mp_studded_imperial_neckguard"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_varangian_bra_basic",
+      "name": "装饰皮革背带",
+      "slot": "Cape",
+      "replaces": [
+        "mp_empire_warrior_padded_armor_shoulder"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_varangian_bra_padded",
+      "name": "装饰皮革背带配填充甲",
+      "slot": "Cape",
+      "replaces": [
+        "mp_empire_warrior_padded_armor_shoulder"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_varangian_bra_scale",
+      "name": "装饰皮革背带衬鳞甲",
+      "slot": "Cape",
+      "replaces": [
+        "mp_empire_warrior_padded_armor_shoulder",
+        "mp_studded_imperial_neckguard"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_varangian_bra_royal",
+      "name": "披风皮革背带",
+      "slot": "Cape",
+      "replaces": [
+        "mp_empire_warrior_padded_armor_shoulder",
+        "mp_studded_imperial_neckguard"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_pauldron_cape_a",
+      "name": "帝国肩甲披风",
+      "slot": "Cape",
+      "replaces": [
+        "mp_empire_warrior_padded_armor_shoulder",
+        "mp_studded_imperial_neckguard"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_pauldron_cape_b",
+      "name": "瓦兰迪亚肩甲披风",
+      "slot": "Cape",
+      "replaces": [
+        "mp_padded_leather_shoulders",
+        "mp_hood"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_leather_gloves",
+      "name": "皮手套",
+      "slot": "Gloves",
+      "replaces": [],
+      "itemless": [
+        {
+          "classId": "mp_shock_infantry_sturgia",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_infantry_sturgia",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_ranged_empire",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_ranged_vlandia",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_infantry_vlandia",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_shock_infantry_empire",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_ranged_sturgia",
+          "slot": "Gloves"
+        }
+      ]
+    },
+    {
+      "id": "mp_padded_vambrace",
+      "name": "填充护臂",
+      "slot": "Gloves",
+      "replaces": [],
+      "itemless": [
+        {
+          "classId": "mp_shock_infantry_empire",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_skirmisher_empire",
+          "slot": "Gloves"
+        }
+      ]
+    },
+    {
+      "id": "mp_padded_mitten",
+      "name": "填充连指手套",
+      "slot": "Gloves",
+      "replaces": [],
+      "itemless": [
+        {
+          "classId": "mp_shock_infantry_empire",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_skirmisher_empire",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_infantry_vlandia",
+          "slot": "Gloves"
+        }
+      ]
+    },
+    {
+      "id": "mp_guarded_padded_vambrace",
+      "name": "护式填充护臂",
+      "slot": "Gloves",
+      "replaces": [
+        "mp_leather_gloves",
+        "mp_eastern_plated_leather_vambraces"
+      ],
+      "itemless": [
+        {
+          "classId": "mp_heavy_infantry_khuzait",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_shock_infantry_empire",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_cavalry_vlandia",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_ranged_vlandia",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_ranged_empire",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_ranged_aserai",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_infantry_aserai",
+          "slot": "Gloves"
+        }
+      ]
+    },
+    {
+      "id": "mp_mail_mitten",
+      "name": "链甲连指手套",
+      "slot": "Gloves",
+      "replaces": [
+        "mp_leather_gloves",
+        "mp_padded_mitten"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_reinforced_padded_mitten",
+      "name": "强化填充连指手套",
+      "slot": "Gloves",
+      "replaces": [
+        "mp_padded_mitten"
+      ],
+      "itemless": [
+        {
+          "classId": "mp_shock_infantry_empire",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_cavalry_vlandia",
+          "slot": "Gloves"
+        }
+      ]
+    },
+    {
+      "id": "mp_lamellar_plate_gauntlets",
+      "name": "扎板臂铠",
+      "slot": "Gloves",
+      "replaces": [
+        "mp_reinforced_leather_vambraces"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_decorated_imperial_gauntlets",
+      "name": "装饰帝国臂铠",
+      "slot": "Gloves",
+      "replaces": [
+        "mp_reinforced_leather_vambraces",
+        "mp_lamellar_plate_gauntlets"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_northern_brass_bracers",
+      "name": "铜护腕",
+      "slot": "Gloves",
+      "replaces": [],
+      "itemless": [
+        {
+          "classId": "mp_light_cavalry_sturgia",
+          "slot": "Gloves"
+        }
+      ]
+    },
+    {
+      "id": "mp_plated_strip_gauntlets",
+      "name": "板条臂铠",
+      "slot": "Gloves",
+      "replaces": [
+        "mp_reinforced_leather_vambraces",
+        "mp_lamellar_plate_gauntlets",
+        "mp_studded_leather_vambraces",
+        "mp_northern_brass_bracers",
+        "mp_eastern_plated_leather_vambraces"
+      ],
+      "itemless": [
+        {
+          "classId": "mp_shock_infantry_aserai",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_cavalry_sturgia",
+          "slot": "Gloves"
+        }
+      ]
+    },
+    {
+      "id": "mp_fine_town_boots",
+      "name": "优质市民靴",
+      "slot": "Leg",
+      "replaces": [
+        "mp_empire_horseman_boots",
+        "mp_leather_cavalier_boots",
+        "mp_steppe_leather_boots"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_empire_horseman_boots",
+      "name": "骏骑兵靴",
+      "slot": "Leg",
+      "replaces": [
+        "mp_leather_cavalier_boots",
+        "mp_steppe_leather_boots"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_folded_town_boots",
+      "name": "翻折城镇靴",
+      "slot": "Leg",
+      "replaces": [
+        "mp_empire_horseman_boots",
+        "mp_leather_cavalier_boots",
+        "mp_steppe_leather_boots"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_plated_strip_boots",
+      "name": "夹板靴",
+      "slot": "Leg",
+      "replaces": [
+        "mp_leather_cavalier_boots",
+        "mp_decorated_imperial_boots",
+        "mp_lamellar_plate_boots",
+        "mp_wrapped_shoes",
+        "mp_steppe_leather_boots",
+        "mp_battania_leather_boots"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_decorated_imperial_boots",
+      "name": "装饰帝国靴",
+      "slot": "Leg",
+      "replaces": [
+        "mp_lamellar_plate_boots",
+        "mp_fine_town_boots",
+        "mp_mail_chausses"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_lamellar_plate_boots",
+      "name": "扎板靴",
+      "slot": "Leg",
+      "replaces": [
+        "mp_mail_chausses"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_aserai_scale_armor_on_cloth",
+      "name": "师匠级南方鳞甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_eastern_plated_leather"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_aserai_civil_a",
+      "name": "奢华长衫配束腰带",
+      "slot": "Body",
+      "replaces": [
+        "mp_aserai_civil_e"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_aserai_civil_c",
+      "name": "彩色长衫",
+      "slot": "Body",
+      "replaces": [
+        "mp_aserai_civil_b"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_aserai_civil_d",
+      "name": "彩色比什特袍",
+      "slot": "Body",
+      "replaces": [
+        "mp_aserai_civil_b"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_aserai_archer_armor",
+      "name": "软甲衬链甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_southern_lamellar_armor"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_aserai_armor_02",
+      "name": "阿塞莱锁甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_southern_lamellar_armor"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_aserai_armor_02_b",
+      "name": "阿塞莱装饰锁甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_southern_lamellar_armor"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_brass_lamellar_over_mail",
+      "name": "铜扎甲衬链甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_eastern_lamellar_armor",
+        "mp_southern_lamellar_armor",
+        "mp_stitched_leather_over_mail",
+        "mp_khuzait_sturdy_armor"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_desert_padded_cloth",
+      "name": "轻型长摆填充甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_aserai_civil_e"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_eastern_silk_clothing",
+      "name": "丝绸长衫",
+      "slot": "Body",
+      "replaces": [
+        "mp_tassled_southern_robes"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_crude_leather_armor",
+      "name": "粗制兽皮甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_tassled_southern_robes",
+        "mp_khuzait_belt_leather"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_leather_strips_over_padded_robe",
+      "name": "皮革条甲衬填充袍",
+      "slot": "Body",
+      "replaces": [
+        "mp_long_padded_robe"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_ringed_desert_armor",
+      "name": "重型环甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_aserai_robe_c_chain",
+        "mp_eastern_plated_leather"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_aserai_robe_c_chain",
+      "name": "多层沙漠袍",
+      "slot": "Body",
+      "replaces": [
+        "mp_eastern_plated_leather"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_aserai_horseman_armor",
+      "name": "环甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_eastern_plated_leather"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_aserai_civil_d_hscarf",
+      "name": "彩色头巾",
+      "slot": "Head",
+      "replaces": [
+        "mp_desert_cap"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_tight_head_scarf",
+      "name": "紧缚围头巾",
+      "slot": "Head",
+      "replaces": [
+        "mp_aserai_civil_hscarf_b"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_emirs_helmet",
+      "name": "埃米尔盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_desert_mail_coif"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_aserai_crown",
+      "name": "奢华头巾衬盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_desert_mail_coif"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_closed_desert_helmet_with_mail",
+      "name": "链甲闭面沙漠盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_desert_mail_coif"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_aserai_civil_c_head",
+      "name": "丝带库菲耶头巾",
+      "slot": "Head",
+      "replaces": [
+        "mp_aserai_civil_hscarf_a"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_desert_helmet",
+      "name": "钢帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_aserai_civil_hscarf_a"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_loose_wrapped_desert_helmet",
+      "name": "宽松缠裹沙漠盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_open_desert_helmet",
+        "mp_aserai_civil_hscarf_a"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_open_desert_helmet",
+      "name": "开面沙漠盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_aserai_civil_hscarf_a"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_closed_desert_helmet",
+      "name": "闭面沙漠盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_open_desert_helmet",
+        "mp_aserai_civil_hscarf_a"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_open_head_scarf",
+      "name": "开面围头巾",
+      "slot": "Head",
+      "replaces": [
+        "mp_aserai_civil_e_hscarf"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_southern_lord_helmet",
+      "name": "阿塞莱领主盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_southern_noble_helmet"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_pointed_skullcap_over_laced_coif",
+      "name": "尖顶头盖盔衬系带围帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_desert_mail_coif"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_aserai_battle_crown",
+      "name": "华丽沙漠战场王冠",
+      "slot": "Head",
+      "replaces": [
+        "mp_aserai_lord_helmet_a"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_desert_scale_shoulders",
+      "name": "强化鳞肩甲",
+      "slot": "Cape",
+      "replaces": [
+        "mp_brass_scale_shoulders"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_a_aserai_scale_b_shoulder_d",
+      "name": "黄铜鳞肩甲",
+      "slot": "Cape",
+      "replaces": [
+        "mp_aserai_horseman_shoulder"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_a_battania_cloak_a",
+      "name": "简易披风",
+      "slot": "Cape",
+      "replaces": [
+        "mp_empire_warrior_padded_armor_shoulder"
+      ],
+      "itemless": [
+        {
+          "classId": "mp_light_ranged_aserai",
+          "slot": "Cape"
+        }
+      ]
+    },
+    {
+      "id": "mp_buttoned_leather_bracers",
+      "name": "纽扣皮护腕",
+      "slot": "Gloves",
+      "replaces": [],
+      "itemless": [
+        {
+          "classId": "mp_skirmisher_aserai",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_ranged_aserai",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_infantry_aserai",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_ranged_sturgia",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_infantry_khuzait",
+          "slot": "Gloves"
+        }
+      ]
+    },
+    {
+      "id": "mp_strapped_leather_bracers",
+      "name": "扎带皮护腕",
+      "slot": "Gloves",
+      "replaces": [],
+      "itemless": [
+        {
+          "classId": "mp_skirmisher_aserai",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_ranged_aserai",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_infantry_sturgia",
+          "slot": "Gloves"
+        }
+      ]
+    },
+    {
+      "id": "mp_woven_leather_bracers",
+      "name": "编织皮护腕",
+      "slot": "Gloves",
+      "replaces": [
+        "mp_studded_leather_vambraces"
+      ],
+      "itemless": [
+        {
+          "classId": "mp_light_cavalry_aserai",
+          "slot": "Gloves"
+        }
+      ]
+    },
+    {
+      "id": "mp_mail_chausses",
+      "name": "链甲护腿",
+      "slot": "Leg",
+      "replaces": [
+        "mp_plated_strip_boots",
+        "mp_leather_cavalier_boots",
+        "mp_fine_town_boots",
+        "mp_mail_cavalier_boots"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_khuzait_leather_stitched",
+      "name": "草原缝制皮甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_khuzait_civil_coat_b"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_eastern_lamellar_armor",
+      "name": "枪骑兵扎甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_khuzait_sturdy_armor"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_eastern_stitched_leather_coat",
+      "name": "缝制硬皮外套",
+      "slot": "Body",
+      "replaces": [
+        "mp_khuzait_fortified_armor"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_eastern_plated_leather",
+      "name": "护心镜布面铁甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_eastern_stitched_leather_coat",
+        "mp_khuzait_fortified_armor"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_eastern_plated_leather_vest",
+      "name": "布面铁甲背心",
+      "slot": "Body",
+      "replaces": [
+        "mp_eastern_stitched_leather_coat",
+        "mp_khuzait_fortified_armor"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_khuzait_lamellar_strapped",
+      "name": "强化皮甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_khuzait_sturdy_armor",
+        "mp_khuzait_belt_leather"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_studded_leather_over_aketon",
+      "name": "镶钉皮甲衬武装衣",
+      "slot": "Body",
+      "replaces": [
+        "mp_eastern_stitched_leather_coat",
+        "mp_khuzait_fortified_armor",
+        "mp_layered_leather_tunic"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_studded_steppe_leather",
+      "name": "镶钉皮甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_steppe_armor"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_khuzait_fortified_armor",
+      "name": "强化护心镜甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_leather_lamellar_armor"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_khuzait_sturdy_armor",
+      "name": "结实的草原甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_leather_lamellar_armor",
+        "mp_khuzait_belt_leather"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_plumed_lamellar_helmet",
+      "name": "缨饰扎甲盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_steppe_helmet",
+        "mp_nomad_helmet"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_plumed_nomad_helmet",
+      "name": "缨饰游牧盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_steppe_helmet",
+        "mp_nomad_helmet",
+        "mp_plumed_lamellar_helmet"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_fur_hat",
+      "name": "毛皮帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_eastern_cap"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_decorated_nomad_cap",
+      "name": "装饰游牧帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_eastern_cap"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_fur_hood",
+      "name": "毛皮风帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_eastern_cap"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_khuzait_noble_helmet_with_feathers",
+      "name": "贵族枪骑兵盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_khuzait_noble_helmet_with_neckguard"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_khuzait_battle_crown",
+      "name": "库赛特战场王冠",
+      "slot": "Head",
+      "replaces": [
+        "mp_khuzait_noble_helmet_with_neckguard"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_peaked_fur_hood",
+      "name": "翻檐毛皮风帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_eastern_cap"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_plumed_fur_lined_helmet",
+      "name": "缨饰毛皮衬里盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_nomad_padded_hood"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_upturned_fur_cap",
+      "name": "翻边毛皮帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_nomad_padded_hood"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_eastern_studded_shoulders",
+      "name": "草原镶钉护肩",
+      "slot": "Cape",
+      "replaces": [
+        "mp_leather_lamellar_shoulders",
+        "mp_desert_leather_shoulderpad"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_khuzait_leather_pauldron",
+      "name": "草原皮肩甲",
+      "slot": "Cape",
+      "replaces": [
+        "mp_eastern_studded_shoulders"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_reinforced_suede_shoulders",
+      "name": "强化绒面护肩",
+      "slot": "Cape",
+      "replaces": [
+        "mp_eastern_studded_shoulders"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_steppe_leather_shoulders",
+      "name": "草原皮护肩",
+      "slot": "Cape",
+      "replaces": [
+        "mp_eastern_studded_shoulders"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_brass_lamellar_shoulder",
+      "name": "铜扎甲护肩",
+      "slot": "Cape",
+      "replaces": [
+        "mp_lamellar_shoulders"
+      ],
+      "itemless": [
+        {
+          "classId": "mp_heavy_cavalry_aserai",
+          "slot": "Cape"
+        }
+      ]
+    },
+    {
+      "id": "mp_eastern_plated_leather_vambraces",
+      "name": "夹板皮护臂",
+      "slot": "Gloves",
+      "replaces": [
+        "mp_buttoned_leather_bracers"
+      ],
+      "itemless": [
+        {
+          "classId": "mp_heavy_infantry_khuzait",
+          "slot": "Gloves"
+        }
+      ]
+    },
+    {
+      "id": "mp_eastern_wrapped_armguards",
+      "name": "缠裹护臂",
+      "slot": "Gloves",
+      "replaces": [
+        "mp_buttoned_leather_bracers"
+      ],
+      "itemless": [
+        {
+          "classId": "mp_light_infantry_khuzait",
+          "slot": "Gloves"
+        }
+      ]
+    },
+    {
+      "id": "mp_steppe_leather_vambraces",
+      "name": "草原皮护臂",
+      "slot": "Gloves",
+      "replaces": [
+        "mp_buttoned_leather_bracers",
+        "mp_eastern_plated_leather_vambraces"
+      ],
+      "itemless": [
+        {
+          "classId": "mp_heavy_infantry_khuzait",
+          "slot": "Gloves"
+        }
+      ]
+    },
+    {
+      "id": "mp_studded_leather_vambraces",
+      "name": "镶钉皮护臂",
+      "slot": "Gloves",
+      "replaces": [
+        "mp_buttoned_leather_bracers"
+      ],
+      "itemless": [
+        {
+          "classId": "mp_light_cavalry_aserai",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_cavalry_sturgia",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_heavy_infantry_khuzait",
+          "slot": "Gloves"
+        }
+      ]
+    },
+    {
+      "id": "mp_studded_vambraces",
+      "name": "镶钉护臂",
+      "slot": "Gloves",
+      "replaces": [
+        "mp_buttoned_leather_bracers"
+      ],
+      "itemless": [
+        {
+          "classId": "mp_light_infantry_khuzait",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_heavy_infantry_khuzait",
+          "slot": "Gloves"
+        }
+      ]
+    },
+    {
+      "id": "mp_woven_leather_boots",
+      "name": "编织皮靴",
+      "slot": "Leg",
+      "replaces": [
+        "mp_steppe_leather_boots",
+        "mp_khuzait_curved_boots"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_eastern_leather_boots",
+      "name": "弯靴",
+      "slot": "Leg",
+      "replaces": [
+        "mp_steppe_leather_boots",
+        "mp_leather_cavalier_boots",
+        "mp_khuzait_curved_boots",
+        "mp_woven_leather_boots"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_khuzait_curved_boots",
+      "name": "草原弯靴",
+      "slot": "Leg",
+      "replaces": [
+        "mp_eastern_leather_boots",
+        "mp_steppe_leather_boots",
+        "mp_leather_cavalier_boots",
+        "mp_woven_leather_boots",
+        "mp_leather_boots"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_leather_boots",
+      "name": "皮靴",
+      "slot": "Leg",
+      "replaces": [
+        "mp_eastern_leather_boots",
+        "mp_steppe_leather_boots",
+        "mp_leather_cavalier_boots",
+        "mp_khuzait_curved_boots",
+        "mp_woven_leather_boots"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_steppe_leather_boots",
+      "name": "草原皮靴",
+      "slot": "Leg",
+      "replaces": [
+        "mp_eastern_leather_boots",
+        "mp_leather_cavalier_boots",
+        "mp_khuzait_curved_boots",
+        "mp_woven_leather_boots"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_decorated_nordic_hauberk",
+      "name": "皇家侍卫装饰链甲衫",
+      "slot": "Body",
+      "replaces": [
+        "mp_nordic_hauberk"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_heavy_nordic_coat",
+      "name": "重磅外套",
+      "slot": "Body",
+      "replaces": [
+        "mp_nordic_padded_cloth"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_heavy_nordic_tunic",
+      "name": "重磅束腰衣",
+      "slot": "Body",
+      "replaces": [
+        "mp_northern_padded_gambeson"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_layered_leather_tunic",
+      "name": "多层束腰皮衣",
+      "slot": "Body",
+      "replaces": [
+        "mp_heavy_nordic_coat"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_northern_leather_tabard",
+      "name": "皮罩袍",
+      "slot": "Body",
+      "replaces": [
+        "mp_heavy_nordic_coat",
+        "mp_northern_lamellar_armor"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_northern_leather_vest",
+      "name": "束腰衣配皮背心",
+      "slot": "Body",
+      "replaces": [
+        "mp_battania_civil_b"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_northern_padded_cloth",
+      "name": "轻型填充甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_battania_civil_b",
+        "mp_nordic_padded_cloth"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_nordic_lamellar_armor",
+      "name": "斯特吉亚扎甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_northern_lamellar_armor"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_northern_coat_of_plates",
+      "name": "覆板衣",
+      "slot": "Body",
+      "replaces": [
+        "mp_nordic_hauberk"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_northern_lamellar_armor",
+      "name": "硬皮扎甲衫",
+      "slot": "Body",
+      "replaces": [
+        "mp_battania_civil_a"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_sturgian_chainmale_longsleeve",
+      "name": "装饰链铠",
+      "slot": "Body",
+      "replaces": [
+        "mp_nordic_hauberk"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_sturgian_chainmale_shortsleeve",
+      "name": "皇家侍卫链铠",
+      "slot": "Body",
+      "replaces": [
+        "mp_nordic_hauberk"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_sturgian_lamellar_base",
+      "name": "重型扎甲衬链甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_northern_brass_lamellar_over_mail",
+        "mp_nordic_lamellar_armor",
+        "mp_nordic_hauberk"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_sturgian_lamellar_gambeson",
+      "name": "重型扎甲背心",
+      "slot": "Body",
+      "replaces": [
+        "mp_northern_brass_lamellar_over_mail",
+        "mp_nordic_lamellar_armor",
+        "mp_nordic_hauberk"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_sturgian_lamellar_fortified",
+      "name": "重型扎甲衬链铠",
+      "slot": "Body",
+      "replaces": [
+        "mp_northern_brass_lamellar_over_mail",
+        "mp_nordic_hauberk"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_sturgian_lamellar_gambeson_heavy",
+      "name": "重型扎甲背心",
+      "slot": "Body",
+      "replaces": [
+        "mp_northern_brass_lamellar_over_mail",
+        "mp_nordic_hauberk"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_fur_skirt",
+      "name": "毛皮裙",
+      "slot": "Body",
+      "replaces": [
+        "mp_baggy_trunks"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_sleeveless_studded_fur_armor",
+      "name": "无袖镶钉毛皮甲",
+      "slot": "Body",
+      "replaces": [
+        "mp_armored_baggy_trunks",
+        "mp_battanian_savage_armor"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_sturgia_light_armor_a",
+      "name": "轻磅束腰衣",
+      "slot": "Body",
+      "replaces": [
+        "mp_northern_padded_gambeson"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_sturgia_light_armor_b",
+      "name": "束腰长衣",
+      "slot": "Body",
+      "replaces": [
+        "mp_heavy_nordic_coat"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_sturgia_light_armor_c",
+      "name": "毛边束腰衣",
+      "slot": "Body",
+      "replaces": [
+        "mp_nordic_padded_cloth"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_sturgia_light_armor_d",
+      "name": "毛边束腰短衣",
+      "slot": "Body",
+      "replaces": [
+        "mp_heavy_nordic_coat"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_sturgia_light_armor_e",
+      "name": "装饰厚束腰衣",
+      "slot": "Body",
+      "replaces": [
+        "mp_nordic_padded_cloth"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_nordic_fur_cap",
+      "name": "毛边帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_roughhide_cap",
+        "mp_fur_hat",
+        "mp_nordic_leather_cap"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_northern_fur_cap",
+      "name": "毛皮帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_roughhide_cap",
+        "mp_nordic_leather_cap",
+        "mp_nordic_fur_cap",
+        "mp_fur_hat"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_roughhide_cap",
+      "name": "粗兽皮帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_fur_hat",
+        "mp_nordic_leather_cap"
+      ],
+      "itemless": [
+        {
+          "classId": "mp_light_ranged_sturgia",
+          "slot": "Head"
+        }
+      ]
+    },
+    {
+      "id": "mp_nasalhelm_over_leather",
+      "name": "鼻护盔衬皮革",
+      "slot": "Head",
+      "replaces": [
+        "mp_nordic_fur_cap",
+        "mp_roughhide_cap"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_sturgian_helmet_base",
+      "name": "护鼻钢帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_nordic_fur_cap",
+        "mp_nasalhelm_over_leather",
+        "mp_nasalhelm_over_mail",
+        "mp_roughhide_cap"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_sturgian_helmet_b_open",
+      "name": "缨饰装饰链甲护鼻盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_sturgia_heavy_cavalry_helmet"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_goggled_helmet_over_mail",
+      "name": "眼眶盔衬链甲",
+      "slot": "Head",
+      "replaces": [
+        "mp_sturgia_heavy_cavalry_helmet"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_nordic_helmet",
+      "name": "北地民盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_sturgia_heavy_cavalry_helmet"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_northern_warlord_helmet",
+      "name": "斯特吉亚军阀盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_sturgia_heavy_cavalry_helmet"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_nasalhelm_over_mail",
+      "name": "鼻护盔衬链甲",
+      "slot": "Head",
+      "replaces": [
+        "mp_nasalhelm_over_leather"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_sturgian_helmet_b_close",
+      "name": "闭面装饰眼眶盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_sturgia_heavy_cavalry_helmet",
+        "mp_eastern_vendel_helmet"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_sturgian_helmet_open",
+      "name": "链甲护鼻盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_nasalhelm_over_leather"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_goggled_helmet_over_full_mail",
+      "name": "闭面皇家侍卫盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_eastern_vendel_helmet"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_lendman_helmet_over_full_mail",
+      "name": "兰德曼盔衬全覆链甲",
+      "slot": "Head",
+      "replaces": [
+        "mp_eastern_vendel_helmet"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_sturgian_helmet_closed",
+      "name": "闭面军阀盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_eastern_vendel_helmet"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_brass_lamellar_shoulder_white",
+      "name": "北地民扎甲护肩",
+      "slot": "Cape",
+      "replaces": [
+        "mp_brass_scale_shoulders",
+        "mp_lamellar_shoulders"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_wrapped_scarf",
+      "name": "缠裹围巾",
+      "slot": "Cape",
+      "replaces": [],
+      "itemless": [
+        {
+          "classId": "mp_heavy_cavalry_aserai",
+          "slot": "Cape"
+        }
+      ]
+    },
+    {
+      "id": "mp_wolf_shoulder",
+      "name": "狼皮护肩",
+      "slot": "Cape",
+      "replaces": [
+        "mp_rough_bearskin",
+        "mp_battania_shoulder_strap"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_rough_bearskin",
+      "name": "粗糙熊皮",
+      "slot": "Cape",
+      "replaces": [
+        "mp_battania_shoulder_strap"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_northern_plated_gloves",
+      "name": "强化覆板手套",
+      "slot": "Gloves",
+      "replaces": [
+        "mp_plated_strip_gauntlets"
+      ],
+      "itemless": [
+        {
+          "classId": "mp_light_cavalry_sturgia",
+          "slot": "Gloves"
+        }
+      ]
+    },
+    {
+      "id": "mp_highland_gloves",
+      "name": "毛边皮手套",
+      "slot": "Gloves",
+      "replaces": [
+        "mp_guarded_armwraps",
+        "mp_armwraps"
+      ],
+      "itemless": [
+        {
+          "classId": "mp_shock_infantry_sturgia",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_infantry_sturgia",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_skirmisher_sturgia",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_infantry_battania",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_skirmisher_battania",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_cavalry_battania",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_ranged_sturgia",
+          "slot": "Gloves"
+        }
+      ]
+    },
+    {
+      "id": "mp_roughtied_leather_bracers",
+      "name": "粗绑皮护腕",
+      "slot": "Gloves",
+      "replaces": [],
+      "itemless": [
+        {
+          "classId": "mp_skirmisher_sturgia",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_infantry_sturgia",
+          "slot": "Gloves"
+        },
+        {
+          "classId": "mp_light_cavalry_sturgia",
+          "slot": "Gloves"
+        }
+      ]
+    },
+    {
+      "id": "mp_northern_plated_boots",
+      "name": "覆板靴",
+      "slot": "Leg",
+      "replaces": [
+        "mp_plated_strip_boots",
+        "mp_battania_leather_boots"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_strapped_mail_chausses",
+      "name": "扎带链甲护腿",
+      "slot": "Leg",
+      "replaces": [
+        "mp_plated_strip_boots",
+        "mp_leather_cavalier_boots",
+        "mp_mail_chausses",
+        "mp_mail_cavalier_boots"
+      ],
+      "itemless": []
+    }
+  ]
+}

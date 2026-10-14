@@ -1,0 +1,57 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {DatabaseSync} from 'node:sqlite';
+import {armoryCatalog as catalog,armoryStore,validateArmory} from '../armory.mjs';
+import {spawn} from 'node:child_process';
+import {mkdtemp,rm} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import path from 'node:path';
+import os from 'node:os';
+import net from 'node:net';
+
+test('all six cultures and 42 classes have valid clothing choices and no slot conflicts',()=>{
+ assert.equal(catalog.cultures.length,6);assert.equal(catalog.classes.length,42);
+ const items=new Map(catalog.items.map(i=>[i.id,i]));
+ for(const culture of catalog.cultures)assert.equal(catalog.classes.filter(c=>c.culture===culture.id).length,7);
+ for(const c of catalog.classes){
+  assert.ok(c.items.length>0);
+  for(const id of c.items){assert.ok(items.has(id));assert.deepEqual(validateArmory({classId:c.id,items:[id]}).items,[id]);}
+  const onePerSlot=catalog.slots.map(s=>c.items.find(id=>items.get(id).slot===s.id)).filter(Boolean);
+  assert.doesNotThrow(()=>validateArmory({classId:c.id,items:onePerSlot}));
+  assert.throws(()=>validateArmory({classId:c.id,items:[c.items[0],c.items[0]]}));
+  const foreign=catalog.items.find(i=>!c.items.includes(i.id));assert.throws(()=>validateArmory({classId:c.id,items:[foreign.id]}));
+ }
+ assert.throws(()=>validateArmory({classId:'__proto__',items:[]}));
+ assert.throws(()=>validateArmory({classId:catalog.classes[0].id,items:['taunt_1']}));
+});
+test('presets are independent by player/class, reset does not erase other classes',()=>{
+ const db=new DatabaseSync(':memory:'),store=armoryStore(db),[a,b]=catalog.classes;
+ store.save('a',{classId:a.id,items:[a.items[0]]});store.save('a',{classId:b.id,items:[]});
+ assert.deepEqual(store.get('b'),{});
+ assert.deepEqual(store.save('a',{classId:a.id,items:null}),{[b.id]:[]});
+ assert.throws(()=>store.batch(['not-steam']));db.close();
+});
+test('armory HTTP enforces Steam session, CSRF, bridge token and persists per-account presets',async()=>{
+ const reserve=net.createServer();await new Promise(r=>reserve.listen(0,'127.0.0.1',r));const port=reserve.address().port;await new Promise(r=>reserve.close(r));
+ const dir=await mkdtemp(path.join(os.tmpdir(),'hymm-armory-')),origin=`http://127.0.0.1:${port}`,token='armory-integration-test-bridge-token-12345';
+ let child;const launch=async()=>{child=spawn(process.execPath,['server.mjs'],{cwd:new URL('../',import.meta.url),env:{...process.env,PORT:String(port),PUBLIC_ORIGIN:origin,PUBLIC_TEST_PORT:'',DATA_DIR:dir,BRIDGE_TOKEN:token,ENABLE_DEMO:'1'},stdio:'ignore'});for(let i=0;i<100;i++){try{if((await fetch(origin+'/health')).ok)return;}catch{}await new Promise(r=>setTimeout(r,50));}throw Error('startup failed');};
+ const stop=()=>new Promise(r=>{child.once('exit',r);child.kill();});
+ const call=(p,body,cookie='first',headers={})=>fetch(origin+p,{method:body?'POST':'GET',headers:{Cookie:'arena='+cookie,Origin:origin,'X-CSRF-Token':'csrf-test','Content-Type':'application/json',...headers},body:body?JSON.stringify(body):undefined});
+ try{
+  await launch();const db=new DatabaseSync(path.join(dir,'arena.sqlite'));
+  for(const [name,id,mode] of [['first','76561198000000001','ranked'],['second','76561198000000002','ranked'],['demo','you','demo']])db.prepare('INSERT INTO sessions VALUES(?,?,?)').run(createHash('sha256').update(name).digest('hex'),JSON.stringify({mode,userId:id,world:mode==='ranked'?'ranked':'demo:test',csrf:'csrf-test'}),Date.now()+60000);db.close();
+  const c=catalog.classes[0],data={classId:c.id,items:[c.items[0]]};
+  assert.equal((await call('/api/armory',null,'guest')).status,401);
+  assert.equal((await call('/api/armory',data,'demo')).status,401);
+  assert.equal((await call('/api/armory',data,'first',{'X-CSRF-Token':'bad'})).status,403);
+  assert.equal((await call('/api/armory',data,'first',{Origin:'https://wrong.test'})).status,403);
+  assert.equal((await call('/api/armory',{...data,items:['mp_fake']})).status,400);
+  assert.equal((await call('/api/armory',{...data,userId:'76561198000000002'})).status,200);
+  assert.deepEqual((await (await call('/api/armory',null,'second')).json()).classes,{});
+  assert.equal((await call('/api/bridge/armory',{ids:['76561198000000001']})).status,401);
+  const b=await call('/api/bridge/armory',{ids:['76561198000000001']},'',{Authorization:'Bearer '+token});assert.deepEqual((await b.json()).profiles['76561198000000001'],{[c.id]:data.items});
+  await stop();await launch();assert.deepEqual((await (await call('/api/armory')).json()).classes,{[c.id]:data.items});
+  await call('/api/armory',{classId:c.id,items:[]});assert.deepEqual((await (await call('/api/armory')).json()).classes,{[c.id]:[]});
+  await call('/api/armory',{classId:c.id,items:null});assert.deepEqual((await (await call('/api/armory')).json()).classes,{});
+ }finally{if(child&&!child.killed)await stop();await rm(dir,{recursive:true,force:true});}
+});

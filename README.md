@@ -46,6 +46,14 @@ npm.cmd start
 
 自定义地图另行安装；部署前按实际安装内容调整 `engine.mjs` 地图池以及桥接插件地图注册列表。
 
+## HYMM 军械库（测试版）
+
+网页军械库覆盖六国 42 个兵种、306 件原版适配服装。Steam 玩家可按兵种免费保存外观，或恢复该兵种的游戏内配装。数据独立保存在 SQLite 的 `armory_profiles` 表；不修改官方账号库存、货币或赛季积分。
+
+插件配置 `enableArmory: true` 后，每 5 秒异步获取在线玩家的配装，并在原版出生流程前覆盖该连接的服装选择，保留原始装备和非服装外观。自由游玩及排位均适用；保存后下一次出生查看，已出生角色不即时换装。未配装的兵种沿用游戏内选择。网页目前使用部位示意图，不包含三维预览、游戏模型或贴图。实服多人显示、换边和切图仍需玩家验收。
+
+升级游戏后可运行 `python tools/export-armory.py "游戏安装目录"` 重新导出原版 ID、中文名称及兼容关系，再运行测试。目录来自 `mpcosmetics.xml`、`mpclassdivisions.xml`、`mpcharacters.xml` 和 `mpitems.xml`，不开放任意装备 ID。停用时将 `enableArmory` 设为 `false` 并重启游戏服。
+
 ## 检查
 
 ```powershell
