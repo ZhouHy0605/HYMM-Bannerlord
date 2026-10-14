@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net8.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable></PropertyGroup>
+  <PropertyGroup><ServerRoot Condition="'$(ServerRoot)' == ''">D:/steam/steamapps/common/Mount &amp; Blade II Dedicated Server</ServerRoot></PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../Core.cs" Link="Core.cs" /><Compile Include="../Preparation.cs" Link="Preparation.cs" />
+    <Compile Include="../CombatLedger.cs" Link="CombatLedger.cs" />
+    <Compile Include="../NativeIdentity.cs" Link="NativeIdentity.cs" />
+    <Compile Include="../NativeHalftime.cs" Link="NativeHalftime.cs" />
+    <Reference Include="$(ServerRoot)/bin/Win64_Shipping_Server/TaleWorlds.PlayerServices.dll" />
+    <Reference Include="$(ServerRoot)/bin/Win64_Shipping_Server/TaleWorlds.Library.dll" />
+  </ItemGroup>
+</Project>

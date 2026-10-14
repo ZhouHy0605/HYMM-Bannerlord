@@ -1,0 +1,5 @@
+# Replace with a domain you own. DNS must point to this server.
+play.example.com {
+    encode gzip
+    reverse_proxy 127.0.0.1:3210
+}

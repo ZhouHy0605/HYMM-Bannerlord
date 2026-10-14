@@ -1,0 +1,7 @@
+{
+  "baseUrl": "http://127.0.0.1:3210/",
+  "serverId": "skirmish-1",
+  "token": "",
+  "arrivalTimeoutSeconds": 300,
+  "gameIdToSteamId": {}
+}
