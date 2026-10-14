@@ -74,6 +74,14 @@
         "mp_fine_town_boots",
         "mp_folded_town_boots"
       ],
+      "requirements": {
+        "mp_padded_leather_shoulders": [
+          "改良护甲"
+        ],
+        "mp_battania_woodland_cloak": [
+          "改良护甲"
+        ]
+      },
       "defaults": {
         "Body": "平民衬衫",
         "Head": "皮帽",
@@ -126,6 +134,17 @@
         "mp_steppe_leather_boots",
         "mp_strapped_mail_chausses"
       ],
+      "requirements": {
+        "mp_padded_leather_shoulders": [
+          "改良护甲"
+        ],
+        "mp_battania_woodland_cloak": [
+          "改良护甲"
+        ],
+        "mp_pauldron_cape_b": [
+          "改良护甲"
+        ]
+      },
       "defaults": {
         "Head": "分段头盖盔衬系带围帽",
         "Body": "无袖填充短摆外套",
@@ -161,6 +180,17 @@
         "mp_steppe_leather_boots",
         "mp_strapped_mail_chausses"
       ],
+      "requirements": {
+        "mp_padded_leather_shoulders": [
+          "强化护甲"
+        ],
+        "mp_battania_woodland_cloak": [
+          "强化护甲"
+        ],
+        "mp_pauldron_cape_b": [
+          "强化护甲"
+        ]
+      },
       "defaults": {
         "Head": "全覆盔衬填充帽",
         "Body": "瓦兰迪亚锁甲",
@@ -190,6 +220,7 @@
         "mp_fine_town_boots",
         "mp_folded_town_boots"
       ],
+      "requirements": {},
       "defaults": {
         "Head": "锅盔衬填充布",
         "Body": "廉价填充衣",
@@ -235,6 +266,17 @@
         "mp_steppe_leather_boots",
         "mp_strapped_mail_chausses"
       ],
+      "requirements": {
+        "mp_padded_leather_shoulders": [
+          "改良护甲"
+        ],
+        "mp_battania_woodland_cloak": [
+          "改良护甲"
+        ],
+        "mp_pauldron_cape_b": [
+          "改良护甲"
+        ]
+      },
       "defaults": {
         "Head": "锅盔衬链甲",
         "Body": "链甲衫",
@@ -273,6 +315,14 @@
         "mp_steppe_leather_boots",
         "mp_strapped_mail_chausses"
       ],
+      "requirements": {
+        "mp_hood": [
+          "额外链甲"
+        ],
+        "mp_pauldron_cape_b": [
+          "额外链甲"
+        ]
+      },
       "defaults": {
         "Head": "护鼻盔衬系带围帽",
         "Body": "多层束腰皮衣",
@@ -309,6 +359,17 @@
         "mp_mail_chausses",
         "mp_strapped_mail_chausses"
       ],
+      "requirements": {
+        "mp_padded_leather_shoulders": [
+          "强化护甲"
+        ],
+        "mp_battania_woodland_cloak": [
+          "强化护甲"
+        ],
+        "mp_pauldron_cape_b": [
+          "强化护甲"
+        ]
+      },
       "defaults": {
         "Head": "尖顶头盖盔衬链甲",
         "Body": "白罩袍衬链铠",
@@ -333,6 +394,7 @@
         "mp_fine_town_boots",
         "mp_folded_town_boots"
       ],
+      "requirements": {},
       "defaults": {
         "Body": "垫肩束腰衣",
         "Leg": "骏骑兵靴",
@@ -367,6 +429,26 @@
         "mp_a_battania_cloak_a",
         "mp_khuzait_curved_boots"
       ],
+      "requirements": {
+        "mp_varangian_bra_basic": [
+          "改良护甲"
+        ],
+        "mp_varangian_bra_padded": [
+          "改良护甲"
+        ],
+        "mp_varangian_bra_scale": [
+          "改良护甲"
+        ],
+        "mp_varangian_bra_royal": [
+          "改良护甲"
+        ],
+        "mp_pauldron_cape_a": [
+          "改良护甲"
+        ],
+        "mp_a_battania_cloak_a": [
+          "改良护甲"
+        ]
+      },
       "defaults": {
         "Body": "辅兵甲配扎带",
         "Leg": "皮靴"
@@ -386,15 +468,41 @@
         "mp_heavy_nasalhelm_over_imperial_mail",
         "mp_empire_battle_crown_west",
         "mp_plumed_helmet",
+        "mp_varangian_bra_basic",
+        "mp_varangian_bra_padded",
+        "mp_varangian_bra_scale",
+        "mp_varangian_bra_royal",
+        "mp_pauldron_cape_a",
         "mp_lamellar_plate_gauntlets",
         "mp_decorated_imperial_gauntlets",
         "mp_plated_strip_gauntlets",
         "mp_decorated_imperial_boots",
         "mp_lamellar_plate_boots",
+        "mp_a_battania_cloak_a",
         "mp_strapped_mail_chausses",
         "mp_empire_battle_crown_north",
         "mp_empire_legion_b"
       ],
+      "requirements": {
+        "mp_varangian_bra_basic": [
+          "覆板护甲"
+        ],
+        "mp_varangian_bra_padded": [
+          "覆板护甲"
+        ],
+        "mp_varangian_bra_scale": [
+          "覆板护甲"
+        ],
+        "mp_varangian_bra_royal": [
+          "覆板护甲"
+        ],
+        "mp_pauldron_cape_a": [
+          "覆板护甲"
+        ],
+        "mp_a_battania_cloak_a": [
+          "覆板护甲"
+        ]
+      },
       "defaults": {
         "Head": "铁制鼻护盔衬链甲",
         "Body": "军团链甲",
@@ -418,6 +526,7 @@
         "mp_fine_town_boots",
         "mp_folded_town_boots"
       ],
+      "requirements": {},
       "defaults": {
         "Body": "军用束腰衣",
         "Leg": "骏骑兵靴",
@@ -446,6 +555,26 @@
         "mp_a_battania_cloak_a",
         "mp_mail_chausses"
       ],
+      "requirements": {
+        "mp_varangian_bra_basic": [
+          "改良护甲"
+        ],
+        "mp_varangian_bra_padded": [
+          "改良护甲"
+        ],
+        "mp_varangian_bra_scale": [
+          "改良护甲"
+        ],
+        "mp_varangian_bra_royal": [
+          "改良护甲"
+        ],
+        "mp_pauldron_cape_a": [
+          "改良护甲"
+        ],
+        "mp_a_battania_cloak_a": [
+          "改良护甲"
+        ]
+      },
       "defaults": {
         "Head": "开面链甲围帽",
         "Body": "步兵链甲背心",
@@ -485,6 +614,26 @@
         "mp_steppe_leather_boots",
         "mp_strapped_mail_chausses"
       ],
+      "requirements": {
+        "mp_varangian_bra_basic": [
+          "额外链甲"
+        ],
+        "mp_varangian_bra_padded": [
+          "额外链甲"
+        ],
+        "mp_varangian_bra_scale": [
+          "额外链甲"
+        ],
+        "mp_varangian_bra_royal": [
+          "额外链甲"
+        ],
+        "mp_pauldron_cape_a": [
+          "额外链甲"
+        ],
+        "mp_a_battania_cloak_a": [
+          "额外链甲"
+        ]
+      },
       "defaults": {
         "Head": "分段碗盔衬填充布",
         "Body": "帝国皮甲",
@@ -510,6 +659,20 @@
         "mp_plated_strip_boots",
         "mp_decorated_imperial_boots"
       ],
+      "requirements": {
+        "mp_imperial_lamellar_shoulders": [
+          "强化护甲"
+        ],
+        "mp_varangian_bra_scale": [
+          "强化护甲"
+        ],
+        "mp_varangian_bra_royal": [
+          "强化护甲"
+        ],
+        "mp_pauldron_cape_a": [
+          "强化护甲"
+        ]
+      },
       "defaults": {
         "Head": "帝国眼眶盔",
         "Body": "具装骑兵扎甲",
@@ -533,6 +696,7 @@
         "mp_leather_boots",
         "mp_steppe_leather_boots"
       ],
+      "requirements": {},
       "defaults": {
         "Head": "游牧填充风帽",
         "Body": "奢华厚外套",
@@ -564,6 +728,17 @@
         "mp_leather_boots",
         "mp_steppe_leather_boots"
       ],
+      "requirements": {
+        "mp_khuzait_leather_pauldron": [
+          "改良护甲"
+        ],
+        "mp_reinforced_suede_shoulders": [
+          "改良护甲"
+        ],
+        "mp_steppe_leather_shoulders": [
+          "改良护甲"
+        ]
+      },
       "defaults": {
         "Body": "强化护心镜甲",
         "Leg": "草原弯靴",
@@ -591,6 +766,7 @@
         "mp_leather_boots",
         "mp_steppe_leather_boots"
       ],
+      "requirements": {},
       "defaults": {
         "Head": "遮颈帽",
         "Body": "滚边外套",
@@ -624,6 +800,7 @@
         "mp_khuzait_curved_boots",
         "mp_leather_boots"
       ],
+      "requirements": {},
       "defaults": {
         "Head": "护颈贵族盔",
         "Body": "结实的草原甲",
@@ -655,6 +832,17 @@
         "mp_leather_boots",
         "mp_steppe_leather_boots"
       ],
+      "requirements": {
+        "mp_khuzait_leather_pauldron": [
+          "改良护甲"
+        ],
+        "mp_reinforced_suede_shoulders": [
+          "改良护甲"
+        ],
+        "mp_steppe_leather_shoulders": [
+          "改良护甲"
+        ]
+      },
       "defaults": {
         "Body": "护镜腰带外套",
         "Gloves": "纽扣皮护腕",
@@ -682,6 +870,7 @@
         "mp_leather_boots",
         "mp_steppe_leather_boots"
       ],
+      "requirements": {},
       "defaults": {
         "Gloves": "纽扣皮护腕",
         "Head": "缨饰扎甲盔",
@@ -715,6 +904,7 @@
         "mp_leather_boots",
         "mp_brass_lamellar_shoulder_white"
       ],
+      "requirements": {},
       "defaults": {
         "Head": "尖刺盔",
         "Cape": "扎甲护肩",
@@ -743,6 +933,11 @@
         "mp_leather_boots",
         "mp_steppe_leather_boots"
       ],
+      "requirements": {
+        "mp_eastern_studded_shoulders": [
+          "改良护甲"
+        ]
+      },
       "defaults": {
         "Head": "布带库菲耶头巾",
         "Body": "填充长袍",
@@ -764,6 +959,7 @@
         "mp_leather_boots",
         "mp_steppe_leather_boots"
       ],
+      "requirements": {},
       "defaults": {
         "Head": "缠裹库菲耶头巾",
         "Body": "长衫配皮腰带",
@@ -798,6 +994,14 @@
         "mp_leather_boots",
         "mp_brass_lamellar_shoulder_white"
       ],
+      "requirements": {
+        "mp_desert_scale_shoulders": [
+          "改良护甲"
+        ],
+        "mp_brass_lamellar_shoulder_white": [
+          "改良护甲"
+        ]
+      },
       "defaults": {
         "Head": "沙漠链甲围帽",
         "Body": "铜扎甲背心衬软甲",
@@ -821,6 +1025,7 @@
         "mp_leather_boots",
         "mp_steppe_leather_boots"
       ],
+      "requirements": {},
       "defaults": {
         "Head": "沙漠帽",
         "Body": "扫卜衫",
@@ -845,6 +1050,11 @@
         "mp_a_aserai_scale_b_shoulder_d",
         "mp_steppe_leather_vambraces"
       ],
+      "requirements": {
+        "mp_a_aserai_scale_b_shoulder_d": [
+          "强化护甲"
+        ]
+      },
       "defaults": {
         "Head": "阿塞莱贵族盔",
         "Body": "护心镜布面铁甲",
@@ -870,6 +1080,11 @@
         "mp_leather_boots",
         "mp_steppe_leather_boots"
       ],
+      "requirements": {
+        "mp_eastern_studded_shoulders": [
+          "改良护甲"
+        ]
+      },
       "defaults": {
         "Head": "粗纺库菲耶头巾",
         "Body": "流苏袍",
@@ -892,6 +1107,7 @@
         "mp_brass_lamellar_shoulder",
         "mp_wrapped_scarf"
       ],
+      "requirements": {},
       "defaults": {
         "Head": "阿塞莱领主盔",
         "Body": "缝制皮甲衬链甲",
@@ -922,6 +1138,7 @@
         "mp_highland_gloves",
         "mp_roughtied_leather_bracers"
       ],
+      "requirements": {},
       "defaults": {
         "Body": "短摆软甲衬束腰衣",
         "Leg": "高地绑腿",
@@ -950,6 +1167,7 @@
         "mp_highland_gloves",
         "mp_roughtied_leather_bracers"
       ],
+      "requirements": {},
       "defaults": {
         "Head": "粗兽皮帽",
         "Body": "强化厚束腰衣",
@@ -976,6 +1194,14 @@
         "mp_wolf_shoulder",
         "mp_highland_gloves"
       ],
+      "requirements": {
+        "mp_bearskin": [
+          "狂战皮肉"
+        ],
+        "mp_wolf_shoulder": [
+          "狂战皮肉"
+        ]
+      },
       "defaults": {
         "Body": "宽裤",
         "Leg": "高地靴",
@@ -988,6 +1214,7 @@
       "culture": "sturgia",
       "group": "Infantry",
       "items": [
+        "mp_bearskin",
         "mp_rough_tied_bracers",
         "mp_wrapped_leather_boots",
         "mp_highland_boots",
@@ -1009,9 +1236,18 @@
         "mp_nordic_helmet",
         "mp_northern_warlord_helmet",
         "mp_sturgian_helmet_b_close",
+        "mp_wolf_shoulder",
         "mp_northern_plated_gloves",
         "mp_northern_plated_boots"
       ],
+      "requirements": {
+        "mp_bearskin": [
+          "填充护甲"
+        ],
+        "mp_wolf_shoulder": [
+          "填充护甲"
+        ]
+      },
       "defaults": {
         "Head": "斯特吉亚重型骑兵盔",
         "Body": "皇家侍卫链甲衫",
@@ -1043,6 +1279,7 @@
         "mp_roughhide_cap",
         "mp_highland_gloves"
       ],
+      "requirements": {},
       "defaults": {
         "Head": "遮耳毛皮帽",
         "Body": "重磅外套",
@@ -1069,6 +1306,7 @@
         "mp_northern_plated_gloves",
         "mp_roughtied_leather_bracers"
       ],
+      "requirements": {},
       "defaults": {
         "Head": "鼻护盔衬皮革",
         "Body": "硬皮扎甲衫",
@@ -1101,6 +1339,7 @@
         "mp_northern_plated_boots",
         "mp_strapped_mail_chausses"
       ],
+      "requirements": {},
       "defaults": {
         "Head": "草原掠袭者盔",
         "Cape": "粗糙熊皮",
@@ -1138,6 +1377,20 @@
         "mp_northern_padded_cloth",
         "mp_highland_gloves"
       ],
+      "requirements": {
+        "mp_battania_woodland_cloak": [
+          "改良护甲"
+        ],
+        "mp_battania_scarf_a": [
+          "改良护甲"
+        ],
+        "mp_battanian_leather_shoulder_a": [
+          "改良护甲"
+        ],
+        "mp_battania_cloak_furr": [
+          "改良护甲"
+        ]
+      },
       "defaults": {
         "Body": "村民束腰皮衣",
         "Leg": "高地靴"
@@ -1172,6 +1425,23 @@
         "mp_sleeveless_studded_fur_armor",
         "mp_highland_gloves"
       ],
+      "requirements": {
+        "mp_battania_scarf_a": [
+          "改良护甲"
+        ],
+        "mp_battanian_leather_shoulder_a": [
+          "改良护甲"
+        ],
+        "mp_battanian_chainmail_shoulder_b": [
+          "改良护甲"
+        ],
+        "mp_battania_cloak_furr": [
+          "改良护甲"
+        ],
+        "mp_battania_shoulder_strap": [
+          "改良护甲"
+        ]
+      },
       "defaults": {
         "Body": "蛮人甲",
         "Leg": "高地靴",
@@ -1204,6 +1474,7 @@
         "mp_rough_bearskin",
         "mp_highland_gloves"
       ],
+      "requirements": {},
       "defaults": {
         "Head": "缨饰盔",
         "Cape": "肩带",
@@ -1226,6 +1497,11 @@
         "mp_battania_noble_bracers",
         "mp_rough_tied_boots"
       ],
+      "requirements": {
+        "mp_battanian_chainmail_shoulder_b": [
+          "强化护甲"
+        ]
+      },
       "defaults": {
         "Head": "高地王冠盔",
         "Body": "游侠链甲",
@@ -1257,6 +1533,7 @@
         "mp_ragged_boots",
         "mp_northern_lamellar_armor"
       ],
+      "requirements": {},
       "defaults": {
         "Head": "布制风帽",
         "Cape": "高地斗篷",
@@ -1288,6 +1565,23 @@
         "mp_rough_tied_boots",
         "mp_highland_gloves"
       ],
+      "requirements": {
+        "mp_battania_scarf_a": [
+          "改良护甲"
+        ],
+        "mp_battanian_leather_shoulder_a": [
+          "改良护甲"
+        ],
+        "mp_battanian_chainmail_shoulder_b": [
+          "改良护甲"
+        ],
+        "mp_battania_cloak_furr": [
+          "改良护甲"
+        ],
+        "mp_battania_shoulder_strap": [
+          "改良护甲"
+        ]
+      },
       "defaults": {
         "Head": "护面盔",
         "Body": "重型链甲衫配宽腰带",
@@ -1315,6 +1609,7 @@
         "mp_northern_lamellar_armor",
         "mp_highland_gloves"
       ],
+      "requirements": {},
       "defaults": {
         "Body": "格纹束腰衣",
         "Leg": "高地毛皮靴"

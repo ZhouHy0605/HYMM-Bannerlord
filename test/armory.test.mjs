@@ -31,6 +31,16 @@ test('presets are independent by player/class, reset does not erase other classe
  assert.deepEqual(store.save('a',{classId:a.id,items:null}),{[b.id]:[]});
  assert.throws(()=>store.batch(['not-steam']));db.close();
 });
+test('Skirmish in a multi-mode perk grants heavy infantry shoulder choices and states their skill requirements',()=>{
+ const legion=catalog.classes.find(c=>c.id==='mp_heavy_infantry_empire');
+ const varangian=catalog.classes.find(c=>c.id==='mp_heavy_infantry_sturgia');
+ const capes=c=>c.items.filter(id=>catalog.items.find(i=>i.id===id).slot==='Cape');
+ assert.equal(capes(legion).length,6);assert.equal(capes(varangian).length,2);
+ for(const id of capes(legion)){assert.deepEqual(legion.requirements[id],['覆板护甲']);assert.doesNotThrow(()=>validateArmory({classId:legion.id,items:[id]}));}
+ for(const id of capes(varangian)){assert.deepEqual(varangian.requirements[id],['填充护甲']);assert.doesNotThrow(()=>validateArmory({classId:varangian.id,items:[id]}));}
+ assert.equal(legion.requirements.mp_empire_battle_crown_north,undefined);
+ assert.equal(legion.requirements.mp_empire_legion_b,undefined);
+});
 test('HYMM legionary exceptions grant both cavalry cosmetics only to the requested infantry class',()=>{
  const crown='mp_empire_battle_crown_north',armor='mp_empire_legion_b',legion='mp_heavy_infantry_empire';
  assert.deepEqual(validateArmory({classId:legion,items:[crown,armor]}).items,[crown,armor].sort());

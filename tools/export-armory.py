@@ -32,14 +32,23 @@ for c in ET.parse(root/'mpclassdivisions.xml').getroot():
     if culture not in {x['id'] for x in cultures}: continue
     base = {x.get('slot'):x.get('id').removeprefix('Item.') for x in hero.findall('.//equipment') if x.get('slot') in slot_types.values()}
     possible = set(base.values())
+    perk_items = {}
     # Only equipment alternatives usable by the player in Skirmish (not captain troops).
     for p in c.findall('Perks/Perk'):
-        if p.get('game_mode') not in ('all','skirmish'): continue
+        modes = {m.strip().lower() for m in p.get('game_mode','').split(',')}
+        if not modes.intersection({'all','skirmish'}): continue
         for x in p.findall('OnSpawnEffect'):
             if x.get('type') == 'AlternativeEquipmentOnSpawn' and x.get('target') == 'Player' and x.get('slot') in slot_types.values():
                 possible.add(x.get('item'))
+                perk_items.setdefault(x.get('item'), []).append(name(p.get('name')))
     allowed = [i for i,x in catalog_items.items() if possible.intersection(x['replaces']) or any(t['classId']==c.get('id') for t in x['itemless'])]
-    classes.append(dict(id=c.get('id'), name=name(hero.get('name')), culture=culture, group=hero.get('default_group'), items=allowed, defaults={s:name(items[i].get('name')) for s,i in base.items() if i in items}))
+    requirements = {}
+    for i in allowed:
+        skin = catalog_items[i]
+        if set(base.values()).intersection(skin['replaces']) or any(t['classId']==c.get('id') for t in skin['itemless']): continue
+        names = sorted({n for target in skin['replaces'] for n in perk_items.get(target, [])})
+        if names: requirements[i] = names
+    classes.append(dict(id=c.get('id'), name=name(hero.get('name')), culture=culture, group=hero.get('default_group'), items=allowed, requirements=requirements, defaults={s:name(items[i].get('name')) for s,i in base.items() if i in items}))
 assert len(classes) >= 40 and len({c['culture'] for c in classes})==6
 # Add explicit HYMM exceptions after building native compatibility, so shared
 # equipment does not accidentally grant the same skin to other classes.
