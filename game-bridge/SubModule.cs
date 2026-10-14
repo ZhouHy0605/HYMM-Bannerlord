@@ -19,7 +19,7 @@ public sealed class SubModule : MBSubModuleBase
             logPath=Path.Combine(Path.GetDirectoryName(configPath)!,"bridge.log");
             var config=JsonSerializer.Deserialize<Config>(File.ReadAllText(configPath),Transport.Json)!;
             Link=new Transport(config,Path.Combine(Path.GetDirectoryName(configPath)!,"bridge-state.json"),Log);
-            Log("Loaded v0.4.2; custom ranked map registration; native scoreboard ADR; native Skirmish round duration; disconnects do not interrupt play; arrival timeout="+config.ArrivalTimeoutSeconds+"s; asynchronous map preparation, in-place halftime, combat v2; explicit identity mappings="+config.GameIdToSteamId.Count);
+            Log("Loaded v0.4.3; custom ranked map registration; native scoreboard ADR; native Skirmish round duration; disconnects do not interrupt play; arrival timeout="+config.ArrivalTimeoutSeconds+"s; asynchronous map preparation, in-place halftime, combat v2; explicit identity mappings="+config.GameIdToSteamId.Count);
         }
         catch(Exception e){Log("DISABLED: "+e.Message);}
     }
@@ -35,7 +35,7 @@ public sealed class SubModule : MBSubModuleBase
         var selector=new RosterTeamSelectComponent();
         mission.AddMissionBehavior(selector);
         selector.OnAfterMissionCreated(); // The mission creation callback has already run.
-        if(Link!=null)mission.AddMissionBehavior(new ArenaBehavior(Link));
+        if(Link!=null){mission.AddMissionBehavior(new ArenaBehavior(Link));mission.AddMissionBehavior(new ServerNotices(Link.Config));}
         Log("Team selection installed; idle free play, ranked roster enforcement");
     }
     internal static void Log(string s)
@@ -69,6 +69,7 @@ public sealed class ArenaBehavior : MissionBehavior
     readonly Dictionary<string,float> horseDamage=new();
     readonly CombatSpawns spawns=new();
     bool recording;
+    readonly KillStreaks streaks=new();
     internal bool Initialized {get;private set;}
     public ArenaBehavior(Transport transport){link=transport;}
     public override MissionBehaviorType BehaviorType=>MissionBehaviorType.Other;
@@ -84,7 +85,7 @@ public sealed class ArenaBehavior : MissionBehavior
         // Uneven online counts must never move another player off the fixed roster.
         MultiplayerOptions.OptionType.AutoTeamBalanceThreshold.SetValue(0);
         rounds=Mission.GetMissionBehavior<MultiplayerRoundController>();
-        if(rounds!=null)rounds.OnRoundStarted+=RoundStarted;
+        if(rounds!=null){rounds.OnRoundStarted+=RoundStarted;rounds.OnRoundEnding+=ResetStreaks;}
         MissionPeer.OnTeamChanged+=TeamChanged;
         if(prepared!=null){job=prepared;arrivalDeadline=DateTime.UtcNow.AddSeconds(link.Config.ArrivalTimeoutSeconds);if(!Policy.Valid(job,Map)||!CulturesMatch()||rounds==null||rounds.RoundCount!=0)Fail("prepared_mission_mismatch");else SubModule.Log($"Adopted {job.MatchId} leg={job.Leg}; cultures(attacker/defender)={string.Join("/",job.Cultures)}");}
         Initialized=true;
@@ -199,6 +200,7 @@ public sealed class ArenaBehavior : MissionBehavior
     }
     void TeamChanged(NetworkCommunicator peer,Team oldTeam,Team newTeam)
     {
+        var agent=peer.GetComponent<MissionPeer>()?.ControlledAgent;if(agent!=null)streaks.Forget(agent);
         if(FreePlay)return;
         if(correcting||peer.IsServerPeer)return;
         // A mid-round side switch invalidates the match rather than silently scoring compromised play.
@@ -208,6 +210,7 @@ public sealed class ArenaBehavior : MissionBehavior
     }
     void RoundStarted()
     {
+        ResetStreaks();
         if(job==null||terminal)return;
         Assign();if(!live){Fail("round_started_before_authorization");return;}
         ledger??=new CombatLedger(job.Teams.SelectMany(t=>t));
@@ -258,6 +261,20 @@ public sealed class ArenaBehavior : MissionBehavior
     }
     void ObserveSpawns(){foreach(var peer in GameNetwork.NetworkPeers){var agent=peer.GetComponent<MissionPeer>()?.ControlledAgent;if(agent!=null)ObserveSpawn(agent);}}
     public override void OnAgentControllerSetToPlayer(Agent agent){base.OnAgentControllerSetToPlayer(agent);ObserveSpawn(agent);}
+    void ResetStreaks()=>streaks.Reset();
+    public override void OnAgentRemoved(Agent affectedAgent,Agent affectorAgent,AgentState agentState,KillingBlow killingBlow)
+    {
+        base.OnAgentRemoved(affectedAgent,affectorAgent,agentState,killingBlow);
+        if(affectedAgent==null||!affectedAgent.IsHuman||affectedAgent.MissionPeer==null)return;
+        var attacker=affectorAgent?.IsMount==true?affectorAgent.RiderAgent:affectorAgent;
+        bool eligible=agentState==AgentState.Killed&&!terminal&&!switchingSides&&!correcting&&
+            Preparation.CanSelectTeam(Mission)&&rounds?.IsRoundInProgress==true&&(FreePlay||live)&&
+            attacker?.IsHuman==true&&attacker.IsActive()&&attacker.MissionPeer!=null&&
+            attacker.Team!=null&&affectedAgent.Team!=null&&attacker.Team.Side!=BattleSideEnum.None&&
+            affectedAgent.Team.Side!=BattleSideEnum.None&&attacker.Team!=affectedAgent.Team;
+        int count=streaks.Removed(affectedAgent,attacker,eligible,ServerNotices.Now);
+        if(count>0)ServerNotices.BroadcastStreak(attacker?.MissionPeer?.Name??"玩家",count);
+    }
     void RoundEnded()
     {
         if(job==null||terminal||!live)return;
@@ -311,7 +328,7 @@ public sealed class ArenaBehavior : MissionBehavior
     }
     public override void OnRemoveBehavior()
     {
-        if(rounds!=null){rounds.OnRoundStarted-=RoundStarted;rounds.OnPostRoundEnded-=RoundEnded;}
+        if(rounds!=null){rounds.OnRoundStarted-=RoundStarted;rounds.OnRoundEnding-=ResetStreaks;rounds.OnPostRoundEnded-=RoundEnded;}
         if(roundEndingSubscribed&&rounds!=null)rounds.OnRoundEnding-=RoundEnding;
         MissionPeer.OnTeamChanged-=TeamChanged;
         Fail("mission_removed_before_result");

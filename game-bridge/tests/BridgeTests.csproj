@@ -4,6 +4,7 @@
   <ItemGroup>
     <Compile Include="../Core.cs" Link="Core.cs" /><Compile Include="../Preparation.cs" Link="Preparation.cs" />
     <Compile Include="../CombatLedger.cs" Link="CombatLedger.cs" />
+    <Compile Include="../KillStreaks.cs" Link="KillStreaks.cs" />
     <Compile Include="../NativeIdentity.cs" Link="NativeIdentity.cs" />
     <Compile Include="../NativeHalftime.cs" Link="NativeHalftime.cs" />
     <Reference Include="$(ServerRoot)/bin/Win64_Shipping_Server/TaleWorlds.PlayerServices.dll" />

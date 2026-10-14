@@ -3,5 +3,10 @@
   "serverId": "skirmish-1",
   "token": "",
   "arrivalTimeoutSeconds": 300,
+  "joinMessages": [
+    "[HYMM] 欢迎加入！自由游玩可自由选边，热身 2 分钟；地图与双方国家随机轮换。",
+    "[HYMM] 匹配通过网页排队，12 人就绪后由队长选人；进服点击自动分配，名单外玩家旁观。",
+    "[HYMM] 匹配到场等待最多 5 分钟，人齐开赛，超时人不齐则取消。匹配玩家须加入 KOOK 语音。"
+  ],
   "gameIdToSteamId": {}
 }

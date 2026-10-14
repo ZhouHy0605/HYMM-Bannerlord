@@ -4,6 +4,7 @@ using System.Text.Json;
 void Check(bool v,string message){if(!v)throw new Exception(message);}
 PreparationChecks.Run();
 HalftimeChecks.Run();
+KillStreakChecks.Run();
 // Disconnect counters survive removal from the online collection; reconnecting
 // with the native retained peer does not duplicate totals. Offline rounds count.
 var offlineLedger=new CombatLedger(new[]{"one","two"});

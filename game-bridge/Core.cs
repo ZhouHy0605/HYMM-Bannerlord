@@ -9,6 +9,7 @@ public sealed class Config
     public string ServerId { get; set; } = "skirmish-1";
     public string Token { get; set; } = "";
     public int ArrivalTimeoutSeconds { get; set; } = 300;
+    public string[] JoinMessages {get;set;}=Array.Empty<string>();
     // Explicit pool excludes native developer scenes; custom entries must also be registered.
     public string[] IdleMaps {get;set;}=new[]{"mp_skirmish_map_002f","mp_skirmish_map_003_skinc","mp_skirmish_map_010","mp_skirmish_map_007","mp_skirmish_map_008_skin","mp_skirmish_map_009","mp_skirmish_map_014","mp_skirmish_map_020"};
     // Populated only after verifying an authenticated game ID against its Steam account.
@@ -19,6 +20,7 @@ public sealed class Config
         if (uri.Scheme != "https" && !(uri.Scheme == "http" && uri.IsLoopback)) throw new Exception("Use HTTPS outside localhost");
         if (Token.Length < 32 || string.IsNullOrWhiteSpace(ServerId) || ServerId.Length > 80) throw new Exception("Set token (32+ characters) and server ID");
         if (ArrivalTimeoutSeconds < 60 || ArrivalTimeoutSeconds > 3600) throw new Exception("Invalid arrival timeout");
+        if(JoinMessages==null||JoinMessages.Length>10||JoinMessages.Any(s=>string.IsNullOrWhiteSpace(s)||s.Length>240||s.Any(char.IsControl)))throw new Exception("Invalid join messages");
         if(IdleMaps==null||IdleMaps.Length==0||IdleMaps.Length>100||IdleMaps.Any(m=>string.IsNullOrEmpty(m)||m.Length>100||m.Any(c=>!(c>='a'&&c<='z'||c>='A'&&c<='Z'||c>='0'&&c<='9'||c=='_')))||IdleMaps.Distinct().Count()!=IdleMaps.Length)throw new Exception("Invalid idle map pool");
         if (GameIdToSteamId.Values.Any(x => !Policy.IsSteamId(x)) || GameIdToSteamId.Values.Distinct().Count()!=GameIdToSteamId.Count) throw new Exception("Invalid or duplicate identity mapping");
     }
@@ -219,7 +221,7 @@ public sealed class Transport : IDisposable
     void PollHeartbeat()
     {
         if(heartbeat?.IsCompleted==true){try{using var response=heartbeat.GetAwaiter().GetResult();if(response.IsSuccessStatusCode){var payload=JsonSerializer.Deserialize<ControlReply>(response.Content.ReadAsStringAsync().GetAwaiter().GetResult(),Json);if(payload?.Control!=null&&payload.Control.Id!=State.LastControlId)Control=payload.Control;}}catch(Exception e){log("Heartbeat retry: "+e.GetType().Name);}heartbeat=null;}
-        if(heartbeat==null&&DateTime.UtcNow>=nextHeartbeat){nextHeartbeat=DateTime.UtcNow.AddSeconds(5);heartbeat=http.PostAsync("api/bridge/heartbeat",Content(new{serverId=Config.ServerId,matchId=State.Active?.MatchId,blocked=State.Blocked!=null,version="arena-0.4.2",ackId=State.LastControlId,idleMapSupported=true,currentMap=CurrentMap,controlResult=State.ControlResult,controlError=State.ControlError}));}
+        if(heartbeat==null&&DateTime.UtcNow>=nextHeartbeat){nextHeartbeat=DateTime.UtcNow.AddSeconds(5);heartbeat=http.PostAsync("api/bridge/heartbeat",Content(new{serverId=Config.ServerId,matchId=State.Active?.MatchId,blocked=State.Blocked!=null,version="arena-0.4.3",ackId=State.LastControlId,idleMapSupported=true,currentMap=CurrentMap,controlResult=State.ControlResult,controlError=State.ControlError}));}
     }
     public void CompleteMapControl(StopCommand command,string? error=null){State.LastControlId=command.Id;State.ControlResult=error==null?"ok":"failed";State.ControlError=error;Save();Control=null;nextHeartbeat=DateTime.MinValue;}
     public bool AcknowledgeStop(StopCommand command)
