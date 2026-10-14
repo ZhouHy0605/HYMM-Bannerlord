@@ -31,6 +31,18 @@ test('presets are independent by player/class, reset does not erase other classe
  assert.deepEqual(store.save('a',{classId:a.id,items:null}),{[b.id]:[]});
  assert.throws(()=>store.batch(['not-steam']));db.close();
 });
+test('HYMM legionary exceptions grant both cavalry cosmetics only to the requested infantry class',()=>{
+ const crown='mp_empire_battle_crown_north',armor='mp_empire_legion_b',legion='mp_heavy_infantry_empire';
+ assert.deepEqual(validateArmory({classId:legion,items:[crown,armor]}).items,[crown,armor].sort());
+ for(const id of ['mp_skirmisher_empire','mp_shock_infantry_empire','mp_light_ranged_empire','mp_heavy_ranged_empire']){
+  assert.throws(()=>validateArmory({classId:id,items:[crown]}));
+  assert.throws(()=>validateArmory({classId:id,items:[armor]}));
+ }
+ assert.doesNotThrow(()=>validateArmory({classId:'mp_heavy_cavalry_empire',items:[crown]}));
+ assert.doesNotThrow(()=>validateArmory({classId:'mp_light_cavalry_empire',items:[armor]}));
+ assert.ok(catalog.items.find(x=>x.id===crown).replaces.includes('mp_ironlame_nasalhelm_over_imperial_mail'));
+ assert.ok(catalog.items.find(x=>x.id===armor).replaces.includes('mp_legionary_mail'));
+});
 test('armory HTTP enforces Steam session, CSRF, bridge token and persists per-account presets',async()=>{
  const reserve=net.createServer();await new Promise(r=>reserve.listen(0,'127.0.0.1',r));const port=reserve.address().port;await new Promise(r=>reserve.close(r));
  const dir=await mkdtemp(path.join(os.tmpdir(),'hymm-armory-')),origin=`http://127.0.0.1:${port}`,token='armory-integration-test-bridge-token-12345';

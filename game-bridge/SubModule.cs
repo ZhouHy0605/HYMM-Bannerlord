@@ -19,7 +19,7 @@ public sealed class SubModule : MBSubModuleBase
             logPath=Path.Combine(Path.GetDirectoryName(configPath)!,"bridge.log");
             var config=JsonSerializer.Deserialize<Config>(File.ReadAllText(configPath),Transport.Json)!;
             Link=new Transport(config,Path.Combine(Path.GetDirectoryName(configPath)!,"bridge-state.json"),Log);
-            Log("Loaded v0.4.4; custom ranked map registration; native scoreboard ADR; native Skirmish round duration; disconnects do not interrupt play; arrival timeout="+config.ArrivalTimeoutSeconds+"s; asynchronous map preparation, in-place halftime, combat v2; explicit identity mappings="+config.GameIdToSteamId.Count);
+            Log("Loaded v0.4.5; custom ranked map registration; native scoreboard ADR; native Skirmish round duration; disconnects do not interrupt play; arrival timeout="+config.ArrivalTimeoutSeconds+"s; asynchronous map preparation, in-place halftime, combat v2; explicit identity mappings="+config.GameIdToSteamId.Count);
         }
         catch(Exception e){Log("DISABLED: "+e.Message);}
     }

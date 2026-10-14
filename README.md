@@ -54,6 +54,8 @@ npm.cmd start
 
 升级游戏后可运行 `python tools/export-armory.py "游戏安装目录"` 重新导出原版 ID、中文名称及兼容关系，再运行测试。目录来自 `mpcosmetics.xml`、`mpclassdivisions.xml`、`mpcharacters.xml` 和 `mpitems.xml`，不开放任意装备 ID。停用时将 `enableArmory` 设为 `false` 并重启游戏服。
 
+HYMM 的兵种例外在 `game-bridge/armory-overrides.json` 中维护，并嵌入插件。当前仅给帝国军团步兵额外开放缨饰珠宝战场王冠及华丽军团鳞甲；目录生成后只扩展指定兵种，插件仅扩展外观替换关系。修改例外时需重新导出目录、构建插件并一并部署。
+
 ## 检查
 
 ```powershell

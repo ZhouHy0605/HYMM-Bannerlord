@@ -41,6 +41,20 @@ for c in ET.parse(root/'mpclassdivisions.xml').getroot():
     allowed = [i for i,x in catalog_items.items() if possible.intersection(x['replaces']) or any(t['classId']==c.get('id') for t in x['itemless'])]
     classes.append(dict(id=c.get('id'), name=name(hero.get('name')), culture=culture, group=hero.get('default_group'), items=allowed, defaults={s:name(items[i].get('name')) for s,i in base.items() if i in items}))
 assert len(classes) >= 40 and len({c['culture'] for c in classes})==6
+# Add explicit HYMM exceptions after building native compatibility, so shared
+# equipment does not accidentally grant the same skin to other classes.
+overrides = json.loads((out.parents[1]/'game-bridge/armory-overrides.json').read_text(encoding='utf-8'))
+for rule in overrides:
+    c = next(c for c in classes if c['id']==rule['classId'])
+    cosmetic = catalog_items[rule['cosmeticId']]
+    assert cosmetic['slot']==rule['slot']
+    hero = chars[rule['classId']+'_hero']
+    base = {x.get('slot'):x.get('id').removeprefix('Item.') for x in hero.findall('.//equipment')}
+    assert base[rule['slot']] in rule['replaceItems']
+    if rule['cosmeticId'] not in c['items']: c['items'].append(rule['cosmeticId'])
+    for target in rule['replaceItems']:
+        assert target in items and slot_types[items[target].get('Type')]==rule['slot']
+        if target not in cosmetic['replaces']: cosmetic['replaces'].append(target)
 used = {i for c in classes for i in c['items']}
 data = dict(version=1, sourceHash=hashlib.sha256(b''.join((root/f).read_bytes() for f in ['mpcosmetics.xml','mpclassdivisions.xml','mpcharacters.xml','mpitems.xml'])).hexdigest(), cultures=cultures, slots=[dict(id=i,name=n) for i,n in [('Head','头部'),('Body','上身'),('Cape','肩部'),('Gloves','手部'),('Leg','腿部')]], classes=classes, items=[x for i,x in catalog_items.items() if i in used])
 out.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')

@@ -6,6 +6,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="*.cs" />
+    <EmbeddedResource Include="armory-overrides.json" LogicalName="ArenaBridge.armory-overrides.json" />
     <Reference Include="$(ServerRoot)/bin/Win64_Shipping_Server/TaleWorlds.*.dll"><Private>false</Private></Reference>
   </ItemGroup>
 </Project>

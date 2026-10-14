@@ -26,7 +26,44 @@ internal sealed class Armory : MissionBehavior
     }
     public Armory(Transport transport) { link=transport; }
     public override MissionBehaviorType BehaviorType => MissionBehaviorType.Other;
-    public override void AfterStart(){SubModule.Log("Armory ready; classes="+MBObjectManager.Instance.GetObjectTypeList<MultiplayerClassDivisions.MPHeroClass>().Count+"; native cosmetics="+CosmeticsManager.CosmeticElementsList.Count);}
+    public override void AfterStart()
+    {
+        try{InstallOverrides();}
+        catch(Exception e){SubModule.Log("Armory compatibility unavailable: "+e.GetType().Name);}
+        SubModule.Log("Armory ready; classes="+MBObjectManager.Instance.GetObjectTypeList<MultiplayerClassDivisions.MPHeroClass>().Count+"; native cosmetics="+CosmeticsManager.CosmeticElementsList.Count);
+    }
+    sealed class CompatibilityRule
+    {
+        public string ClassId {get;set;}="";
+        public string Slot {get;set;}="";
+        public string CosmeticId {get;set;}="";
+        public string[] ReplaceItems {get;set;}=Array.Empty<string>();
+    }
+    static void InstallOverrides()
+    {
+        using var stream=typeof(Armory).Assembly.GetManifestResourceStream("ArenaBridge.armory-overrides.json")!;
+        var rules=JsonSerializer.Deserialize<CompatibilityRule[]>(stream,Transport.Json)!;
+        var classes=MBObjectManager.Instance.GetObjectTypeList<MultiplayerClassDivisions.MPHeroClass>();
+        var changes=new List<(ClothingCosmeticElement clothing,string target)>();
+        foreach(var rule in rules)
+        {
+            var hero=classes.First(c=>c.StringId==rule.ClassId).HeroCharacter;
+            var slot=rule.Slot=="Head"?EquipmentIndex.Head:rule.Slot=="Body"?EquipmentIndex.Body:throw new InvalidOperationException("Unsupported override slot");
+            if(!rule.ReplaceItems.Contains(hero.Equipment[slot].Item?.StringId))throw new InvalidOperationException("Native class equipment changed");
+            var clothing=CosmeticsManager.CosmeticElementsList.First(c=>c.Id==rule.CosmeticId) as ClothingCosmeticElement??throw new InvalidOperationException("Unknown override cosmetic");
+            foreach(var target in rule.ReplaceItems)
+            {
+                var original=MBObjectManager.Instance.GetObject<ItemObject>(target);
+                var cosmetic=MBObjectManager.Instance.GetObject<ItemObject>(rule.CosmeticId);
+                if(original==null||cosmetic==null||original.ItemType!=cosmetic.ItemType)throw new InvalidOperationException("Incompatible override item");
+                changes.Add((clothing,target));
+            }
+        }
+        // Validate the complete set before extending native, in-memory cosmetic
+        // lookups. No Item, equipment, armor or weapon statistics are modified.
+        foreach(var (clothing,target) in changes)if(!clothing.ReplaceItemsId.Contains(target))clothing.ReplaceItemsId.Add(target);
+        SubModule.Log("Armory HYMM compatibility ready; rules="+rules.Length);
+    }
     public override void OnPreMissionTick(float dt)
     {
         if(!link.Config.EnableArmory)return;

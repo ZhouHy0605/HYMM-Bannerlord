@@ -1,0 +1,14 @@
+[
+  {
+    "classId": "mp_heavy_infantry_empire",
+    "slot": "Head",
+    "cosmeticId": "mp_empire_battle_crown_north",
+    "replaceItems": ["mp_ironlame_nasalhelm_over_imperial_mail"]
+  },
+  {
+    "classId": "mp_heavy_infantry_empire",
+    "slot": "Body",
+    "cosmeticId": "mp_empire_legion_b",
+    "replaceItems": ["mp_legionary_mail"]
+  }
+]

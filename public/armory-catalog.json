@@ -391,7 +391,9 @@
         "mp_plated_strip_gauntlets",
         "mp_decorated_imperial_boots",
         "mp_lamellar_plate_boots",
-        "mp_strapped_mail_chausses"
+        "mp_strapped_mail_chausses",
+        "mp_empire_battle_crown_north",
+        "mp_empire_legion_b"
       ],
       "defaults": {
         "Head": "铁制鼻护盔衬链甲",
@@ -2873,7 +2875,8 @@
       "name": "华丽军团鳞甲",
       "slot": "Body",
       "replaces": [
-        "mp_basic_imperial_leather_armor"
+        "mp_basic_imperial_leather_armor",
+        "mp_legionary_mail"
       ],
       "itemless": []
     },
@@ -3016,7 +3019,8 @@
       "name": "缨饰珠宝战场王冠",
       "slot": "Head",
       "replaces": [
-        "mp_imperial_goggled_helmet"
+        "mp_imperial_goggled_helmet",
+        "mp_ironlame_nasalhelm_over_imperial_mail"
       ],
       "itemless": []
     },

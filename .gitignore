@@ -47,6 +47,7 @@
 !/game-bridge/SubModule.xml
 !/game-bridge/Build.ps1
 !/game-bridge/bridge.example.json
+!/game-bridge/armory-overrides.json
 !/game-bridge/tests/
 /game-bridge/tests/*
 !/game-bridge/tests/*.cs
