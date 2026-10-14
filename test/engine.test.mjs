@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as g from '../engine.mjs';
 function setup(){const s=g.empty();for(let i=0;i<12;i++){g.user(s,'p'+i,'骑士'+i);g.action(s,'p'+i,{type:'join'},1000);}return s;}
-function ready(s){const m=s.matches[0];for(const id of m.players)g.action(s,id,{type:'ready',matchId:m.id,revision:m.revision},2000);return m;}
+function ready(s){const m=s.matches[0];for(const id of m.players)g.action(s,id,{type:'ready',matchId:m.id,revision:m.revision},2000);g.tick(s,m.deadline);return m;}
 function draft(s,m){for(let i=0;i<10;i++){const id=m.players.find(p=>!m.teams.flat().includes(p));g.action(s,m.captains[m.turn],{type:'pick',playerId:id,matchId:m.id,revision:m.revision},3000);}}
 test('12 unique players -> balanced roster -> random map/cultures -> trusted result, exactly once',()=>{
  const s=setup(),m=ready(s);draft(s,m);assert.equal(m.phase,'awaiting_server');assert.deepEqual(m.teams.map(t=>t.length),[6,6]);assert.equal(new Set(m.teams.flat()).size,12);assert.ok(g.MAPS.some(x=>x.id===m.map));assert.equal(m.cultures.length,2);
@@ -52,10 +52,11 @@ test('queue joins are idempotent and one player cannot enter two active matches'
 test('all twelve can confirm the same ready snapshot without stale-revision failures',()=>{
  const s=setup(),m=s.matches[0],revision=m.revision;
  for(const id of m.players)g.action(s,id,{type:'ready',matchId:m.id,revision},2000);
- assert.equal(m.phase,'draft');assert.equal(m.ready.length,12);
+ assert.equal(m.phase,'election');assert.equal(m.ready.length,12);
  const after=m.revision;
  g.action(s,m.players[0],{type:'ready',matchId:m.id,revision},2001);
  assert.equal(m.revision,after);assert.equal(m.ready.length,12);
+ g.tick(s,m.deadline);
  const playerId=m.players.find(id=>!m.captains.includes(id));
  assert.throws(()=>g.action(s,m.captains[0],{type:'pick',matchId:m.id,revision,playerId},2002),/更新/);
 });

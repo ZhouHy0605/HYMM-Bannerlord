@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as g from '../engine.mjs';
 import {heartbeat} from '../operations.mjs';
-function fixture(){const s=g.empty();for(let i=0;i<12;i++){const id=String(76561198000000000n+BigInt(i));g.user(s,id,'Player '+i);g.action(s,id,{type:'join'},1000);}const m=s.matches[0];g.action(s,m.players[0],{type:'demo-ready',matchId:m.id,revision:m.revision},2000,true);for(let i=0;i<10;i++)g.tick(s,m.deadline+1);return {s,m};}
+function fixture(){const s=g.empty();for(let i=0;i<12;i++){const id=String(76561198000000000n+BigInt(i));g.user(s,id,'Player '+i);g.action(s,id,{type:'join'},1000);}const m=s.matches[0];g.action(s,m.players[0],{type:'demo-ready',matchId:m.id,revision:m.revision},2000,true);for(let i=0;i<11;i++)g.tick(s,m.deadline+1);return {s,m};}
 test('exclusive claim, same-server retry and reservation-aware start',()=>{
  const {s,m}=fixture(),b={matchId:m.id,map:m.map,serverId:'s1'};
  assert.equal(g.claim(s,b).reservedBy,'s1');assert.deepEqual(g.claim(s,b),g.job(m));

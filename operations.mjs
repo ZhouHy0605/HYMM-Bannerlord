@@ -11,7 +11,7 @@ function stop(s,m,now){const serverId=occupied(m);if(!serverId||serverId==='simu
 export function pendingControl(s,serverId){return s.controls?.[serverId]?.status==='pending';}
 export function adminAction(s,actor,b,now=Date.now()){
  if(b.type==='idle-map'){
-  if(s.matches.some(m=>m.phase==='draft'))fail('已有房间正在队长选人，禁止后台切图');
+  if(s.matches.some(m=>['election','draft'].includes(m.phase)))fail('已有房间正在竞选队长或选人，禁止后台切图');
   const r=s.servers?.[b.serverId],map=IDLE_MAPS.find(m=>m.id===b.map);
   if(!map)fail('请选择可用地图',400);
   if(!r||now-r.lastSeen>20000)fail('服务器离线或心跳过期，请稍后重试');

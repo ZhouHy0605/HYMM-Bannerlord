@@ -1,5 +1,6 @@
 const melodies={
  ready:[[523,0,.16],[659,.2,.16],[784,.4,.3],[523,.9,.16],[659,1.1,.16],[784,1.3,.35]],
+ election:[[523,0,.18],[784,.24,.3]],
  pick:[[659,0,.14],[880,.2,.25]],draft:[[392,0,.15],[523,.2,.22]],
  prepare:[[392,0,.16],[494,.2,.16],[587,.4,.25]],
  live:[[392,0,.18],[523,.22,.18],[784,.44,.35]],
@@ -15,9 +16,10 @@ export function matchCue(previous,next){
  const cue=(room,kind,step=room.leg||0)=>({key:[next.mode,id,room.id,kind,step].join(':'),kind});
  if(m?.players.includes(id)){
   if(m.phase==='ready'&&!m.ready.includes(id))return cue(m,'ready');
+  if(m.phase==='election')return cue(m,'election');
   if(m.phase==='draft'){
    if(m.captains[m.turn]===id)return cue(m,'pick',m.picks.length);
-   if(previous?.current?.id===m.id&&previous.current.phase==='ready')return cue(m,'draft');
+   if(previous?.current?.id===m.id&&['ready','election'].includes(previous.current.phase))return cue(m,'draft');
   }
   if(previous?.current?.id===m.id&&(previous.current.phase!==m.phase||previous.current.leg!==m.leg)){
    if(m.phase==='awaiting_server')return cue(m,m.leg===1?'halftime':'prepare');

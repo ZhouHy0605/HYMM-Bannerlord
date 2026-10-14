@@ -9,7 +9,7 @@ export const CULTURES=[{id:'khuzait',name:'库赛特'},{id:'aserai',name:'阿塞
 export const validCultures=c=>Array.isArray(c)&&c.length===2&&c[0]!==c[1]&&c.every(id=>CULTURES.some(x=>x.id===id));
 export const DRAFT_ORDER=Object.freeze([0,1,1,0,0,1,1,0,0,1]);
 export const validLegScore=score=>Array.isArray(score)&&score.length===2&&score.every(Number.isInteger)&&((score[0]===3&&score[1]>=0&&score[1]<3)||(score[1]===3&&score[0]>=0&&score[0]<3));
-export const ACTIVE=['ready','draft','veto','awaiting_server','live','review'];
+export const ACTIVE=['ready','election','draft','veto','awaiting_server','live','review'];
 export function fail(message,status=409){throw Object.assign(new Error(message),{status});}
 export function rank(r){return r<800?"小丑":r<1200?"农民":r<1400?"卫兵":r<1600?"骑士":r<2000?"骑士长":r<2400?"领主":r<3000?"公爵":r<3600?"亲王":r<4000?"国王":'皇帝';}
 export function empty(){return {users:{},queue:[],matches:[],ledger:[],events:[]};}
@@ -42,8 +42,17 @@ export function prepareBattle(m,now=Date.now(),choose=randomInt){
  if(!m.selection||redraw){m.selection={method:'random-distinct-v2',at:now};event(m,'随机地图与双方不同国家已锁定',now);}
  phase(m,'awaiting_server',0,now);
 }
+function lockDraftMap(m,now){
+ if(!m.map){m.map=MAPS[randomInt(MAPS.length)].id;event(m,'本场地图已锁定：'+MAPS.find(x=>x.id===m.map).name,now);}
+}
+function beginElection(m,now){
+ lockDraftMap(m,now);m.candidates=[];phase(m,'election',30,now);event(m,'队长竞选开始，30 秒内可报名',now);
+}
 function beginDraft(s,m,now){
- const sorted=[...m.players].sort((a,b)=>s.users[b].rating-s.users[a].rating||a.localeCompare(b));
+ lockDraftMap(m,now);
+ const candidates=m.candidates||[],pool=candidates.length>=2?candidates:m.players;
+ m.captainSelection=candidates.length>=2?'volunteers':'rating-fallback';
+ const sorted=[...pool].sort((a,b)=>s.users[b].rating-s.users[a].rating||a.localeCompare(b));
  m.captains=sorted.slice(0,2);m.teams=m.captains.map(id=>[id]);m.pickOrder=[...DRAFT_ORDER];m.turn=m.pickOrder[0];phase(m,'draft',30,now);event(m,'队长已确定，A 队先选',now);
 }
 function pick(s,m,id,now){
@@ -63,13 +72,20 @@ export function action(s,actor,b,now=Date.now(),demo=false){
  if(b.type==='ready'){
   // Each player's acknowledgement is independent; concurrent confirmations may
   // share a revision. Draft picks still require an exact revision below.
-  if(m.phase==='draft'&&m.ready.includes(actor))return;
+  if(['election','draft'].includes(m.phase)&&m.ready.includes(actor))return;
   if(m.phase==='ready'&&now>=m.deadline)fail('就绪确认已超时');
-  if(m.phase!=='ready')fail('当前无需确认');if(!m.ready.includes(actor)){m.ready.push(actor);event(m,`${s.users[actor].name} 已就绪`,now);}if(m.ready.length===12)beginDraft(s,m,now);return;
+  if(m.phase!=='ready')fail('当前无需确认');if(!m.ready.includes(actor)){m.ready.push(actor);event(m,`${s.users[actor].name} 已就绪`,now);}if(m.ready.length===12)beginElection(m,now);return;
+ }
+ if(b.type==='captain-join'||b.type==='captain-withdraw'){
+  if(m.phase!=='election')fail('当前不在队长竞选阶段');
+  if(now>=m.deadline)fail('队长竞选已结束');
+  const joined=m.candidates.includes(actor),joining=b.type==='captain-join';
+  if(joined!==joining){m.candidates=joining?[...m.candidates,actor]:m.candidates.filter(id=>id!==actor);event(m,`${s.users[actor].name} ${joining?'报名竞选队长':'取消队长报名'}`,now);}return;
  }
  if(b.revision!==m.revision)fail('房间已更新，请重试');
  if(b.type==='pick'){if(m.phase!=='draft')fail('不在选人阶段');if(!demo&&actor!==m.captains[m.turn])fail('还没轮到你',403);pick(s,m,b.playerId,now);return;}
- if(b.type==='demo-ready'&&demo){if(m.phase!=='ready')fail('阶段已变化');m.ready=[...m.players];beginDraft(s,m,now);return;}
+ if(b.type==='demo-ready'&&demo){if(m.phase!=='ready')fail('阶段已变化');m.ready=[...m.players];beginElection(m,now);return;}
+ if(b.type==='demo-election'&&demo){if(m.phase!=='election')fail('阶段已变化');beginDraft(s,m,now);return;}
  if(b.type==='demo-start'&&demo){if(m.phase!=='awaiting_server')fail('请先完成选人');m.server={id:'simulation',name:'模拟训练服务器'};phase(m,'live',0,now);event(m,'模拟比赛开始 · 不连接游戏客户端',now);return;}
  if(b.type==='demo-result'&&demo){finishLeg(s,m,b.score,null,now,'simulation');return;}
  fail('不支持的操作',400);
@@ -111,10 +127,12 @@ export function tick(s,now=Date.now()){
  for(const m of s.matches){if(m.phase==='veto'||(m.phase==='awaiting_server'&&!validCultures(m.cultures))){
   if(m.reservation){m.failureReason='culture_rule_changed';phase(m,'review',0,now);event(m,'已领取比赛的国家规则不符，暂停等待核查',now);}else prepareBattle(m,now);
   changed=true;
- }if(!m.deadline||now<m.deadline)continue;changed=true;
+ }if(m.phase==='draft'&&!m.map){lockDraftMap(m,now);changed=true;}if(!m.deadline||now<m.deadline)continue;changed=true;
   if(m.phase==='ready'){
    for(const id of m.players){s.users[id].cooldown=0;if(m.ready.includes(id)&&!s.queue.some(q=>q.id===id))s.queue.push({id,at:m.createdAt});}
    phase(m,'cancelled',0,now);event(m,'就绪超时，已确认玩家保留排队优先级',now);
+  } else if(m.phase==='election'){
+   beginDraft(s,m,now);
   } else if(m.phase==='draft'){
    const available=m.players.filter(id=>!m.teams.flat().includes(id));const target=m.turn;
    const sum=t=>t.reduce((n,id)=>n+s.users[id].rating,0);

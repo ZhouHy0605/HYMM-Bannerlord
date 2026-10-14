@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as g from '../engine.mjs';
 function queue(n){const s=g.empty();for(let i=0;i<n;i++){const id='p'+i;g.user(s,id,id);s.queue.push({id,at:1000});}return s;}
-function prepare(s,m){g.action(s,m.players[0],{type:'demo-ready',matchId:m.id,revision:m.revision},2000,true);for(let i=0;i<10;i++)g.tick(s,m.deadline+1);}
+function prepare(s,m){g.action(s,m.players[0],{type:'demo-ready',matchId:m.id,revision:m.revision},2000,true);for(let i=0;i<11;i++)g.tick(s,m.deadline+1);}
 test('24 / 36 players form disjoint rooms in one pass, leftovers stay queued',()=>{
  for(const n of [24,25,36,40]){const s=queue(n);g.pair(s,1000);assert.equal(s.matches.length,Math.floor(n/12));assert.equal(s.queue.length,n%12);const ids=s.matches.flatMap(m=>m.players);assert.equal(new Set(ids).size,ids.length);assert.equal(new Set(s.matches.map(m=>m.number)).size,s.matches.length);assert.equal(g.pair(s,1000),undefined);}
 });
@@ -19,7 +19,7 @@ test('random choice excludes mirror cultures and survives reload/ticks, legacy b
  assert.throws(()=>g.action(s,'p0',{type:'ban',matchId:m.id,revision:m.revision}),/不支持/);
 });
 test('two servers claim/settle independent tables; double booking and wrong cultures fail',()=>{
- const s=queue(24);g.pair(s,1000);for(const m of s.matches)g.action(s,m.players[0],{type:'demo-ready',matchId:m.id,revision:m.revision},2000,true);for(let i=0;i<10;i++)g.tick(s,s.matches[0].deadline+1);const [a,b]=s.matches;
+ const s=queue(24);g.pair(s,1000);for(const m of s.matches)g.action(s,m.players[0],{type:'demo-ready',matchId:m.id,revision:m.revision},2000,true);for(let i=0;i<11;i++)g.tick(s,s.matches[0].deadline+1);const [a,b]=s.matches;
  g.claim(s,{matchId:a.id,map:a.map,serverId:'s1'});
  assert.throws(()=>g.claim(s,{matchId:a.id,map:a.map,serverId:'s2'}),/reserved/);
  assert.throws(()=>g.claim(s,{matchId:b.id,map:b.map,serverId:'s1'}),/occupied/);
