@@ -178,7 +178,8 @@
         "mp_khuzait_curved_boots",
         "mp_leather_boots",
         "mp_steppe_leather_boots",
-        "mp_strapped_mail_chausses"
+        "mp_strapped_mail_chausses",
+        "mp_sturgian_fortified_armor"
       ],
       "requirements": {
         "mp_padded_leather_shoulders": [
@@ -388,6 +389,7 @@
         "mp_empire_warrior_padded_armor_f",
         "mp_empire_warrior_padded_armor_d",
         "mp_merchants_hat",
+        "mp_pilgrim_hood",
         "mp_leather_cap",
         "mp_padded_vambrace",
         "mp_padded_mitten",
@@ -466,6 +468,7 @@
         "mp_lamellar_with_scale_skirt",
         "mp_mail_shirt",
         "mp_heavy_nasalhelm_over_imperial_mail",
+        "mp_empire_helmet_with_metal_strips",
         "mp_empire_battle_crown_west",
         "mp_plumed_helmet",
         "mp_varangian_bra_basic",
@@ -543,6 +546,7 @@
         "mp_imperial_mail_over_leather",
         "mp_mail_coif",
         "mp_ironlame_roundkettle_over_imperial_mail",
+        "mp_empire_lord_helmet",
         "mp_varangian_bra_basic",
         "mp_varangian_bra_padded",
         "mp_varangian_bra_scale",
@@ -649,6 +653,7 @@
       "items": [
         "mp_northern_brass_lamellar_over_mail",
         "mp_lamellar_with_scale_skirt",
+        "mp_empire_guarded_lord_helmet",
         "mp_empire_battle_crown_north",
         "mp_imperial_lamellar_shoulders",
         "mp_varangian_bra_scale",
@@ -794,6 +799,7 @@
         "mp_khuzait_lamellar_strapped",
         "mp_khuzait_noble_helmet_with_feathers",
         "mp_khuzait_battle_crown",
+        "mp_khuzait_noble_helmet_with_fur",
         "mp_steppe_leather_vambraces",
         "mp_woven_leather_boots",
         "mp_eastern_leather_boots",
@@ -1233,6 +1239,7 @@
         "mp_sturgian_lamellar_gambeson_heavy",
         "mp_sturgian_helmet_b_open",
         "mp_goggled_helmet_over_mail",
+        "mp_sturgian_lord_helmet_b",
         "mp_nordic_helmet",
         "mp_northern_warlord_helmet",
         "mp_sturgian_helmet_b_close",
@@ -1492,6 +1499,8 @@
         "mp_kilt_over_plated_leather",
         "mp_battania_noble_armor",
         "mp_battanian_scale_armor_a",
+        "mp_battanian_noble_helmet_with_feather",
+        "mp_battanian_plated_noble_helmet",
         "mp_battanian_chainmail_shoulder_b",
         "mp_guarded_armwraps",
         "mp_battania_noble_bracers",
@@ -1531,6 +1540,7 @@
         "mp_battania_woodland_boots",
         "mp_battania_leather_boots",
         "mp_ragged_boots",
+        "mp_pilgrim_hood",
         "mp_northern_lamellar_armor"
       ],
       "requirements": {},
@@ -1552,6 +1562,7 @@
         "mp_battanian_chainmail_armor_d",
         "mp_battania_earmuff_helmet_d",
         "mp_battania_earmuff_helmet_d_brnz",
+        "mp_battanian_noble_helmet_with_feather",
         "mp_battania_battle_crown",
         "mp_battania_scarf_a",
         "mp_battanian_leather_shoulder_a",
@@ -1781,7 +1792,8 @@
       "name": "布面铁甲衬链铠",
       "slot": "Body",
       "replaces": [
-        "mp_mail_shirt"
+        "mp_mail_shirt",
+        "mp_vlandia_chainmail"
       ],
       "itemless": []
     },
@@ -2685,11 +2697,30 @@
       "itemless": []
     },
     {
+      "id": "mp_battanian_noble_helmet_with_feather",
+      "name": "羽饰高地贵族盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_battanian_crowned_helmet",
+        "mp_helmet_with_faceguard"
+      ],
+      "itemless": []
+    },
+    {
       "id": "mp_battania_battle_crown",
       "name": "双叉铜王冠",
       "slot": "Head",
       "replaces": [
         "mp_helmet_with_faceguard"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_battanian_plated_noble_helmet",
+      "name": "高地夹板贵族盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_battanian_crowned_helmet"
       ],
       "itemless": []
     },
@@ -3185,6 +3216,16 @@
       "itemless": []
     },
     {
+      "id": "mp_pilgrim_hood",
+      "name": "朝圣风帽",
+      "slot": "Head",
+      "replaces": [
+        "mp_laced_coif",
+        "mp_battania_civil_hood"
+      ],
+      "itemless": []
+    },
+    {
       "id": "mp_leather_cap",
       "name": "皮帽",
       "slot": "Head",
@@ -3234,6 +3275,15 @@
           "slot": "Head"
         }
       ]
+    },
+    {
+      "id": "mp_empire_helmet_with_metal_strips",
+      "name": "护板领主盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_ironlame_nasalhelm_over_imperial_mail"
+      ],
+      "itemless": []
     },
     {
       "id": "mp_empire_battle_crown_west",
@@ -3301,11 +3351,29 @@
       "itemless": []
     },
     {
+      "id": "mp_empire_lord_helmet",
+      "name": "领主盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_open_mail_coif"
+      ],
+      "itemless": []
+    },
+    {
       "id": "mp_helmet_with_faceguard",
       "name": "护面盔",
       "slot": "Head",
       "replaces": [
         "mp_segmented_cervelliere_over_padded_cloth"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_empire_guarded_lord_helmet",
+      "name": "护板领主盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_imperial_goggled_helmet"
       ],
       "itemless": []
     },
@@ -4182,6 +4250,15 @@
       "itemless": []
     },
     {
+      "id": "mp_khuzait_noble_helmet_with_fur",
+      "name": "带毛皮贵族盔",
+      "slot": "Head",
+      "replaces": [
+        "mp_khuzait_noble_helmet_with_neckguard"
+      ],
+      "itemless": []
+    },
+    {
       "id": "mp_peaked_fur_hood",
       "name": "翻檐毛皮风帽",
       "slot": "Head",
@@ -4690,6 +4767,15 @@
     {
       "id": "mp_goggled_helmet_over_mail",
       "name": "眼眶盔衬链甲",
+      "slot": "Head",
+      "replaces": [
+        "mp_sturgia_heavy_cavalry_helmet"
+      ],
+      "itemless": []
+    },
+    {
+      "id": "mp_sturgian_lord_helmet_b",
+      "name": "护鼻军阀盔",
       "slot": "Head",
       "replaces": [
         "mp_sturgia_heavy_cavalry_helmet"

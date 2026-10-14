@@ -10,5 +10,11 @@
     "slot": "Body",
     "cosmeticId": "mp_empire_legion_b",
     "replaceItems": ["mp_legionary_mail"]
+  },
+  {
+    "classId": "mp_heavy_infantry_vlandia",
+    "slot": "Body",
+    "cosmeticId": "mp_sturgian_fortified_armor",
+    "replaceItems": ["mp_vlandia_chainmail"]
   }
 ]

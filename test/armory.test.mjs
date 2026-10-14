@@ -53,6 +53,17 @@ test('HYMM legionary exceptions grant both cavalry cosmetics only to the request
  assert.ok(catalog.items.find(x=>x.id===crown).replaces.includes('mp_ironlame_nasalhelm_over_imperial_mail'));
  assert.ok(catalog.items.find(x=>x.id===armor).replaces.includes('mp_legionary_mail'));
 });
+test('Oathsworn includes both native headArmor cosmetics and Sergeant alone gains the crossbow armor exception',()=>{
+ const oath='mp_heavy_infantry_battania',sergeant='mp_heavy_infantry_vlandia',armor='mp_sturgian_fortified_armor';
+ const helmets=['mp_battanian_noble_helmet_with_feather','mp_battanian_plated_noble_helmet'];
+ const c=catalog.classes.find(c=>c.id===oath);
+ assert.deepEqual(c.items.filter(id=>catalog.items.find(i=>i.id===id).slot==='Head').sort(),helmets.sort());
+ for(const id of helmets)assert.doesNotThrow(()=>validateArmory({classId:oath,items:[id]}));
+ for(const classId of [sergeant,'mp_heavy_ranged_vlandia'])assert.doesNotThrow(()=>validateArmory({classId,items:[armor]}));
+ for(const classId of ['mp_light_infantry_vlandia','mp_shock_infantry_vlandia','mp_light_ranged_vlandia','mp_light_cavalry_vlandia','mp_heavy_cavalry_vlandia'])assert.throws(()=>validateArmory({classId,items:[armor]}));
+ assert.ok(catalog.items.find(i=>i.id===armor).replaces.includes('mp_vlandia_chainmail'));
+});
+
 test('armory HTTP enforces Steam session, CSRF, bridge token and persists per-account presets',async()=>{
  const reserve=net.createServer();await new Promise(r=>reserve.listen(0,'127.0.0.1',r));const port=reserve.address().port;await new Promise(r=>reserve.close(r));
  const dir=await mkdtemp(path.join(os.tmpdir(),'hymm-armory-')),origin=`http://127.0.0.1:${port}`,token='armory-integration-test-bridge-token-12345';

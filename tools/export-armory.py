@@ -17,13 +17,13 @@ def name(s):
 items = {x.get('id'): x for x in ET.parse(root/'mpitems.xml').getroot()}
 chars = {x.get('id'): x for x in ET.parse(root/'mpcharacters.xml').getroot()}
 cosmetics = list(ET.parse(root/'mpcosmetics.xml').getroot())
-slot_types = {'HeadArmor':'Head', 'BodyArmor':'Body', 'LegArmor':'Leg', 'HandArmor':'Gloves', 'Cape':'Cape'}
+slot_types = {'headarmor':'Head', 'bodyarmor':'Body', 'legarmor':'Leg', 'handarmor':'Gloves', 'cape':'Cape'}
 cultures = [{'id':i,'name':n} for i,n in [('empire','帝国'),('vlandia','瓦兰迪亚'),('sturgia','斯特吉亚'),('battania','巴旦尼亚'),('aserai','阿塞莱'),('khuzait','库赛特')]]
 catalog_items = {}
 for c in cosmetics:
     item = items.get(c.get('id'))
-    if c.get('type') != 'Clothing' or item is None or item.get('Type') not in slot_types: continue
-    catalog_items[c.get('id')] = dict(id=c.get('id'), name=name(item.get('name')), slot=slot_types[item.get('Type')], replaces=[x.get('id') for x in c.findall('Replace/Item')], itemless=[dict(classId=x.get('troop'),slot=x.get('slot')) for x in c.findall('Replace/Itemless')])
+    if c.get('type') != 'Clothing' or item is None or item.get('Type','').lower() not in slot_types: continue
+    catalog_items[c.get('id')] = dict(id=c.get('id'), name=name(item.get('name')), slot=slot_types[item.get('Type').lower()], replaces=[x.get('id') for x in c.findall('Replace/Item')], itemless=[dict(classId=x.get('troop'),slot=x.get('slot')) for x in c.findall('Replace/Itemless')])
 classes = []
 for c in ET.parse(root/'mpclassdivisions.xml').getroot():
     if c.tag != 'MPClassDivision': continue
@@ -62,7 +62,7 @@ for rule in overrides:
     assert base[rule['slot']] in rule['replaceItems']
     if rule['cosmeticId'] not in c['items']: c['items'].append(rule['cosmeticId'])
     for target in rule['replaceItems']:
-        assert target in items and slot_types[items[target].get('Type')]==rule['slot']
+        assert target in items and slot_types[items[target].get('Type','').lower()]==rule['slot']
         if target not in cosmetic['replaces']: cosmetic['replaces'].append(target)
 used = {i for c in classes for i in c['items']}
 data = dict(version=1, sourceHash=hashlib.sha256(b''.join((root/f).read_bytes() for f in ['mpcosmetics.xml','mpclassdivisions.xml','mpcharacters.xml','mpitems.xml'])).hexdigest(), cultures=cultures, slots=[dict(id=i,name=n) for i,n in [('Head','头部'),('Body','上身'),('Cape','肩部'),('Gloves','手部'),('Leg','腿部')]], classes=classes, items=[x for i,x in catalog_items.items() if i in used])
