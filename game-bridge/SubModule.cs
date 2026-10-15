@@ -19,11 +19,11 @@ public sealed class SubModule : MBSubModuleBase
             logPath=Path.Combine(Path.GetDirectoryName(configPath)!,"bridge.log");
             var config=JsonSerializer.Deserialize<Config>(File.ReadAllText(configPath),Transport.Json)!;
             Link=new Transport(config,Path.Combine(Path.GetDirectoryName(configPath)!,"bridge-state.json"),Log);
-            Log("Loaded v0.4.8; custom ranked map registration; native scoreboard ADR; native Skirmish round duration; disconnects do not interrupt play; arrival timeout="+config.ArrivalTimeoutSeconds+"s; asynchronous map preparation, in-place halftime, combat v2; explicit identity mappings="+config.GameIdToSteamId.Count);
+            Log("Loaded v0.4.9; custom ranked map registration; native scoreboard ADR; native Skirmish round duration; disconnects do not interrupt play; arrival timeout="+config.ArrivalTimeoutSeconds+"s; asynchronous map preparation, in-place halftime, combat v2; explicit identity mappings="+config.GameIdToSteamId.Count);
         }
         catch(Exception e){Log("DISABLED: "+e.Message);}
     }
-    protected override void OnApplicationTick(float dt){base.OnApplicationTick(dt);Recovery.Tick();Preparation.Tick();Link?.Tick();Operations.Tick();}
+    protected override void OnApplicationTick(float dt){base.OnApplicationTick(dt);Recovery.Tick();Preparation.Tick();Link?.Tick();Operations.Tick();MissionRetirement.Tick();}
     public override void OnBeforeMissionBehaviorInitialize(Mission mission)
     {
         base.OnBeforeMissionBehaviorInitialize(mission);
@@ -202,6 +202,7 @@ public sealed class ArenaBehavior : MissionBehavior
     void TeamChanged(NetworkCommunicator peer,Team oldTeam,Team newTeam)
     {
         var agent=peer.GetComponent<MissionPeer>()?.ControlledAgent;if(agent!=null)streaks.Forget(agent);
+        if(terminal||MissionRetirement.IsRetiring(Mission))return;
         if(FreePlay)return;
         if(correcting||peer.IsServerPeer)return;
         // A mid-round side switch invalidates the match rather than silently scoring compromised play.
@@ -321,7 +322,8 @@ public sealed class ArenaBehavior : MissionBehavior
         if(id==null||Policy.Team(job,id)<0||Policy.Team(job,other)<0||!damage.ContainsKey(id))return;
         if(affectedAgent!.IsMount)horseDamage[id]+=damagedHp;else damage[id]+=damagedHp;
     }
-    public bool StopByAdmin(string matchId){if(job!=null&&job.MatchId!=matchId)return false;terminal=true;recording=false;return true;}
+    internal void BeginRetirement(){terminal=true;recording=false;streaks.Reset();}
+    public bool StopByAdmin(string matchId){if(job!=null&&job.MatchId!=matchId)return false;BeginRetirement();return true;}
     void Fail(string reason)
     {
         if(terminal||job==null)return;

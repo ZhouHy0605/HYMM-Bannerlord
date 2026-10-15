@@ -228,7 +228,7 @@ public sealed class Transport : IDisposable
     void PollHeartbeat()
     {
         if(heartbeat?.IsCompleted==true){try{using var response=heartbeat.GetAwaiter().GetResult();if(response.IsSuccessStatusCode){var payload=JsonSerializer.Deserialize<ControlReply>(response.Content.ReadAsStringAsync().GetAwaiter().GetResult(),Json);if(payload?.Control!=null&&payload.Control.Id!=State.LastControlId)Control=payload.Control;}}catch(Exception e){log("Heartbeat retry: "+e.GetType().Name);}heartbeat=null;}
-        if(heartbeat==null&&DateTime.UtcNow>=nextHeartbeat){nextHeartbeat=DateTime.UtcNow.AddSeconds(5);heartbeat=http.PostAsync("api/bridge/heartbeat",Content(new{serverId=Config.ServerId,matchId=State.Active?.MatchId,blocked=State.Blocked!=null,version="arena-0.4.8",ackId=State.LastControlId,idleMapSupported=true,currentMap=CurrentMap,controlResult=State.ControlResult,controlError=State.ControlError}));}
+        if(heartbeat==null&&DateTime.UtcNow>=nextHeartbeat){nextHeartbeat=DateTime.UtcNow.AddSeconds(5);heartbeat=http.PostAsync("api/bridge/heartbeat",Content(new{serverId=Config.ServerId,matchId=State.Active?.MatchId,blocked=State.Blocked!=null,version="arena-0.4.9",ackId=State.LastControlId,idleMapSupported=true,currentMap=CurrentMap,controlResult=State.ControlResult,controlError=State.ControlError}));}
     }
     public void CompleteMapControl(StopCommand command,string? error=null){State.LastControlId=command.Id;State.ControlResult=error==null?"ok":"failed";State.ControlError=error;Save();Control=null;nextHeartbeat=DateTime.MinValue;}
     public bool AcknowledgeStop(StopCommand command)

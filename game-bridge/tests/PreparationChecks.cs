@@ -9,6 +9,7 @@ internal static class PreparationChecks
     {
         var dir=Path.Combine(Path.GetTempPath(),"hymm-preparation-"+Guid.NewGuid());
         Directory.CreateDirectory(dir);
+        var retirementClock=MissionRetirement.Now;
         try
         {
             using var link=new Transport(new Config{Token=new string('x',40)},Path.Combine(dir,"state.json"),_=>{});
@@ -111,7 +112,7 @@ internal static class PreparationChecks
             Check(Mission.Current==emptyWarmup&&manager.Ends==3,"native warmup ending may be delayed");
             Check(!Preparation.CanSelectTeam(emptyWarmup!),"manual transition rejects team operations");
             var flags=System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Static;
-            typeof(Preparation).GetField("manualEndRequested",flags)!.SetValue(null,DateTime.UtcNow.AddSeconds(-20));
+            double clock=retirementClock()+20;MissionRetirement.Now=()=>clock;
             typeof(Preparation).GetField("manualRetry",flags)!.SetValue(null,DateTime.MinValue);
             Preparation.SwitchIdle(link,command);
             Check(Mission.Current==emptyWarmup&&manager.Ends==3&&endTimer.Duration==0,"fallback only expires native ending timer and leaves scene alive until network tick");
@@ -135,26 +136,66 @@ internal static class PreparationChecks
             GameNetwork.Messages.Clear();Preparation.Begin(job,link);Preparation.Tick();
             typeof(Preparation).GetField("nextAttempt",flags)!.SetValue(null,DateTime.MinValue);Preparation.Tick();
             Check(manager.Ends==endsBefore+1&&rankedTimer.Duration==420,"ranked shutdown requested once; normal post-match wait retained");
-            typeof(Preparation).GetField("rankedEndRequested",flags)!.SetValue(null,DateTime.UtcNow.AddSeconds(-20));
+            clock+=20;
             typeof(Preparation).GetField("nextAttempt",flags)!.SetValue(null,DateTime.MinValue);Preparation.Tick();
             Check(rankedTimer.Duration==0&&Mission.Current==rankedPrevious&&Preparation.HasPending&&link.State.Outbox.Count==0,"ranked reservation expires overwritten timer without losing roster");
             Check(manager.Starts==startsBefore&&manager.Ends==endsBefore+1&&GameNetwork.Messages.Count==0,"no premature mission load, direct unload or repeated shutdown requests");
             rankedTimer.Duration=420;
+            clock+=2;
             typeof(Preparation).GetField("nextAttempt",flags)!.SetValue(null,DateTime.MinValue);Preparation.Tick();
             Check(rankedTimer.Duration==0,"later round timer overwrite also recovers");
             Mission.Current=null; // Native network tick finishes shutdown.
             typeof(Preparation).GetField("nextAttempt",flags)!.SetValue(null,DateTime.MinValue);Preparation.Tick();
             Check(manager.Starts==startsBefore+1&&Preparation.Adopt(link)==job,"ranked map starts and adopts the same roster after native cleanup");
             Check(MultiplayerOptions.Values[MultiplayerOptions.OptionType.WarmupTimeLimitInSeconds].Equals(300),"recovery retains ranked five-minute arrival window");
+            MissionRetirement.Tick(); // Observe that the native mission was replaced.
             Mission.Current=rankedPrevious;rankedLobby.CurrentMultiplayerState=MissionLobbyComponent.MultiplayerGameState.Playing;rankedTimer.Duration=420;
             Preparation.Begin(job,link);Preparation.Tick();
-            typeof(Preparation).GetField("rankedEndRequested",flags)!.SetValue(null,DateTime.UtcNow.AddSeconds(-20));
+            clock+=20;
             typeof(Preparation).GetField("nextAttempt",flags)!.SetValue(null,DateTime.MinValue);Preparation.Tick();
             Check(rankedTimer.Duration==420&&link.State.Outbox.Single().Reason=="native_shutdown_unavailable","never expire an actively playing lobby timer");
-            link.State.Outbox.Clear();manager.DeferEnd=false;
+            link.State.Outbox.Clear();
+            // All three callers must move players through the native selector before
+            // ending a scene; cancellation must retain the existing retirement clock.
+            Mission.Current=new();var spectatorMission=Mission.Current;
+            var arena=new ArenaBehavior();var selector=new MultiplayerTeamSelectComponent();
+            var spectatorTimer=new MultiplayerTimerComponent{Duration=420};
+            spectatorMission.Behaviors[typeof(ArenaBehavior)]=arena;
+            spectatorMission.Behaviors[typeof(MultiplayerTeamSelectComponent)]=selector;
+            spectatorMission.Behaviors[typeof(MissionLobbyComponent)]=new MissionLobbyComponent{CurrentMultiplayerState=MissionLobbyComponent.MultiplayerGameState.Ending};
+            spectatorMission.Behaviors[typeof(MultiplayerTimerComponent)]=spectatorTimer;
+            GameNetwork.NetworkPeers.Clear();GameNetwork.Messages.Clear();
+            var a=new NetworkCommunicator{Player=new(){Team=spectatorMission.AttackerTeam,ControlledAgent=new()}};
+            var b=new NetworkCommunicator{Player=new(){Team=spectatorMission.DefenderTeam,ControlledAgent=new()}};
+            var observer=new NetworkCommunicator{Player=new(){Team=spectatorMission.SpectatorTeam}};
+            var loading=new NetworkCommunicator{IsSynchronized=false,Player=new(){Team=spectatorMission.AttackerTeam}};
+            GameNetwork.NetworkPeers.AddRange(new[]{a,b,observer,loading});
+            selector.BeforeChange=()=>Check(arena.Retiring&&!Preparation.CanSelectTeam(spectatorMission),"scoring and team requests disabled before native team-switch callbacks");
+            manager.BeforeEnd=()=>Check(a.Player.Team==spectatorMission.SpectatorTeam&&b.Player.Team==spectatorMission.SpectatorTeam,"both combat sides moved before native end request");
+            endsBefore=manager.Ends;link.State.Active=job;Preparation.Begin(job,link);Preparation.Tick();
+            Check(selector.Changes==2&&manager.Ends==endsBefore+1&&a.Player.ControlledAgent==null&&b.Player.ControlledAgent==null,"native spectator switch removes living agents; existing observers skipped");
+            loading.IsSynchronized=true;clock+=2;MissionRetirement.Tick();
+            Check(loading.Player.Team==spectatorMission.SpectatorTeam&&selector.Changes==3,"late synchronized peers also moved to spectator");
+            var stop=new StopCommand{Id="stop-during-preparation",MatchId=job.MatchId,Type="stop"};
+            typeof(Transport).GetField("<Control>k__BackingField",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic)!.SetValue(link,stop);
+            Operations.Tick();
+            Check(!Preparation.HasPending&&link.Control==stop&&manager.Ends==endsBefore+1,"cancel reuses pending retirement without resending end or acknowledging early");
+            clock+=20;Operations.Tick();
+            Check(spectatorTimer.Duration==0&&Mission.Current==spectatorMission,"cancel also recovers overwritten ending timer");
+            Check(!GameNetwork.Messages.Any(m=>m is NetworkMessages.FromServer.UnloadMission or DesynchronizeMarker or LobbyEndMarker),"spectator flow never forcibly unloads or desynchronizes clients");
+            Mission.Current=null;Operations.Tick();MissionRetirement.Tick();
+            Check(link.Control==null&&link.State.Active==null&&link.State.LastControlId==stop.Id,"cancel releases server only after native scene exit");
+            Mission.Current=new();var untouched=Mission.Current;
+            link.State.Active=job;stop=new StopCommand{Id="wrong-match",MatchId="another-match",Type="stop"};
+            typeof(Transport).GetField("<Control>k__BackingField",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic)!.SetValue(link,stop);
+            endsBefore=manager.Ends;Operations.Tick();
+            Check(manager.Ends==endsBefore&&!MissionRetirement.IsRetiring(untouched),"stop for another match cannot spectate or retire current players");
+            typeof(Transport).GetField("<Control>k__BackingField",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic)!.SetValue(link,null);
+            link.State.Active=null;
+            manager.BeforeEnd=null;manager.DeferEnd=false;GameNetwork.NetworkPeers.Clear();
             Console.WriteLine("Preparation regression checks passed");
         }
-        finally{Preparation.Abort();SubModule.Link=null;Mission.Current=null;Directory.Delete(dir,true);}
+        finally{Preparation.Abort();SubModule.Link=null;Mission.Current=null;MissionRetirement.Tick();MissionRetirement.Now=retirementClock;GameNetwork.NetworkPeers.Clear();Directory.Delete(dir,true);}
     }
 }
 
@@ -162,7 +203,7 @@ namespace ArenaBridge
 {
     internal static class SubModule {internal static Transport? Link;internal static void Log(string message){} }
     internal static class Recovery {public static bool HasPending=>false;}
-    internal sealed class ArenaBehavior {public bool FreePlay=>true;public bool Initialized=true;}
+    internal sealed class ArenaBehavior {public bool Retiring;public bool FreePlay=>!Retiring;public bool Initialized=true;public void BeginRetirement(){Retiring=true;}public bool StopByAdmin(string matchId){BeginRetirement();return true;}}
 }
 namespace TaleWorlds.MountAndBlade
 {
@@ -173,6 +214,7 @@ namespace TaleWorlds.MountAndBlade
         public bool MissionEnded;
         public readonly Dictionary<Type,object> Behaviors=new();
         public Team AttackerTeam=new(TaleWorlds.Core.BattleSideEnum.Attacker),DefenderTeam=new(TaleWorlds.Core.BattleSideEnum.Defender);
+        public Team SpectatorTeam=new(TaleWorlds.Core.BattleSideEnum.None);
         public T? GetMissionBehavior<T>() where T:class=>Behaviors.GetValueOrDefault(typeof(T)) as T;
         public int Resets;
         public Action? ResetFault;
@@ -183,6 +225,10 @@ namespace TaleWorlds.MountAndBlade
         public static readonly float PostMatchWaitDuration=15;
         public enum MultiplayerGameState {Playing,Ending}
         public MultiplayerGameState CurrentMultiplayerState;
+    }
+    public sealed class MultiplayerTeamSelectComponent {
+        public int Changes;public Action? BeforeChange;
+        public void ChangeTeamServer(NetworkCommunicator peer,Team team){BeforeChange?.Invoke();Changes++;peer.Player.ControlledAgent=null;peer.Player.Team=team;}
     }
     public sealed class DesynchronizeMarker {}
     public sealed class LobbyEndMarker {}
@@ -236,12 +282,12 @@ namespace TaleWorlds.MountAndBlade.ListedServer
     {
         public static readonly ServerSideIntermissionManager Instance=new();
         public int Starts,Ends;
-        public bool DeferStart,DeferEnd;
+        public bool DeferStart,DeferEnd;public Action? BeforeEnd;
         public sealed class ServerState {public bool IsRegistered=true,IsPlaying=true;}
         public ServerState ListedServer=new();
         public string[] UsableMaps=Array.Empty<string>();
         public void StartMission(){Starts++;GameNetwork.Messages.Add(new NetworkMessages.FromServer.LoadMission());if(!DeferStart)Mission.Current=new();}
-        public void EndMission(){Ends++;if(!DeferEnd)Mission.Current=null;}
+        public void EndMission(){BeforeEnd?.Invoke();Ends++;if(!DeferEnd)Mission.Current=null;}
     }
 }
 namespace NetworkMessages.FromServer
