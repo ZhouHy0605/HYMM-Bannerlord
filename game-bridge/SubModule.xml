@@ -1,5 +1,5 @@
 <Module>
-  <Name value="Arena Bridge"/><Id value="ArenaBridge"/><Version value="v0.4.7"/>
+  <Name value="Arena Bridge"/><Id value="ArenaBridge"/><Version value="v0.4.8"/>
   <DefaultModule value="false"/><ModuleCategory value="Server"/>
   <DependedModules><DependedModule Id="Native"/><DependedModule Id="Multiplayer"/></DependedModules>
   <SubModules><SubModule><Name value="ArenaBridge"/><DLLName value="ArenaBridge.dll"/>

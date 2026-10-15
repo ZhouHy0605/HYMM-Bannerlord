@@ -122,6 +122,36 @@ internal static class PreparationChecks
             Mission.Current.Behaviors[typeof(MissionLobbyComponent)]=new MissionLobbyComponent{CurrentMultiplayerState=MissionLobbyComponent.MultiplayerGameState.Ending};
             Check(!Preparation.CanSelectTeam(Mission.Current),"results screen rejects team operations without a map command");
             manager.DeferEnd=false;
+            // Incident #37: an existing free-play round replaces the shared lobby
+            // shutdown timer. A reservation must not sit for 120 seconds or send
+            // UnloadMission from the application tick to work around it.
+            manager.DeferEnd=true;link.State.Active=job;link.State.Outbox.Clear();
+            Mission.Current=new();var rankedPrevious=Mission.Current;
+            var rankedLobby=new MissionLobbyComponent{CurrentMultiplayerState=MissionLobbyComponent.MultiplayerGameState.Ending};
+            var rankedTimer=new MultiplayerTimerComponent{Duration=420};
+            rankedPrevious.Behaviors[typeof(MissionLobbyComponent)]=rankedLobby;
+            rankedPrevious.Behaviors[typeof(MultiplayerTimerComponent)]=rankedTimer;
+            int endsBefore=manager.Ends,startsBefore=manager.Starts;
+            GameNetwork.Messages.Clear();Preparation.Begin(job,link);Preparation.Tick();
+            typeof(Preparation).GetField("nextAttempt",flags)!.SetValue(null,DateTime.MinValue);Preparation.Tick();
+            Check(manager.Ends==endsBefore+1&&rankedTimer.Duration==420,"ranked shutdown requested once; normal post-match wait retained");
+            typeof(Preparation).GetField("rankedEndRequested",flags)!.SetValue(null,DateTime.UtcNow.AddSeconds(-20));
+            typeof(Preparation).GetField("nextAttempt",flags)!.SetValue(null,DateTime.MinValue);Preparation.Tick();
+            Check(rankedTimer.Duration==0&&Mission.Current==rankedPrevious&&Preparation.HasPending&&link.State.Outbox.Count==0,"ranked reservation expires overwritten timer without losing roster");
+            Check(manager.Starts==startsBefore&&manager.Ends==endsBefore+1&&GameNetwork.Messages.Count==0,"no premature mission load, direct unload or repeated shutdown requests");
+            rankedTimer.Duration=420;
+            typeof(Preparation).GetField("nextAttempt",flags)!.SetValue(null,DateTime.MinValue);Preparation.Tick();
+            Check(rankedTimer.Duration==0,"later round timer overwrite also recovers");
+            Mission.Current=null; // Native network tick finishes shutdown.
+            typeof(Preparation).GetField("nextAttempt",flags)!.SetValue(null,DateTime.MinValue);Preparation.Tick();
+            Check(manager.Starts==startsBefore+1&&Preparation.Adopt(link)==job,"ranked map starts and adopts the same roster after native cleanup");
+            Check(MultiplayerOptions.Values[MultiplayerOptions.OptionType.WarmupTimeLimitInSeconds].Equals(300),"recovery retains ranked five-minute arrival window");
+            Mission.Current=rankedPrevious;rankedLobby.CurrentMultiplayerState=MissionLobbyComponent.MultiplayerGameState.Playing;rankedTimer.Duration=420;
+            Preparation.Begin(job,link);Preparation.Tick();
+            typeof(Preparation).GetField("rankedEndRequested",flags)!.SetValue(null,DateTime.UtcNow.AddSeconds(-20));
+            typeof(Preparation).GetField("nextAttempt",flags)!.SetValue(null,DateTime.MinValue);Preparation.Tick();
+            Check(rankedTimer.Duration==420&&link.State.Outbox.Single().Reason=="native_shutdown_unavailable","never expire an actively playing lobby timer");
+            link.State.Outbox.Clear();manager.DeferEnd=false;
             Console.WriteLine("Preparation regression checks passed");
         }
         finally{Preparation.Abort();SubModule.Link=null;Mission.Current=null;Directory.Delete(dir,true);}

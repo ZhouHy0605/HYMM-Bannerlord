@@ -13,6 +13,8 @@ internal static class Preparation
     static Mission? previous;
     static Task<Job?>? claiming;
     static bool startRequested;
+    static DateTime rankedEndRequested;
+    static bool rankedEndTimerLogged;
     static bool idleStarting;
     static DateTime idleDeadline;
     static DateTime deadline,nextAttempt,nextPoll;
@@ -58,7 +60,7 @@ internal static class Preparation
         SubModule.Log("Starting idle Skirmish; unranked free play; pool="+maps.Length);
         manager.StartMission();
     }
-    public static bool Abort(){if(claiming!=null)return false;pending=null;owner=null;previous=null;startRequested=false;return true;}
+    public static bool Abort(){if(claiming!=null)return false;pending=null;owner=null;previous=null;startRequested=false;rankedEndRequested=DateTime.MinValue;rankedEndTimerLogged=false;return true;}
     internal static void SwitchIdle(Transport link,StopCommand command)
     {
         void Finish(string? error){link.CompleteMapControl(command,error);manualId=null;manualPrevious=null;manualStarted=false;SubModule.Log("Idle map command "+command.Id+": "+(error??"loaded "+command.Map));}
@@ -96,18 +98,19 @@ internal static class Preparation
     public static void Begin(Job job,Transport link)
     {
         pending=job;owner=link;previous=Mission.Current;startRequested=false;
+        rankedEndRequested=DateTime.MinValue;rankedEndTimerLogged=false;
         deadline=DateTime.UtcNow.AddSeconds(120);nextAttempt=DateTime.MinValue;
         SubModule.Log("Preparing "+job.MatchId+": "+job.Map+" / "+string.Join(" vs ",job.Cultures));
     }
     public static Job? Adopt(Transport link)
     {
         if(owner!=link||pending==null||!startRequested||Mission.Current==null||Mission.Current==previous)return null;
-        var job=pending;pending=null;owner=null;previous=null;startRequested=false;return job;
+        var job=pending;pending=null;owner=null;previous=null;startRequested=false;rankedEndRequested=DateTime.MinValue;rankedEndTimerLogged=false;return job;
     }
     static void Fail(string reason)
     {
         if(pending!=null&&owner!=null)owner.Queue("failed",pending,reason:reason);
-        pending=null;owner=null;previous=null;startRequested=false;SubModule.Log("Preparation stopped: "+reason);
+        pending=null;owner=null;previous=null;startRequested=false;rankedEndRequested=DateTime.MinValue;rankedEndTimerLogged=false;SubModule.Log("Preparation stopped: "+reason);
     }
     public static void Tick()
     {
@@ -139,7 +142,10 @@ internal static class Preparation
                 {nextPoll=DateTime.UtcNow.AddSeconds(5);claiming=link.Claim();}
                 return;
             }
-            if(DateTime.UtcNow>=deadline){Fail("map_preparation_timeout");return;}
+            if(DateTime.UtcNow>=deadline){
+                SubModule.Log("Preparation timeout detail: startRequested="+startRequested+"; previousMission="+(Mission.Current!=null&&Mission.Current==previous)+"; lobby="+Mission.Current?.GetMissionBehavior<MissionLobbyComponent>()?.CurrentMultiplayerState);
+                Fail("map_preparation_timeout");return;
+            }
             if(link.State.Blocked!=null)return;
             // StartMission is asynchronous: Mission.Current can appear seconds before
             // ArenaBehavior.AfterStart adopts the roster. Keep it pending throughout loading.
@@ -157,7 +163,21 @@ internal static class Preparation
             if(Mission.Current!=null)
             {
                 if(Mission.Current!=previous){Fail("unexpected_mission_during_preparation");return;}
-                manager.EndMission();return;
+                if(rankedEndRequested==DateTime.MinValue){
+                    rankedEndRequested=DateTime.UtcNow;
+                    SubModule.Log("Ranked preparation: requesting previous mission shutdown; lobby="+Mission.Current.GetMissionBehavior<MissionLobbyComponent>()?.CurrentMultiplayerState);
+                    manager.EndMission();
+                }else if(DateTime.UtcNow>=rankedEndRequested.AddSeconds(MissionLobbyComponent.PostMatchWaitDuration+2)&&!Mission.Current.MissionEnded){
+                    // As with manual map switches, round transitions may replace
+                    // the lobby's shared end timer. Only expire that timer; let
+                    // the native network tick send unload and retire the scene.
+                    var lobby=Mission.Current.GetMissionBehavior<MissionLobbyComponent>();
+                    var timer=Mission.Current.GetMissionBehavior<MultiplayerTimerComponent>();
+                    if(lobby?.CurrentMultiplayerState!=MissionLobbyComponent.MultiplayerGameState.Ending||timer==null){Fail("native_shutdown_unavailable");return;}
+                    timer.StartTimerAsServer(0);
+                    if(!rankedEndTimerLogged){SubModule.Log("Ranked preparation: native lobby end timer expired; waiting for network-tick shutdown");rankedEndTimerLogged=true;}
+                }
+                return;
             }
             var votes=MultiplayerIntermissionVotingManager.Instance;
             votes.IsMapVoteEnabled=false;votes.IsCultureVoteEnabled=false;
