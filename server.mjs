@@ -2,6 +2,7 @@ import {PERFORMANCE_RULE} from './rating.mjs';
 import {ratingVisibility} from './rating-visibility.mjs';
 import {assetDelivery,sendJSON as json} from './http-delivery.mjs';
 import {armoryStore} from './armory.mjs';
+import {chatStore} from './chat.mjs';
 import {clientIP} from './client-ip.mjs';
 import {adminAction,adminView,heartbeat,monitor} from './operations.mjs';
 import {combatStats} from './combat.mjs';
@@ -36,6 +37,7 @@ CREATE TABLE IF NOT EXISTS sessions(id TEXT PRIMARY KEY, body TEXT NOT NULL, exp
 CREATE TABLE IF NOT EXISTS login_states(id TEXT PRIMARY KEY, return_to TEXT NOT NULL, expires INTEGER NOT NULL);
 CREATE TABLE IF NOT EXISTS nonces(id TEXT PRIMARY KEY, expires INTEGER NOT NULL);`);
 const armory=armoryStore(db);
+const chat=chatStore(db);
 const hash=x=>createHash('sha256').update(x).digest('hex'),random=()=>randomBytes(32).toString('hex');
 function world(id){const row=db.prepare('SELECT body FROM worlds WHERE id=?').get(id);const s=row?JSON.parse(row.body):game.empty();s.matchFormat=MATCH_FORMAT;s.ratingRule=id==='ranked'?PERFORMANCE_RULE:'elo-team-v1';return s;}
 function save(id,s){db.prepare('INSERT INTO worlds VALUES(?,?) ON CONFLICT(id) DO UPDATE SET body=excluded.body').run(id,JSON.stringify(s));}
@@ -98,6 +100,7 @@ for(const name of ['Joker','Peasant','Guard','Knight','MasterKnight','Lord','Duk
 assets['/image-assets.js']='image-assets.js';
 assets['/state-sync.js']='state-sync.js';
 for(const file of ['armory.js','armory.css','armory-catalog.json'])assets['/'+file]=file;
+for(const file of ['chat.js','chat.css'])assets['/'+file]=file;
 const immutableImages=new Set([...Object.values(imageAssets.backgrounds),...Object.values(imageAssets.ranks).flatMap(Object.values),...Object.values(imageAssets.maps)]);
 for(const url of Object.values(matchSamples))immutableImages.add(url);
 for(const url of immutableImages)assets[url]=url.slice(1);
@@ -111,6 +114,19 @@ export const server=http.createServer(async(req,res)=>{
  try{
   rate(req);const url=new URL(req.url,ORIGIN),ses=session(req),p=url.pathname;
   if(req.method==='GET'&&p==='/api/state')return json(res,200,view(ses,url.searchParams.get('view')==='live'));
+  if(req.method==='GET'&&p==='/api/chat'){
+   const snapshot=chat.view();res.setHeader('ETag',snapshot.etag);
+   if(String(req.headers['if-none-match']||'').split(',').map(x=>x.trim().replace(/^W\//,'')).includes(snapshot.etag)){
+    res.writeHead(304,{'Cache-Control':'no-store'});res.end();return;
+   }
+   return json(res,200,snapshot.data);
+  }
+  if(req.method==='POST'&&(p==='/api/chat'||p==='/api/chat/remove')){
+   if(ses?.mode!=='ranked')game.fail('请先使用 Steam 登录',401);
+   protectedPost(req,ses);const input=await body(req);
+   if(p==='/api/chat/remove')return json(res,200,chat.remove(ses.userId,input?.id,isAdmin(ses)));
+   return json(res,200,chat.send(ses.userId,world('ranked').users[ses.userId],input));
+  }
   if(p==='/api/armory'){
    if(ses?.mode!=='ranked')game.fail('请先使用 Steam 登录',401);
    if(req.method==='GET')return json(res,200,{classes:armory.get(ses.userId)});
