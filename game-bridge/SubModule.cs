@@ -7,8 +7,7 @@ namespace ArenaBridge;
 public sealed class SubModule : MBSubModuleBase
 {
     internal static Transport? Link;
-    static string? logPath;
-    static readonly object logLock=new();
+    static BufferedDiagnosticLog? diagnostics;
     protected override void OnSubModuleLoad()
     {
         base.OnSubModuleLoad();
@@ -16,10 +15,10 @@ public sealed class SubModule : MBSubModuleBase
         {
             string dir=Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
             string configPath=Environment.GetEnvironmentVariable("ARENA_BRIDGE_CONFIG")??Path.Combine(dir,"bridge.json");
-            logPath=Path.Combine(Path.GetDirectoryName(configPath)!,"bridge.log");
+            diagnostics=BufferedDiagnosticLog.ToFile(Path.Combine(Path.GetDirectoryName(configPath)!,"bridge.log"));
             var config=JsonSerializer.Deserialize<Config>(File.ReadAllText(configPath),Transport.Json)!;
             Link=new Transport(config,Path.Combine(Path.GetDirectoryName(configPath)!,"bridge-state.json"),Log);
-            Log("Loaded v0.4.9; custom ranked map registration; native scoreboard ADR; native Skirmish round duration; disconnects do not interrupt play; arrival timeout="+config.ArrivalTimeoutSeconds+"s; asynchronous map preparation, in-place halftime, combat v2; explicit identity mappings="+config.GameIdToSteamId.Count);
+            Log("Loaded v0.4.10; custom ranked map registration; native scoreboard ADR; native Skirmish round duration; disconnects do not interrupt play; arrival timeout="+config.ArrivalTimeoutSeconds+"s; asynchronous map preparation, in-place halftime, combat v2; explicit identity mappings="+config.GameIdToSteamId.Count);
         }
         catch(Exception e){Log("DISABLED: "+e.Message);}
     }
@@ -39,17 +38,13 @@ public sealed class SubModule : MBSubModuleBase
         if(Link?.Config.EnableArmory==true)mission.AddMissionBehavior(new Armory(Link));
         Log("Team selection installed; idle free play, ranked roster enforcement");
     }
-    internal static void Log(string s)
+    protected override void OnSubModuleUnloaded()
     {
-        Console.WriteLine("[ArenaBridge] "+s);
-        // Dedicated-server Console output is not reliably captured by the launcher.
-        // Keep a bounded diagnostic file beside the protected instance configuration.
-        if(logPath==null)return;
-        try{lock(logLock){
-            if(File.Exists(logPath)&&new FileInfo(logPath).Length>5*1024*1024)File.Move(logPath,logPath+".1",true);
-            File.AppendAllText(logPath,DateTimeOffset.UtcNow.ToString("o")+" "+s+Environment.NewLine);
-        }}catch{ /* Logging must never stop mission processing. */ }
+        diagnostics?.Dispose();diagnostics=null;
+        base.OnSubModuleUnloaded();
     }
+    internal static void Log(string s)=>diagnostics?.Write(s);
+
 }
 public sealed class ArenaBehavior : MissionBehavior
 {

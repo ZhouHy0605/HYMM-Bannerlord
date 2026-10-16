@@ -1,3 +1,4 @@
+import {pollDelay,statePath,sameIdentity,mergeState} from './state-sync.js';
 import {createArmory} from './armory.js';
 import {MatchAudio} from './match-audio.js';
 import {imageAssets} from './image-assets.js';
@@ -36,7 +37,8 @@ async function request(url,body){const r=await fetch(url,{method:body?'POST':'GE
 let paintedState='',paintedAdmin='';
 const matchAudio=new MatchAudio(()=>{const b=document.querySelector('[data-action="sound-toggle"]');if(b){b.textContent=matchAudio.label;b.setAttribute('aria-pressed',String(matchAudio.enabled));}});
 for(const type of ['pointerdown','keydown'])document.addEventListener(type,e=>{if(e.isTrusted&&!e.target.closest?.('[data-action="sound-toggle"]'))void matchAudio.unlock();},{capture:true});
-const readySeen=new Set();let readyFocusPending=false,refreshing=false,actionEpoch=0;
+const readySeen=new Set();let readyFocusPending=false,refreshing=false,actionEpoch=0,pollTimer;
+function schedulePoll(){clearTimeout(pollTimer);pollTimer=setTimeout(()=>{void refresh();},pollDelay(state,document.hidden));}
 function receiveState(next){
  matchAudio.update(state,next);
  state=next;
@@ -57,9 +59,9 @@ function readyNotice(){
  return '<section class="ready-callout" role="alert" aria-label="匹配成功，请确认就绪"><div class="ready-callout-mark" aria-hidden="true">⚔</div><div class="ready-callout-copy"><small>MATCH FOUND · 已匹配 12 人</small><h2 tabindex="-1" data-ready-focus>匹配成功，请确认就绪</h2><p>本次确认限时 45 秒 · 每位玩家都需要确认</p></div><div class="ready-callout-clock">'+countdown(m)+'<small>剩余时间</small></div><button class="primary" data-action="ready">确认就绪</button></section>';
 }
 function focusReady(){if(!readyFocusPending)return;readyFocusPending=false;window.scrollTo(0,0);document.querySelector('[data-ready-focus]')?.focus({preventScroll:true});}
-document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!busy)refresh();});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!busy)void refresh();schedulePoll();});
 const stateSignature=s=>s?JSON.stringify({...s,now:0}):'';
-async function refresh(){if(refreshing||busy)return;refreshing=true;const epoch=actionEpoch;try{const next=await request('/api/state');if(busy||epoch!==actionEpoch)return;const last=state?.current;if(last&&!next.current&&next.matches.some(m=>m.id===last.id&&m.phase==='settled')){if(tab==='room')selectedMatch=last.id;else toast('比赛已结算，可在比赛记录查看');}receiveState(next);if(tab==='admin'&&state.isAdmin)adminData=await request('/api/admin/state');if((stateSignature(state)!==paintedState||(tab==='admin'&&JSON.stringify(adminData)!==paintedAdmin)||document.querySelector('main')?.className!=='page-'+tab||lastError)&&performance.now()>=resultAnimatingUntil&&(!document.activeElement?.closest('[data-admin-form], [data-idle-map-form]')||readyFocusPending))render();if(lastError){lastError='';toast('连接已恢复');}}catch(e){if(!lastError){toast('连接中断，正在重试…');lastError=e.message;}}finally{refreshing=false;}}
+async function refresh(){if(refreshing||busy){schedulePoll();return;}refreshing=true;const epoch=actionEpoch;try{let next=await request(statePath(state,tab,selectedMatch));if(next.partial&&(!sameIdentity(state,next)||statePath(state,tab,selectedMatch)==='/api/state'))next=await request('/api/state');if(busy||epoch!==actionEpoch)return;next=mergeState(state,next);const last=state?.current;if(last&&!next.current&&next.matches.some(m=>m.id===last.id&&m.phase==='settled')){if(tab==='room')selectedMatch=last.id;else toast('比赛已结算，可在比赛记录查看');}receiveState(next);if(tab==='admin'&&state.isAdmin)adminData=await request('/api/admin/state');if((stateSignature(state)!==paintedState||(tab==='admin'&&JSON.stringify(adminData)!==paintedAdmin)||document.querySelector('main')?.className!=='page-'+tab||lastError)&&performance.now()>=resultAnimatingUntil&&(!document.activeElement?.closest('[data-admin-form], [data-idle-map-form]')||readyFocusPending))render();if(lastError){lastError='';toast('连接已恢复');}}catch(e){if(!lastError){toast('连接中断，正在重试…');lastError=e.message;}}finally{refreshing=false;schedulePoll();}}
 function avatar(u,small=false){return `<span class="avatar ${small?'small':''} hue-${(u?.name?.codePointAt(0)||0)%5}">${esc(u?.name?.slice(0,1)||'?')}${u?.avatar?`<img src="${esc(u.avatar)}" alt="${esc(u.name)}的 Steam 头像" referrerpolicy="no-referrer">`:''}</span>`;}
 
 function combatMetric(u,key){const value=u?.combat?.[key];return value==null?'—':Number(value).toFixed(key==='adr'?1:2)+(key==='adr'&&u?.combat?.scoreEstimatedMatches?'（估算）':'');}
@@ -172,14 +174,14 @@ document.addEventListener('click',async e=>{
  if(e.target.closest('[data-action="copy-qq"]')){await copyCommunityNumber();return;}
  const mapsAction=e.target.closest('[data-action^="maps-"]');if(mapsAction){const a=mapsAction.dataset.action;if(a==='maps-toggle'){mapPoolExpanded=!mapPoolExpanded;render();$('[data-action="maps-toggle"]')?.focus({preventScroll:true});}else{const track=$('#battlefield-maps');track?.scrollBy({left:(a==='maps-next'?1:-1)*track.clientWidth,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});}return;}
  if(e.target.closest('[data-action="sound-toggle"]')){await matchAudio.toggle();return;}
- const nav=e.target.closest('[data-tab]');if(nav){tab=nav.dataset.tab;selectedMatch=null;if(tab==='admin')await refresh();else render();window.scrollTo(0,0);return;}
+ const nav=e.target.closest('[data-tab]');if(nav){tab=nav.dataset.tab;selectedMatch=null;render();void refresh();window.scrollTo(0,0);return;}
  const target=e.target.closest('[data-action]');if(!target||busy)return;const a=target.dataset.action;
- if(['home','profile','hall','room','history','ranks'].includes(a)){tab=a;selectedMatch=null;render();window.scrollTo(0,0);return;}
+ if(['home','profile','hall','room','history','ranks'].includes(a)){tab=a;selectedMatch=null;render();void refresh();window.scrollTo(0,0);return;}
  if(a==='ranking-prev'||a==='ranking-next'){if(!state.isAdmin)return;rankingPage+=a==='ranking-next'?1:-1;render();document.querySelector('.page-rank')?.scrollIntoView({block:'start'});return;}
  if(a==='replay-result'){const id=selectedMatch||state.matches.find(m=>m.phase==='settled')?.id;if(id){resultSeen.delete(id);sessionStorage.removeItem('result-seen:'+state.mode+':'+id);render();}return;}
  if(a==='admin-open'){adminSelected=target.dataset.id;render();return;}
  if(a==='dismiss-auth'){authError='';render();return;}
- if(a==='inspect'){selectedMatch=target.dataset.id;tab='room';render();return;}
+ if(a==='inspect'){selectedMatch=target.dataset.id;tab='room';render();void refresh();return;}
  busy=true;actionEpoch++;target.disabled=true;
  try{
   if(a==='demo'){state=await request('/api/demo',{});tab='hall';toast('已进入独立模拟训练');}
@@ -191,10 +193,10 @@ document.addEventListener('click',async e=>{
    receiveState(await request('/api/action',b));if(state.current){selectedMatch=null;tab='room';}
    if(b.type==='demo-result')selectedMatch=m.id;
   }render();
- }catch(err){toast(err.message);busy=false;await refresh();}finally{busy=false;if(target.isConnected)target.disabled=false;}
+ }catch(err){toast(err.message);busy=false;await refresh();}finally{busy=false;schedulePoll();if(target.isConnected)target.disabled=false;}
 });
 let authError=new URLSearchParams(location.search).get('authError');if(authError){toast(authError);window.history.replaceState(null,'','/');}
-await refresh();setInterval(()=>{if(!busy)refresh();},2500);
+await refresh();
 setInterval(()=>document.querySelectorAll('[data-deadline]').forEach(el=>el.textContent=Math.max(0,Math.ceil((Number(el.dataset.deadline)-Date.now())/1000))+'s'),1000);
 
 document.addEventListener('error',e=>{if(e.target instanceof HTMLImageElement&&e.target.parentElement?.classList.contains('avatar'))e.target.remove();},true);

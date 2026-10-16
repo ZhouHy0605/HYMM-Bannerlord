@@ -1,4 +1,5 @@
 import {ratingVisibility} from './rating-visibility.mjs';
+import {assetDelivery,sendJSON as json} from './http-delivery.mjs';
 import {armoryStore} from './armory.mjs';
 import {clientIP} from './client-ip.mjs';
 import {adminAction,adminView,heartbeat,monitor} from './operations.mjs';
@@ -9,7 +10,7 @@ import {originConfig} from './origin-config.mjs';
 import {imageAssets} from './public/image-assets.js';
 import {existsSync} from 'node:fs';
 import http from 'node:http';
-import {readFile,mkdir} from 'node:fs/promises';
+import {mkdir} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {randomBytes,createHash,timingSafeEqual} from 'node:crypto';
@@ -41,18 +42,22 @@ function cookies(req){return Object.fromEntries((req.headers.cookie||'').split('
 function session(req){const value=cookies(req).arena;if(!value)return null;const row=db.prepare('SELECT body FROM sessions WHERE id=? AND expires>?').get(hash(value),Date.now());return row?JSON.parse(row.body):null;}
 function cookie(name,value,maxAge){return `${name}=${value}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${maxAge}${SECURE?'; Secure':''}`;}
 function newSession(res,mode,userId){const token=random();const s={mode,userId,csrf:random(),world:mode==='demo'?`demo:${random()}`:'ranked'};db.prepare('INSERT INTO sessions VALUES(?,?,?)').run(hash(token),JSON.stringify(s),Date.now()+86400000);res.setHeader('Set-Cookie',cookie('arena',token,86400));return s;}
-function json(res,status,data){res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify(data));}
 function redirect(res,url){res.writeHead(302,{Location:url,'Cache-Control':'no-store'});res.end();}
 async function body(req){let buffer='';for await(const chunk of req){buffer+=chunk;if(Buffer.byteLength(buffer)>16384)game.fail('请求过大',413);}try{return JSON.parse(buffer||'{}');}catch{game.fail('无效 JSON',400);}}
 function protectedPost(req,s){if(req.headers.origin!==ORIGIN)game.fail('来源校验失败',403);if(!s||req.headers['x-csrf-token']!==s.csrf)game.fail('请刷新页面后重试',403);}
 const limits=new Map();function rate(req){const key=clientIP(req,process.env.TRUST_LOCAL_PROXY==='1');const now=Date.now();let x=limits.get(key);if(!x||x.until<now){x={count:0,until:now+60000};limits.set(key,x);}if(++x.count>500)game.fail('操作过于频繁，请稍后再试',429);}
-function view(ses){
- const s=world(ses?.world||'ranked');for(const u of Object.values(s.users))u.combat=combatStats(s,u.id);const me=ses?s.users[ses.userId]:null;
+function view(ses,partial=false){
+ const s=world(ses?.world||'ranked');const me=ses?s.users[ses.userId]:null;
  const own=ses?s.matches.filter(m=>m.players.includes(ses.userId)):[];
+ const current=own.find(m=>game.ACTIVE.includes(m.phase))||null;
+ const selected=new Set([ses?.userId,...s.queue.map(q=>q.id),...(current?.players||[]),...(own[0]?.players||[])]);
+ const users=partial?Object.fromEntries(Object.entries(s.users).filter(([id])=>selected.has(id))):s.users;
+ for(const u of Object.values(users))u.combat=combatStats(s,u.id);
  return ratingVisibility({isAdmin:isAdmin(ses),matchFormat:MATCH_FORMAT,mode:ses?.mode||'guest',csrf:ses?.csrf,me:me?{...me,rank:game.rank(me.rating)}:null,config:{demo:DEMO,ranked:RANKED,steam:true},
-  queue:s.queue.map(q=>({at:q.at,user:s.users[q.id]})),current:own.find(m=>game.ACTIVE.includes(m.phase))||null,
-  matches:own.slice(0,30),users:s.users,leaderboard:Object.values(s.users).sort((a,b)=>b.rating-a.rating).slice(0,100).map(u=>({...u,rank:game.rank(u.rating)})),
-  ledger:ses?s.ledger.filter(l=>l.userId===ses.userId).slice(-30).reverse():[],maps:game.MAPS,cultures:game.CULTURES,rooms:s.matches.filter(m=>game.ACTIVE.includes(m.phase)).map(m=>({id:m.id,number:m.number,phase:m.phase,players:m.players.length,map:m.map,cultures:m.cultures,server:m.server?.name||null,mine:m.players.includes(ses?.userId)})),now:Date.now()});
+  queue:s.queue.map(q=>({at:q.at,user:users[q.id]})),current,
+  matches:own.slice(0,partial?1:30),users,
+  ...(partial?{partial:true}:{leaderboard:Object.values(s.users).sort((a,b)=>b.rating-a.rating).slice(0,100).map(u=>({...u,rank:game.rank(u.rating)})),ledger:ses?s.ledger.filter(l=>l.userId===ses.userId).slice(-30).reverse():[],maps:game.MAPS,cultures:game.CULTURES}),
+  rooms:s.matches.filter(m=>game.ACTIVE.includes(m.phase)).map(m=>({id:m.id,number:m.number,phase:m.phase,players:m.players.length,map:m.map,cultures:m.cultures,server:m.server?.name||null,mine:m.players.includes(ses?.userId)})),now:Date.now()});
 }
 const steamEndpoint='https://steamcommunity.com/openid/login';
 async function authCallback(req,res,url){
@@ -88,18 +93,20 @@ assets['/calradia-banner.png']='calradia-banner.png';
 for(const map of game.IDLE_MAPS)assets[map.image]=map.image.slice(1);
 for(const name of ['Joker','Peasant','Guard','Knight','MasterKnight','Lord','Duke','Prince','King','Emperor'])assets['/ranks/tarot/'+name+'.png']='ranks/tarot/'+name+'.png';
 assets['/image-assets.js']='image-assets.js';
+assets['/state-sync.js']='state-sync.js';
 for(const file of ['armory.js','armory.css','armory-catalog.json'])assets['/'+file]=file;
 const immutableImages=new Set([...Object.values(imageAssets.backgrounds),...Object.values(imageAssets.ranks).flatMap(Object.values),...Object.values(imageAssets.maps)]);
 for(const url of immutableImages)assets[url]=url.slice(1);
 assets['/fonts/unifrakturcook-latin.woff2']='fonts/unifrakturcook-latin.woff2';
 assets['/fonts/OFL.txt']='fonts/OFL.txt';
 const types={json:'application/json; charset=utf-8',woff2:'font/woff2',txt:'text/plain; charset=utf-8',webp:'image/webp',jpg:'image/jpeg',png:'image/png',html:'text/html; charset=utf-8',js:'text/javascript; charset=utf-8',css:'text/css; charset=utf-8',svg:'image/svg+xml'};
+const serveAsset=assetDelivery(path.join(ROOT,'public'),assets,immutableImages,types);
 export const server=http.createServer(async(req,res)=>{
  res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','same-origin');res.setHeader('X-Frame-Options','DENY');
  res.setHeader('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://avatars.steamstatic.com https://avatars.akamai.steamstatic.com https://avatars.cloudflare.steamstatic.com; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self' https://steamcommunity.com");
  try{
   rate(req);const url=new URL(req.url,ORIGIN),ses=session(req),p=url.pathname;
-  if(req.method==='GET'&&p==='/api/state')return json(res,200,view(ses));
+  if(req.method==='GET'&&p==='/api/state')return json(res,200,view(ses,url.searchParams.get('view')==='live'));
   if(p==='/api/armory'){
    if(ses?.mode!=='ranked')game.fail('请先使用 Steam 登录',401);
    if(req.method==='GET')return json(res,200,{classes:armory.get(ses.userId)});
@@ -134,20 +141,13 @@ export const server=http.createServer(async(req,res)=>{
   if(p.startsWith('/api/bridge/')){
    const token=process.env.BRIDGE_TOKEN||'',supplied=(req.headers.authorization||'').replace(/^Bearer /,'');
    if(token.length<32||!timingSafeEqual(Buffer.from(hash(supplied)),Buffer.from(hash(token))))game.fail('Unauthorized bridge',401);
-   if(req.method==='POST'&&p==='/api/bridge/armory'){const b=await body(req);return json(res,200,{profiles:armory.batch(b.ids)});}
+   if(req.method==='POST'&&p==='/api/bridge/armory'){const b=await body(req);return json(res,200,b.versions===undefined?{profiles:armory.batch(b.ids)}:armory.delta(b.ids,b.versions));}
    if(req.method==='POST'&&p==='/api/bridge/heartbeat'){const b=await body(req);return json(res,200,mutate('ranked',s=>heartbeat(s,b)));}
    if(req.method==='GET'&&p==='/api/bridge/jobs')return json(res,200,world('ranked').matches.filter(m=>m.phase==='awaiting_server').sort((a,b)=>a.createdAt-b.createdAt||(a.number||0)-(b.number||0)).map(game.job));
    if(req.method==='POST'&&p==='/api/bridge/claim'){const b=await body(req);return json(res,200,mutate('ranked',s=>game.claim(s,b)));}
    if(req.method==='POST'&&p==='/api/bridge/events'){const b=await body(req);mutate('ranked',s=>game.bridge(s,b));return json(res,200,{ok:true});}
   }
-  if(req.method==='GET'&&assets[p]){
-   const f=assets[p],body=await readFile(path.join(ROOT,'public',f));
-   const etag='"'+createHash('sha256').update(body).digest('hex')+'"';
-   const headers={'Content-Type':types[f.split('.').at(-1)],'Cache-Control':immutableImages.has(p)?'public, max-age=31536000, immutable':'no-cache','ETag':etag};
-   const tags=String(req.headers['if-none-match']||'').split(',').map(t=>t.trim().replace(/^W\//,''));
-   if(tags.includes(etag)||tags.includes('*')){res.writeHead(304,headers);return res.end();}
-   res.writeHead(200,{...headers,'Content-Length':body.length});return res.end(body);
-  }
+  if(req.method==='GET'&&assets[p])return await serveAsset(req,res,url);
   game.fail('页面不存在',404);
  }catch(e){const status=e.status||502;if(!e.status)console.error('Request failure:',e.name);if(req.url.startsWith('/auth/'))return redirect(res,'/?authError='+encodeURIComponent(e.status?e.message:'Steam 暂时无法连接，请稍后重试'));json(res,status,{error:e.status?e.message:'服务暂时不可用，请稍后重试'});}
 });

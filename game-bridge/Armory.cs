@@ -13,22 +13,27 @@ internal sealed class Armory : MissionBehavior
 {
     readonly Transport link;
     static readonly Dictionary<NetworkCommunicator, PeerState> peers = new();
-    static Dictionary<string, Dictionary<string, string[]>> profiles = new();
-    static Task<Dictionary<string, Dictionary<string, string[]>>>? request;
+    static readonly ArmoryCache cache = new();
+    readonly Dictionary<string,int> classIndices=new(),cosmeticIndices=new();
+    double nextUpdate;
+    static Task<ArmoryReply>? request;
     static double nextPoll;
     static string lastIds = "";
     sealed class PeerState
     {
         public Dictionary<int,List<int>>? Original;
         public Dictionary<int,List<int>>? Applied;
-        public string Signature = "";
         public Dictionary<string,string[]>? Choices;
     }
     public Armory(Transport transport) { link=transport; }
     public override MissionBehaviorType BehaviorType => MissionBehaviorType.Other;
     public override void AfterStart()
     {
-        try{InstallOverrides();}
+        try{InstallOverrides();
+            var classes=MBObjectManager.Instance.GetObjectTypeList<MultiplayerClassDivisions.MPHeroClass>();
+            for(int i=0;i<classes.Count;i++)classIndices[classes[i].StringId]=i;
+            for(int i=0;i<CosmeticsManager.CosmeticElementsList.Count;i++)cosmeticIndices[CosmeticsManager.CosmeticElementsList[i].Id]=i;
+        }
         catch(Exception e){SubModule.Log("Armory compatibility unavailable: "+e.GetType().Name);}
         SubModule.Log("Armory ready; classes="+MBObjectManager.Instance.GetObjectTypeList<MultiplayerClassDivisions.MPHeroClass>().Count+"; native cosmetics="+CosmeticsManager.CosmeticElementsList.Count);
     }
@@ -66,9 +71,10 @@ internal sealed class Armory : MissionBehavior
     }
     public override void OnPreMissionTick(float dt)
     {
-        if(!link.Config.EnableArmory)return;
+        if(!link.Config.EnableArmory||ServerNotices.Now<nextUpdate)return;
+        nextUpdate=ServerNotices.Now+0.5;
         try { Update(); }
-        catch(Exception e) { SubModule.Log("Armory skipped: "+e.GetType().Name); nextPoll=ServerNotices.Now+30; }
+        catch(Exception e) { SubModule.Log("Armory skipped: "+e.GetType().Name); nextPoll=nextUpdate=ServerNotices.Now+30; }
     }
     void Update()
     {
@@ -82,41 +88,33 @@ internal sealed class Armory : MissionBehavior
         var key=string.Join(",",ids);
         if(request?.IsCompleted==true)
         {
-            try { profiles=request.GetAwaiter().GetResult(); }
+            try { cache.Apply(request.GetAwaiter().GetResult()); }
             catch(Exception e){SubModule.Log("Armory fetch retry: "+e.GetType().Name);}
             request=null;
         }
         if(request==null&&(ServerNotices.Now>=nextPoll||key!=lastIds))
         {
             nextPoll=ServerNotices.Now+5;lastIds=key;
-            if(ids.Length>0)request=link.FetchArmory(ids);else profiles.Clear();
+            cache.Retain(ids);
+            if(ids.Length>0)request=link.FetchArmory(ids,cache.Known(ids));
         }
         foreach(var entry in identities)
         {
-            if(!profiles.TryGetValue(entry.id!,out var choices))continue;
+            if(!cache.Profiles.TryGetValue(entry.id!,out var choices))continue;
             var player=entry.peer.VirtualPlayer;
             if(!peers.TryGetValue(entry.peer,out var saved))peers[entry.peer]=saved=new PeerState{Original=player.UsedCosmetics};
             // Master-server updates may replace the dictionary; keep the new native baseline.
             if(saved.Applied!=null&&!ReferenceEquals(player.UsedCosmetics,saved.Applied))
-            { saved.Original=player.UsedCosmetics;saved.Signature="";saved.Applied=null;saved.Choices=null; }
+            { saved.Original=player.UsedCosmetics;saved.Applied=null;saved.Choices=null; }
             if(ReferenceEquals(saved.Choices,choices))continue;
-            saved.Choices=choices;
-            var signature=JsonSerializer.Serialize(choices,Transport.Json);
-            if(saved.Signature==signature)continue;
             var result=(saved.Original??new()).ToDictionary(x=>x.Key,x=>new List<int>(x.Value));
-            var classes=MBObjectManager.Instance.GetObjectTypeList<MultiplayerClassDivisions.MPHeroClass>();
             foreach(var choice in choices)
             {
-                int classIndex=-1;
-                for(int i=0;i<classes.Count;i++)if(classes[i].StringId==choice.Key){classIndex=i;break;}
-                if(classIndex<0)continue;
+                if(!classIndices.TryGetValue(choice.Key,out var classIndex))throw new InvalidOperationException("Unknown class ID");
                 var selected=new List<int>();var targets=new HashSet<string>();
                 foreach(var id in choice.Value)
                 {
-                    int index=-1;
-                    for(int i=0;i<CosmeticsManager.CosmeticElementsList.Count;i++)
-                        if(CosmeticsManager.CosmeticElementsList[i].Id==id){index=i;break;}
-                    if(index<0||CosmeticsManager.CosmeticElementsList[index] is not ClothingCosmeticElement clothing)
+                    if(!cosmeticIndices.TryGetValue(id,out var index)||CosmeticsManager.CosmeticElementsList[index] is not ClothingCosmeticElement clothing)
                         throw new InvalidOperationException("Unknown clothing ID");
                     foreach(var target in clothing.ReplaceItemsId.Concat(clothing.ReplaceItemless.Where(t=>t.Item1==choice.Key).Select(t=>t.Item2)))
                         if(!targets.Add(target))throw new InvalidOperationException("Conflicting cosmetics");
@@ -126,7 +124,7 @@ internal sealed class Armory : MissionBehavior
                 if(result.TryGetValue(classIndex,out var original))selected.AddRange(original.Where(i=>i>=0&&i<CosmeticsManager.CosmeticElementsList.Count&&CosmeticsManager.CosmeticElementsList[i] is not ClothingCosmeticElement));
                 result[classIndex]=selected;
             }
-            player.UsedCosmetics=result;saved.Applied=result;saved.Signature=signature;
+            player.UsedCosmetics=result;saved.Applied=result;saved.Choices=choices;
             SubModule.Log("Armory applied to connection; configured classes="+choices.Count);
         }
     }

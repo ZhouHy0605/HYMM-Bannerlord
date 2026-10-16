@@ -2,6 +2,7 @@ using ArenaBridge;
 using System.Text.Json;
 
 void Check(bool v,string message){if(!v)throw new Exception(message);}
+OptimizationChecks.Run();
 PreparationChecks.Run();
 HalftimeChecks.Run();
 KillStreakChecks.Run();

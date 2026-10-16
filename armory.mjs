@@ -1,4 +1,5 @@
 import {readFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
 import {fail} from './engine.mjs';
 
 export const armoryCatalog=JSON.parse(readFileSync(new URL('./public/armory-catalog.json',import.meta.url),'utf8'));
@@ -22,10 +23,21 @@ export function validateArmory(input){
 }
 export function armoryStore(db){
  db.exec('CREATE TABLE IF NOT EXISTS armory_profiles(user_id TEXT NOT NULL, class_id TEXT NOT NULL, items TEXT NOT NULL, updated_at INTEGER NOT NULL, PRIMARY KEY(user_id,class_id))');
- const read=db.prepare('SELECT class_id,items FROM armory_profiles WHERE user_id=?');
+ const read=db.prepare('SELECT class_id,items FROM armory_profiles WHERE user_id=? ORDER BY class_id');
+ function checkedIds(ids){if(!Array.isArray(ids)||ids.length>64||ids.some(id=>typeof id!=='string'||!/^\d{17}$/.test(id)))fail('无效玩家列表',400);return [...new Set(ids)];}
  return {
   get(userId){return Object.fromEntries(read.all(userId).map(r=>[r.class_id,JSON.parse(r.items)]));},
   save(userId,input){const value=validateArmory(input);if(value.items===null)db.prepare('DELETE FROM armory_profiles WHERE user_id=? AND class_id=?').run(userId,value.classId);else db.prepare('INSERT INTO armory_profiles VALUES(?,?,?,?) ON CONFLICT(user_id,class_id) DO UPDATE SET items=excluded.items,updated_at=excluded.updated_at').run(userId,value.classId,JSON.stringify(value.items),Date.now());return this.get(userId);},
-  batch(ids){if(!Array.isArray(ids)||ids.length>64||ids.some(id=>typeof id!=='string'||!/^\d{17}$/.test(id)))fail('无效玩家列表',400);return Object.fromEntries([...new Set(ids)].map(id=>[id,this.get(id)]));}
+  batch(ids){return Object.fromEntries(checkedIds(ids).map(id=>[id,this.get(id)]));},
+  delta(ids,known){
+   ids=checkedIds(ids);
+   if(!known||typeof known!=='object'||Array.isArray(known)||Object.keys(known).length>64||Object.entries(known).some(([id,v])=>!/^\d{17}$/.test(id)||typeof v!=='string'||v.length>128))fail('无效配装版本',400);
+   const profiles={},versions={};
+   for(const id of ids){
+    const rows=read.all(id),version=createHash('sha256').update(JSON.stringify(rows)).digest('hex');versions[id]=version;
+    if(known[id]!==version)profiles[id]=Object.fromEntries(rows.map(r=>[r.class_id,JSON.parse(r.items)]));
+   }
+   return {profiles,versions};
+  }
  };
 }

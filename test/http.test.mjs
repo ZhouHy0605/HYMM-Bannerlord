@@ -32,6 +32,12 @@ test('HTTP: demo lifecycle, CSRF, persistence, isolation and Steam redirect',asy
   let s=await (await req('/api/demo',{})).json();csrf=s.csrf;
   assert.equal((await req('/api/action',{type:'demo-fill'},{'X-CSRF-Token':'bad'})).status,403);
   s=await (await req('/api/action',{type:'demo-fill'})).json();let m=s.current;assert.equal(m.players.length,12);
+  const live=await (await req('/api/state?view=live')).json();
+  assert.equal(live.partial,true);assert.deepEqual(live.current,s.current);assert.equal(live.me.id,s.me.id);
+  for(const key of ['maps','cultures','leaderboard','ledger'])assert.equal(live[key],undefined);
+  for(const id of m.players)assert.ok(live.users[id]);
+  assert.equal(live.me.rating,undefined);assert.ok(JSON.stringify(live).length<JSON.stringify(s).length);
+  const fullAgain=await (await req('/api/state')).json();assert.equal(fullAgain.partial,undefined);assert.equal(fullAgain.maps.length,s.maps.length);
   const act=async(type,data={})=>{const r=await req('/api/action',{type,matchId:m.id,revision:m.revision,...data});assert.equal(r.status,200,await r.clone().text());s=await r.json();m=s.current||s.matches[0];};
   await act('demo-ready');await act('demo-election');for(let i=0;i<10;i++)await act('pick',{playerId:m.players.find(id=>!m.teams.flat().includes(id))});await act('demo-start');await act('demo-result',{score:[3,1]});assert.equal(s.ledger.length,0);assert.equal(s.me.rating,undefined);assert.equal(s.matches[0].changes,undefined);
   const persisted=new DatabaseSync(path.join(dir,'arena.sqlite'),{readOnly:true});const demoWorld=JSON.parse(persisted.prepare("SELECT body FROM worlds WHERE id LIKE 'demo:%'").get().body);persisted.close();assert.equal(demoWorld.ledger.filter(l=>l.userId==='you').length,1);assert.equal(typeof demoWorld.users.you.rating,'number');

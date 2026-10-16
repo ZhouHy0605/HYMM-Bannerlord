@@ -31,6 +31,20 @@ test('presets are independent by player/class, reset does not erase other classe
  assert.deepEqual(store.save('a',{classId:a.id,items:null}),{[b.id]:[]});
  assert.throws(()=>store.batch(['not-steam']));db.close();
 });
+
+test('armory delta sends only changed players and explicit resets; versions survive store recreation',()=>{
+ const db=new DatabaseSync(':memory:'),store=armoryStore(db),[c]=catalog.classes;
+ const a='76561198000000001',b='76561198000000002';
+ store.save(a,{classId:c.id,items:[c.items[0]]});
+ const first=store.delta([a,b],{});assert.deepEqual(first.profiles[b],{});
+ assert.deepEqual(store.delta([a,b],first.versions).profiles,{});
+ assert.deepEqual(armoryStore(db).delta([a,b],first.versions).profiles,{});
+ store.save(a,{classId:c.id,items:[]});const changed=store.delta([a,b],first.versions);
+ assert.deepEqual(changed.profiles,{[a]:{[c.id]:[]}});
+ store.save(a,{classId:c.id,items:null});assert.deepEqual(store.delta([a,b],changed.versions).profiles,{[a]:{}});
+ assert.throws(()=>store.delta([a],null));assert.throws(()=>store.delta([a],{[a]:123}));
+ assert.deepEqual(Object.keys(store.batch([a,b])),[a,b]);db.close();
+});
 test('Skirmish in a multi-mode perk grants heavy infantry shoulder choices and states their skill requirements',()=>{
  const legion=catalog.classes.find(c=>c.id==='mp_heavy_infantry_empire');
  const varangian=catalog.classes.find(c=>c.id==='mp_heavy_infantry_sturgia');
@@ -83,6 +97,9 @@ test('armory HTTP enforces Steam session, CSRF, bridge token and persists per-ac
   assert.deepEqual((await (await call('/api/armory',null,'second')).json()).classes,{});
   assert.equal((await call('/api/bridge/armory',{ids:['76561198000000001']})).status,401);
   const b=await call('/api/bridge/armory',{ids:['76561198000000001']},'',{Authorization:'Bearer '+token});assert.deepEqual((await b.json()).profiles['76561198000000001'],{[c.id]:data.items});
+  const delta=await (await call('/api/bridge/armory',{ids:['76561198000000001'],versions:{}},'',{Authorization:'Bearer '+token})).json();
+  const unchanged=await (await call('/api/bridge/armory',{ids:['76561198000000001'],versions:delta.versions},'',{Authorization:'Bearer '+token})).json();
+  assert.deepEqual(unchanged.profiles,{});assert.deepEqual(unchanged.versions,delta.versions);
   await stop();await launch();assert.deepEqual((await (await call('/api/armory')).json()).classes,{[c.id]:data.items});
   await call('/api/armory',{classId:c.id,items:[]});assert.deepEqual((await (await call('/api/armory')).json()).classes,{[c.id]:[]});
   await call('/api/armory',{classId:c.id,items:null});assert.deepEqual((await (await call('/api/armory')).json()).classes,{});

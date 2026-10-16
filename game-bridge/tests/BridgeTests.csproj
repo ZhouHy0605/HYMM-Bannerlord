@@ -2,6 +2,7 @@
   <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net8.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable></PropertyGroup>
   <PropertyGroup><ServerRoot Condition="'$(ServerRoot)' == ''">D:/steam/steamapps/common/Mount &amp; Blade II Dedicated Server</ServerRoot></PropertyGroup>
   <ItemGroup>
+    <Compile Include="../ArmoryCache.cs" /><Compile Include="../BufferedDiagnosticLog.cs" />
     <Compile Include="../Core.cs" Link="Core.cs" /><Compile Include="../Preparation.cs" Link="Preparation.cs" />
     <Compile Include="../MissionRetirement.cs" Link="MissionRetirement.cs" />
     <Compile Include="../Operations.cs" Link="Operations.cs" />
