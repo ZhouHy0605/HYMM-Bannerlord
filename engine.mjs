@@ -48,12 +48,16 @@ function lockDraftMap(m,now){
 function beginElection(m,now){
  lockDraftMap(m,now);m.candidates=[];phase(m,'election',30,now);event(m,'队长竞选开始，30 秒内可报名',now);
 }
+export function selectCaptains(s,m,choose=randomInt){
+ const candidates=m.candidates||[],pool=candidates.length>=2?candidates:m.players;
+ const captains=[...pool].sort((a,b)=>s.users[b].rating-s.users[a].rating||a.localeCompare(b)).slice(0,2);
+ return choose(2)===0?captains:captains.reverse();
+}
 function beginDraft(s,m,now){
  lockDraftMap(m,now);
- const candidates=m.candidates||[],pool=candidates.length>=2?candidates:m.players;
+ const candidates=m.candidates||[];
  m.captainSelection=candidates.length>=2?'volunteers':'rating-fallback';
- const sorted=[...pool].sort((a,b)=>s.users[b].rating-s.users[a].rating||a.localeCompare(b));
- m.captains=sorted.slice(0,2);m.teams=m.captains.map(id=>[id]);m.pickOrder=[...DRAFT_ORDER];m.turn=m.pickOrder[0];phase(m,'draft',30,now);event(m,'队长已确定，A 队先选',now);
+ m.captains=selectCaptains(s,m);m.teams=m.captains.map(id=>[id]);m.pickOrder=[...DRAFT_ORDER];m.turn=m.pickOrder[0];phase(m,'draft',30,now);event(m,'队长已确定，随机分配 A / B 队，A 队先选',now);
 }
 function pick(s,m,id,now){
  if(!m.players.includes(id)||m.teams.flat().includes(id))fail('该玩家已被选择');
