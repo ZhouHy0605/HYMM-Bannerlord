@@ -2,6 +2,13 @@ import test from 'node:test';import assert from 'node:assert/strict';
 import * as g from '../engine.mjs';import * as op from '../operations.mjs';
 function setup(){const s=g.empty();s.matchFormat='two-leg-v1';for(let i=0;i<12;i++){g.user(s,'p'+i,'P'+i);g.action(s,'p'+i,{type:'join'},1000);}const m=s.matches[0];g.action(s,'p0',{type:'demo-ready',matchId:m.id,revision:m.revision},2000,true);for(let i=0;i<11;i++)g.tick(s,m.deadline+1);g.claim(s,{matchId:m.id,map:m.map,serverId:'s1'},400000);return{s,m};}
 function start(s,m){g.bridge(s,{eventId:`${m.id}:leg${m.leg}:started`,type:'started',leg:m.leg,matchId:m.id,serverId:'s1',map:m.map,teams:m.teams,cultures:m.cultures},400100);}
+
+test('admin room list returns latest 20 while retaining stored rooms and cancellations',()=>{
+ const s=g.empty();s.matches=Array.from({length:35},(_,i)=>({id:'room-'+i,number:35-i,phase:i%2?'cancelled':'settled',players:[]}));
+ const view=op.adminView(s);
+ assert.equal(view.matches.length,20);assert.equal(view.matches[0].number,35);assert.equal(view.matches.at(-1).number,16);
+ assert.ok(view.matches.some(m=>m.phase==='cancelled'));assert.equal(s.matches.length,35);
+});
 test('idle map commands serialize with claims, require loaded-map acknowledgement and preserve scores',()=>{
  const s=g.empty(),map=g.MAPS[0].id,now=500000;
  op.heartbeat(s,{serverId:'s1',idleMapSupported:true},now);

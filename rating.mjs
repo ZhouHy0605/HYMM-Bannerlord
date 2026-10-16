@@ -1,8 +1,10 @@
 // Inspired by EastSeaC/blmmbot ScoreMaster.py (de2d00a). HYMM fixes team
 // denominators and zero divisions; removes the abrupt 500/3000 team-score switch.
-export const PERFORMANCE_RULE='blmm-class-v1';
+export const PERFORMANCE_RULE='blmm-class-v2';
+export const isPerformanceRule=rule=>rule==='blmm-class-v1'||rule===PERFORMANCE_RULE;
 const clamp=(n,max)=>Math.max(0,Math.min(n,max));
-export function performanceRating(teams,score,report){
+export function performanceRating(teams,score,report,rule=PERFORMANCE_RULE){
+ if(!isPerformanceRule(rule))throw new Error('Unknown performance rating rule');
  if(report?.version!==2)throw new Error('兵种与战斗明细不完整，不能按新规则结算');
  const records=new Map(report.players.map(p=>[p.id,p]));
  const result={};
@@ -19,12 +21,13 @@ export function performanceRating(teams,score,report){
    const personal=Math.ceil(kills+survival+assist+damage+horseDamage);
    const teamScore=(score[team]-score[1-team])*20;
    const base=teamScore+personal,cavalryShare=p.spawns?p.classes.cavalry/p.spawns:0;
-   const factor=1+0.5*cavalryShare;
+   const archerShare=p.spawns?p.classes.archer/p.spawns:0;
+   const factor=rule==='blmm-class-v1'?1+0.5*cavalryShare:1+0.35*cavalryShare+0.15*archerShare;
    const adjusted=base>=0?base/factor:base*factor;
    // Symmetric nearest-integer rounding; -10.5 must not favor the loser.
    const delta=adjusted<0?-Math.round(-adjusted):Math.round(adjusted);
-   result[id]={rule:PERFORMANCE_RULE,teamScore,kills,survival,assists:assist,damage,horseDamage,personal,base,
-    spawns:p.spawns,classes:{...p.classes},cavalryShare,factor,adjustment:delta-base,delta};
+   result[id]={rule,teamScore,kills,survival,assists:assist,damage,horseDamage,personal,base,
+    spawns:p.spawns,classes:{...p.classes},cavalryShare,archerShare,factor,adjustment:delta-base,delta};
   }
  }
  return result;

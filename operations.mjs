@@ -1,3 +1,4 @@
+import {isPerformanceRule} from './rating.mjs';
 import {randomUUID} from 'node:crypto';
 import {fail,event,settle,ACTIVE,validLegScore,IDLE_MAPS} from './engine.mjs';
 
@@ -34,7 +35,7 @@ export function adminAction(s,actor,b,now=Date.now()){
   m.phase='cancelled';m.deadline=null;m.finishedAt=now;m.adminResolution={type:'cancel',reason,actor,at:now};stop(s,m,now);event(m,'管理员取消比赛，不计积分：'+reason,now);
  }else if(b.type==='settle'){
   if(before!=='review'||!m.startedAt)fail('仅已开赛且待核查的比赛可人工结算');
-  if(m.ratingRule==='blmm-class-v1'&&(m.format==='two-leg-v1'?m.legs?.length!==2||m.legs.some(l=>l.combat?.version!==2):m.combat?.version!==2))fail('新规则需要完整兵种与战斗明细，不能仅凭比分人工结算；可取消本场');
+  if(isPerformanceRule(m.ratingRule)&&(m.format==='two-leg-v1'?m.legs?.length!==2||m.legs.some(l=>l.combat?.version!==2):m.combat?.version!==2))fail('新规则需要完整兵种与战斗明细，不能仅凭比分人工结算；可取消本场');
   if(m.format==='two-leg-v1'){
    if(!Array.isArray(b.legs)||b.legs.length!==2||!b.legs.every(validLegScore))fail('请填写两轮原始 A/B 比分，每轮一方为 3 分',400);
    if(m.legs?.some((l,i)=>JSON.stringify(l.score)!==JSON.stringify(b.legs[i])))fail('人工比分与已回传轮次冲突，不能覆盖原始记录');
@@ -72,6 +73,6 @@ export function monitor(s,now=Date.now()){
  }
 }
 export function adminView(s,now=Date.now()){
- return {now,maps:IDLE_MAPS,matches:s.matches.slice(0,100).map(m=>({...m,players:m.players.map(id=>({id,name:s.users[id]?.name||id})),failureLabel:FAILURE_LABELS[m.failureReason]||m.failureReason})),
+ return {now,maps:IDLE_MAPS,matches:s.matches.slice(0,20).map(m=>({...m,players:m.players.map(id=>({id,name:s.users[id]?.name||id})),failureLabel:FAILURE_LABELS[m.failureReason]||m.failureReason})),
   servers:Object.values(s.servers||{}).map(r=>({...r,online:now-r.lastSeen<=90000,control:s.controls?.[r.id]||null,match:s.matches.find(m=>ACTIVE.includes(m.phase)&&occupied(m)===r.id)?.id||null})),controls:Object.values(s.controls||{}),audit:(s.audit||[]).slice(-100).reverse()};
 }

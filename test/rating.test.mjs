@@ -23,7 +23,7 @@ test('disconnected entire second half preserves first-half stats and settles all
  const second=report();absent(second.players[0]);g.finishLeg(s,m,[1,3],second);
  assert.equal(m.phase,'settled');assert.equal(s.ledger.length,12);
  const p=m.combat.players[0];assert.equal(p.rounds,8);assert.equal(p.kills,4);assert.equal(p.damage,600);assert.equal(p.spawns,4);
- assert.equal(m.ratingBreakdown.p0.factor,1.5);assert(Number.isFinite(m.changes.p0));
+ assert.equal(m.ratingBreakdown.p0.factor,1.35);assert(Number.isFinite(m.changes.p0));
 });
 test('explicit zero activity is valid without inventing class evidence or survival points',()=>{
  const r=report();r.players.forEach(absent);const b=performanceRating(teams,[3,1],validateCombat(r,ids,[3,1]));
@@ -34,8 +34,8 @@ test('cavalry discounts positive delta and magnifies loss; mixed lives interpola
  const r=report();r.players[1].classes={infantry:0,archer:0,cavalry:4};r.players[2].classes={infantry:2,archer:0,cavalry:2};r.players[7].classes={infantry:0,archer:0,cavalry:4};
  const b=performanceRating(teams,[3,1],validateCombat(r,ids,[3,1]));
  // 2.5 kills + 9 survival + 7/6 assists + 600*40/5064 + 200*40/15192 = 17.93..., ceil 18.
- assert.equal(b.p0.personal,18);assert.equal(b.p0.delta,58);assert.equal(b.p1.base,58);assert.equal(b.p1.delta,39);assert.equal(b.p2.factor,1.25);assert.equal(b.p2.delta,46);
- assert.equal(b.p6.delta,-22);assert.equal(b.p7.delta,-33);assert.equal(b.p7.factor,1.5);
+ assert.equal(b.p0.personal,18);assert.equal(b.p0.delta,58);assert.equal(b.p1.base,58);assert.equal(b.p1.delta,43);assert.equal(b.p2.factor,1.175);assert.equal(b.p2.delta,49);
+ assert.equal(b.p6.delta,-22);assert.equal(b.p7.delta,-30);assert.equal(b.p7.factor,1.35);
 });
 test('symmetrical teams have equal personal components, correct assist denominators, independent of ratings',()=>{
  const r=report();const b=performanceRating(teams,[2,2],r);assert.equal(b.p0.personal,b.p6.personal);assert.equal(b.p0.assists,7/6);assert.equal(b.p0.teamScore,0);assert.equal(b.p6.delta,18);
@@ -57,11 +57,37 @@ test('missing v2 evidence enters review; no fallback to guessed infantry and no 
 test('two legs aggregate class proportions before rating; legacy matches retain Elo',()=>{
  const{s,m}=live();m.format='two-leg-v1';m.leg=0;m.legs=[];
  const first=report();first.players[0].classes={infantry:0,archer:0,cavalry:4};g.finishLeg(s,m,[3,1],first);assert.equal(s.ledger.length,0);
- m.phase='live';g.finishLeg(s,m,[3,1],report());assert.equal(m.ratingBreakdown.p0.factor,1.25);assert.equal(m.ratingBreakdown.p0.spawns,8);assert.deepEqual(m.combat.players[0].classes,{infantry:4,archer:0,cavalry:4});assert.equal(s.ledger.length,12);
+ m.phase='live';g.finishLeg(s,m,[3,1],report());assert.equal(m.ratingBreakdown.p0.factor,1.175);assert.equal(m.ratingBreakdown.p0.spawns,8);assert.deepEqual(m.combat.players[0].classes,{infantry:4,archer:0,cavalry:4});assert.equal(s.ledger.length,12);
  const old=live('elo-team-v1');g.finishLeg(old.s,old.m,[3,1],report());assert.equal(old.s.users.p0.rating,1016);assert.equal(old.m.ratingBreakdown,undefined);
 });
 test('rule is captured when room is created, not changed mid-match',()=>{
  const s=g.empty();s.ratingRule=PERFORMANCE_RULE;ids.forEach(id=>{g.user(s,id,id);g.action(s,id,{type:'join'},1000);});assert.equal(s.matches[0].ratingRule,PERFORMANCE_RULE);s.ratingRule='elo-team-v1';assert.equal(s.matches[0].ratingRule,PERFORMANCE_RULE);
+});
+
+test('archers and mixed classes use weighted factors for both wins and losses',()=>{
+ const r=report();
+ for(const i of [0,6])r.players[i].classes={infantry:0,archer:4,cavalry:0};
+ for(const i of [1,7])r.players[i].classes={infantry:0,archer:2,cavalry:2};
+ for(const i of [2,8])r.players[i].classes={infantry:2,archer:2,cavalry:0};
+ const b=performanceRating(teams,[3,1],validateCombat(r,ids,[3,1]));
+ assert.equal(b.p0.factor,1.15);assert.equal(b.p0.archerShare,1);assert.equal(b.p0.delta,50);assert.equal(b.p6.delta,-25);
+ assert.equal(b.p1.factor,1.25);assert.equal(b.p1.delta,46);assert.equal(b.p7.delta,-28);
+ assert.equal(b.p2.factor,1.075);assert.equal(b.p2.delta,54);assert.equal(b.p8.delta,-24);
+});
+
+test('existing v1 rooms retain cavalry 1.5 and archer 1, and cannot bypass evidence checks',()=>{
+ const {s,m}=live('blmm-class-v1'),r=report();
+ r.players[0].classes={infantry:0,archer:0,cavalry:4};
+ r.players[1].classes={infantry:0,archer:4,cavalry:0};
+ s.ratingRule=PERFORMANCE_RULE;
+ g.finishLeg(s,m,[3,1],r);
+ assert.equal(m.ratingBreakdown.p0.factor,1.5);assert.equal(m.changes.p0,39);
+ assert.equal(m.ratingBreakdown.p1.factor,1);assert.equal(m.changes.p1,58);
+ assert.equal(s.ledger[0].rule,'blmm-class-v1');
+ for(const rule of ['blmm-class-v1',PERFORMANCE_RULE]){
+  const x=live(rule);x.m.phase='review';x.m.startedAt=1;
+  assert.throws(()=>op.adminAction(x.s,'admin',{type:'settle',matchId:x.m.id,revision:0,score:[3,1],reason:'仅有比赛比分没有兵种明细'}),/完整兵种/);
+ }
 });
 test('mixing legacy and v2 legs never fabricates class evidence',()=>{
  const a=report(),b=report();b.version=1;const merged=mergeCombat([{combat:a},{combat:b}],ids);assert.equal(merged.version,1);assert.equal(merged.players[0].classes,undefined);

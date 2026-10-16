@@ -1,5 +1,5 @@
 import {validateCombat,mergeCombat} from './combat.mjs';
-import {PERFORMANCE_RULE,performanceRating} from './rating.mjs';
+import {isPerformanceRule,performanceRating} from './rating.mjs';
 import { randomUUID, randomInt } from 'node:crypto';
 export const CANDIDATE_MAPS=[{"id":"mp_bnl_ghosttown","name":"幽灵镇","subtitle":"Ghost Town","tone":"stone","image":"/maps/mp_bnl_ghosttown.svg","custom":true,"previewKind":"layout","ranked":true},{"id":"mp_bnl_fortlieve","name":"利耶夫堡","subtitle":"Fort Lieve","tone":"stone","image":"/maps/mp_bnl_fortlieve.svg","custom":true,"previewKind":"layout","ranked":true},{"id":"mp_bnl_purplehaze","name":"紫雾","subtitle":"Purple Haze","tone":"stone","image":"/maps/mp_bnl_purplehaze.svg","custom":true,"previewKind":"layout","ranked":true},{"id":"mp_dao","name":"岛","subtitle":"Dao","tone":"stone","image":"/maps/mp_dao.svg","custom":true,"previewKind":"layout","ranked":true},{"id":"mp_gebi","name":"戈壁","subtitle":"Gebi","tone":"stone","image":"/maps/mp_gebi.svg","custom":true,"previewKind":"layout","ranked":true},{"id":"mp_luzhou","name":"绿洲","subtitle":"Luzhou","tone":"stone","image":"/maps/mp_luzhou.svg","custom":true,"previewKind":"layout","ranked":true}];
 export const MAPS=[{"id":"mp_skirmish_map_002f","name":"城镇外围","subtitle":"Town Outskirts","tone":"sand","image":"/maps/mp_skirmish_map_002f.jpg"},{"id":"mp_skirmish_map_003_skinc","name":"贸易站","subtitle":"Trading Post","tone":"forest","image":"/maps/mp_skirmish_map_003_skinc.jpg"},{"id":"mp_skirmish_map_010","name":"埃刻俄里昂","subtitle":"Echerion","tone":"snow","image":"/maps/mp_skirmish_map_010.jpg"},{"id":"mp_skirmish_map_007","name":"骚拿","subtitle":"Xauna","tone":"dusk","image":"/maps/mp_skirmish_map_007.jpg"},{"id":"mp_skirmish_map_008_skin","name":"奥莫尔港","subtitle":"Port at Omor","tone":"stone","image":"/maps/mp_skirmish_map_008_skin.jpg"},{"id":"mp_skirmish_map_009","name":"岑加尔","subtitle":"Zendyar","tone":"stone","image":"/maps/mp_skirmish_map_009.jpg"},{"id":"mp_skirmish_map_014","name":"乌里克斯卡洛尔","subtitle":"Urikskalaar","tone":"stone","image":"/maps/mp_skirmish_map_014.jpg"},{"id":"mp_skirmish_map_020","name":"沙里斯","subtitle":"Sharis","tone":"stone","image":"/maps/mp_skirmish_map_020.jpg"},{"id":"mp_bnl_abandoned_v2","name":"废弃据点","subtitle":"Abandoned V2","tone":"stone","image":"/maps/mp_bnl_abandoned_v2.svg","custom":true,"previewKind":"layout"},{"id":"mp_bnl_fortofhonour","name":"荣誉堡","subtitle":"Fort of Honour","tone":"stone","image":"/maps/mp_bnl_fortofhonour.svg","custom":true,"previewKind":"layout"},{"id":"mp_bnl_lighthouse","name":"灯塔","subtitle":"Lighthouse","tone":"stone","image":"/maps/mp_bnl_lighthouse.svg","custom":true,"previewKind":"layout"}];
@@ -96,11 +96,11 @@ export function settle(s,m,score,now=Date.now(),source='bridge'){
  if(m.format==='two-leg-v1'){if(m.legs?.length!==2||!m.legs.every(l=>validLegScore(l.score))||JSON.stringify(score)!==JSON.stringify([0,1].map(t=>m.legs.reduce((n,l)=>n+l.score[t],0))))fail('两轮赛果不完整或合计比分不符',400);}else if(!validLegScore(score))fail('比分必须符合三胜制',400);
  const avg=m.teams.map(t=>t.reduce((n,id)=>n+s.users[id].rating,0)/6),win=score[0]===score[1]?null:score[0]>score[1]?0:1;
  const expected=1/(1+10**((avg[1]-avg[0])/400));const change=Math.round(32*((win===null?0.5:win===0?1:0)-expected));
- if(m.ratingRule===PERFORMANCE_RULE){
+ if(isPerformanceRule(m.ratingRule)){
   const combat=m.format==='two-leg-v1'?mergeCombat(m.legs,m.players):m.combat;
   if(combat?.version!==2)fail('兵种与战斗明细不完整，不能按新规则结算');
   m.combat=validateCombat(combat,m.players,score);
-  m.ratingBreakdown=performanceRating(m.teams,score,m.combat);
+  m.ratingBreakdown=performanceRating(m.teams,score,m.combat,m.ratingRule);
  }
  m.ratings={};m.changes={};for(let team=0;team<2;team++)for(const id of m.teams[team]){
   const u=s.users[id],delta=m.ratingBreakdown?.[id]?.delta??(team===0?change:-change),before=u.rating;u.rating+=delta;if(win===null)u.draws=(u.draws||0)+1;else u[team===win?'wins':'losses']++;
@@ -111,7 +111,7 @@ export function settle(s,m,score,now=Date.now(),source='bridge'){
 export function finishLeg(s,m,score,report,now=Date.now(),source='bridge'){
  if(m.phase!=='live')fail('比赛尚未开始');if(!validLegScore(score))fail('每轮比分必须符合三胜制',400);
  const combat=validateCombat(report,m.players,score);
- if(m.ratingRule===PERFORMANCE_RULE&&combat?.version!==2){
+ if(isPerformanceRule(m.ratingRule)&&combat?.version!==2){
   m.pendingResult={leg:m.leg,score:[...score],combat,at:now,source};m.failureReason='combat_v2_required';phase(m,'review',0,now);event(m,'缺少可信兵种与战斗明细，保留比分并暂停积分结算',now);return;
  }
  if(m.format!=='two-leg-v1'){if(combat)m.combat=combat;settle(s,m,score,now,source);return;}

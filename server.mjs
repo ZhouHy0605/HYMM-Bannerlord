@@ -1,3 +1,4 @@
+import {PERFORMANCE_RULE} from './rating.mjs';
 import {ratingVisibility} from './rating-visibility.mjs';
 import {assetDelivery,sendJSON as json} from './http-delivery.mjs';
 import {armoryStore} from './armory.mjs';
@@ -35,7 +36,7 @@ CREATE TABLE IF NOT EXISTS login_states(id TEXT PRIMARY KEY, return_to TEXT NOT 
 CREATE TABLE IF NOT EXISTS nonces(id TEXT PRIMARY KEY, expires INTEGER NOT NULL);`);
 const armory=armoryStore(db);
 const hash=x=>createHash('sha256').update(x).digest('hex'),random=()=>randomBytes(32).toString('hex');
-function world(id){const row=db.prepare('SELECT body FROM worlds WHERE id=?').get(id);const s=row?JSON.parse(row.body):game.empty();s.matchFormat=MATCH_FORMAT;s.ratingRule=id==='ranked'?'blmm-class-v1':'elo-team-v1';return s;}
+function world(id){const row=db.prepare('SELECT body FROM worlds WHERE id=?').get(id);const s=row?JSON.parse(row.body):game.empty();s.matchFormat=MATCH_FORMAT;s.ratingRule=id==='ranked'?PERFORMANCE_RULE:'elo-team-v1';return s;}
 function save(id,s){db.prepare('INSERT INTO worlds VALUES(?,?) ON CONFLICT(id) DO UPDATE SET body=excluded.body').run(id,JSON.stringify(s));}
 function mutate(id,fn){db.exec('BEGIN IMMEDIATE');try{const s=world(id);const result=fn(s);save(id,s);db.exec('COMMIT');return result;}catch(e){db.exec('ROLLBACK');throw e;}}
 function cookies(req){return Object.fromEntries((req.headers.cookie||'').split(';').map(x=>x.trim().split('=')).filter(x=>x.length===2));}
@@ -48,7 +49,7 @@ function protectedPost(req,s){if(req.headers.origin!==ORIGIN)game.fail('来源�
 const limits=new Map();function rate(req){const key=clientIP(req,process.env.TRUST_LOCAL_PROXY==='1');const now=Date.now();let x=limits.get(key);if(!x||x.until<now){x={count:0,until:now+60000};limits.set(key,x);}if(++x.count>500)game.fail('操作过于频繁，请稍后再试',429);}
 function view(ses,partial=false){
  const s=world(ses?.world||'ranked');const me=ses?s.users[ses.userId]:null;
- const own=ses?s.matches.filter(m=>m.players.includes(ses.userId)):[];
+ const own=ses?s.matches.filter(m=>m.phase!=='cancelled'&&m.players.includes(ses.userId)):[];
  const current=own.find(m=>game.ACTIVE.includes(m.phase))||null;
  const selected=new Set([ses?.userId,...s.queue.map(q=>q.id),...(current?.players||[]),...(own[0]?.players||[])]);
  const users=partial?Object.fromEntries(Object.entries(s.users).filter(([id])=>selected.has(id))):s.users;

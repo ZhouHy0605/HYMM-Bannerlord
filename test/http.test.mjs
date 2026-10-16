@@ -44,6 +44,19 @@ test('HTTP: demo lifecycle, CSRF, persistence, isolation and Steam redirect',asy
   const savedCookie=cookie;cookie='';const guest=await (await req('/api/state')).json();assert.equal(guest.leaderboard.length,0);cookie=savedCookie;
   await stop();await launch();s=await (await req('/api/state')).json();assert.equal(s.matches[0].phase,'settled');assert.equal(s.ledger.length,0);assert.equal(s.me.rating,undefined);assert.equal(s.matches[0].changes,undefined);
   s=await (await req('/api/action',{type:'demo-fill-24'})).json();assert.equal(s.rooms.length,2);assert.equal(s.rooms.filter(r=>r.mine).length,1);assert.equal(s.cultures.length,6);assert.equal(s.queue.length,0);assert.equal((await req('/calradia-banner.png')).status,200);
+  // Seed cancellations ahead of a completed match: filtering must precede the history limit.
+  await stop();
+  const seed=new DatabaseSync(path.join(dir,'arena.sqlite'));
+  const row=seed.prepare("SELECT id,body FROM worlds WHERE id LIKE 'demo:%'").get(),saved=JSON.parse(row.body);
+  saved.matches.unshift(...Array.from({length:35},(_,i)=>({...saved.matches[0],id:'cancelled-'+i,phase:'cancelled',deadline:null})));
+  seed.prepare('UPDATE worlds SET body=? WHERE id=?').run(JSON.stringify(saved),row.id);seed.close();
+  await launch();
+  for(const route of ['/api/state','/api/state?view=live']){
+   const visible=await (await req(route)).json();assert.ok(visible.matches.length);assert.ok(visible.matches.every(m=>m.phase!=='cancelled'));
+   if(route==='/api/state')assert.ok(visible.matches.some(m=>m.phase==='settled'));
+  }
+  const stored=new DatabaseSync(path.join(dir,'arena.sqlite'),{readOnly:true});
+  assert.equal(JSON.parse(stored.prepare('SELECT body FROM worlds WHERE id=?').get(row.id).body).matches.filter(m=>m.phase==='cancelled').length,35);stored.close();
   const auth=await req('/auth/steam');assert.equal(auth.status,302);assert.equal(new URL(auth.headers.get('location')).hostname,'steamcommunity.com');
   const forged=await req('/auth/steam/callback?openid.mode=id_res');assert.equal(forged.status,302);assert.match(forged.headers.get('location'),/authError=/);
  }finally{if(child&&!child.killed)await stop();await rm(dir,{recursive:true,force:true});}
