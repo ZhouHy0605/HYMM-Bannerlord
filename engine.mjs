@@ -7,7 +7,7 @@ MAPS.push(...CANDIDATE_MAPS.filter(m=>m.ranked));
 export const IDLE_MAPS=[...MAPS,...CANDIDATE_MAPS.filter(m=>!m.ranked)];
 export const CULTURES=[{id:'khuzait',name:'库赛特'},{id:'aserai',name:'阿塞莱'},{id:'battania',name:'巴旦尼亚'},{id:'vlandia',name:'瓦兰迪亚'},{id:'sturgia',name:'斯特吉亚'},{id:'empire',name:'帝国'}];
 export const validCultures=c=>Array.isArray(c)&&c.length===2&&c[0]!==c[1]&&c.every(id=>CULTURES.some(x=>x.id===id));
-export const DRAFT_ORDER=Object.freeze([0,1,1,0,0,1,1,0,0,1]);
+export const DRAFT_ORDER=Object.freeze([0,1,1,0,0,1,1,0,1,0]);
 export const validLegScore=score=>Array.isArray(score)&&score.length===2&&score.every(Number.isInteger)&&((score[0]===3&&score[1]>=0&&score[1]<3)||(score[1]===3&&score[0]>=0&&score[0]<3));
 export const ACTIVE=['ready','election','draft','veto','awaiting_server','live','review'];
 export function fail(message,status=409){throw Object.assign(new Error(message),{status});}

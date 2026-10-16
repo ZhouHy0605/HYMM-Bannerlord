@@ -23,10 +23,10 @@ test('ready timeout preserves priority and lets absentees rejoin immediately',()
  assert.equal(m.phase,'cancelled');assert.equal(s.queue[0].id,'p0');assert.equal(s.users.p1.cooldown,0);assert.equal(s.queue.some(q=>q.id==='p1'),false);g.action(s,'p1',{type:'join'},62000);assert.deepEqual(s.queue.map(q=>q.id),['p0','p1']);assert.equal(s.queue[0].at,m.createdAt);assert.equal(s.ledger.length,0);assert.ok(Object.values(s.users).every(u=>u.rating===1000&&u.losses===0));
 });
 test('timeouts automatically advance draft without duplicate picks',()=>{
- const s=setup(),m=ready(s);for(let i=0;i<10;i++)g.tick(s,m.deadline+1);assert.equal(m.phase,'awaiting_server');assert.equal(new Set(m.teams.flat()).size,12);assert.deepEqual(m.picks.map(p=>p.team),[0,1,1,0,0,1,1,0,0,1]);assert.deepEqual(m.teams.map(t=>t.length),[6,6]);
+ const s=setup(),m=ready(s);for(let i=0;i<10;i++)g.tick(s,m.deadline+1);assert.equal(m.phase,'awaiting_server');assert.equal(new Set(m.teams.flat()).size,12);assert.deepEqual(m.picks.map(p=>p.team),[0,1,1,0,0,1,1,0,1,0]);assert.deepEqual(m.teams.map(t=>t.length),[6,6]);
 });
-test('snake draft gives the second captain consecutive picks and rejects the other captain',()=>{
- const s=setup(),m=ready(s),expected=[0,1,1,0,0,1,1,0,0,1];
+test('ABBAABBABA draft enforces every turn and rejects the other captain',()=>{
+ const s=setup(),m=ready(s),expected=[0,1,1,0,0,1,1,0,1,0];
  for(const team of expected){
   assert.equal(m.turn,team);const playerId=m.players.find(id=>!m.teams.flat().includes(id));
   const request={type:'pick',matchId:m.id,revision:m.revision,playerId};
@@ -34,6 +34,13 @@ test('snake draft gives the second captain consecutive picks and rejects the oth
   g.action(s,m.captains[team],request,3000);
  }
  assert.deepEqual(m.picks.map(p=>p.team),expected);assert.deepEqual(m.teams.map(t=>t.length),[6,6]);assert.equal(m.phase,'awaiting_server');
+});
+test('persisted previous snake drafts keep their remaining turns after restart',()=>{
+ const s=setup(),m=ready(s),previous=[0,1,1,0,0,1,1,0,0,1];m.pickOrder=[...previous];
+ for(let i=0;i<8;i++)g.tick(s,m.deadline);
+ const restored=JSON.parse(JSON.stringify(s)),match=restored.matches[0];
+ for(let i=8;i<10;i++)g.tick(restored,match.deadline);
+ assert.deepEqual(match.picks.map(p=>p.team),previous);assert.deepEqual(match.teams.map(t=>t.length),[6,6]);assert.equal(match.phase,'awaiting_server');
 });
 test('persisted legacy drafts retain alternating order after restart',()=>{
  const s=setup(),m=ready(s);delete m.pickOrder;
