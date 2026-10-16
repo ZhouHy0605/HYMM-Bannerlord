@@ -78,6 +78,19 @@ test('Oathsworn includes both native headArmor cosmetics and Sergeant alone gain
  assert.ok(catalog.items.find(i=>i.id===armor).replaces.includes('mp_vlandia_chainmail'));
 });
 
+test('Aserai Veteran and Mameluke share only the requested crown and scale cosmetic',()=>{
+ const classes=['mp_heavy_ranged_aserai','mp_heavy_cavalry_aserai'];
+ const crown='mp_aserai_battle_crown',armor='mp_aserai_scale_armor_on_cloth';
+ for(const c of catalog.classes){
+  for(const item of [crown,armor]){
+   if(classes.includes(c.id)){assert.doesNotThrow(()=>validateArmory({classId:c.id,items:[crown,armor]}));assert.equal(c.requirements[item],undefined);}
+   else {assert.ok(!c.items.includes(item));assert.throws(()=>validateArmory({classId:c.id,items:[item]}));}
+  }
+ }
+ assert.ok(catalog.items.find(i=>i.id===crown).replaces.includes('mp_southern_noble_helmet'));
+ assert.ok(catalog.items.find(i=>i.id===armor).replaces.includes('mp_stitched_leather_over_mail'));
+});
+
 test('armory HTTP enforces Steam session, CSRF, bridge token and persists per-account presets',async()=>{
  const reserve=net.createServer();await new Promise(r=>reserve.listen(0,'127.0.0.1',r));const port=reserve.address().port;await new Promise(r=>reserve.close(r));
  const dir=await mkdtemp(path.join(os.tmpdir(),'hymm-armory-')),origin=`http://127.0.0.1:${port}`,token='armory-integration-test-bridge-token-12345';

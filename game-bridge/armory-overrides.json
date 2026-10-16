@@ -16,5 +16,17 @@
     "slot": "Body",
     "cosmeticId": "mp_sturgian_fortified_armor",
     "replaceItems": ["mp_vlandia_chainmail"]
+  },
+  {
+    "classId": "mp_heavy_ranged_aserai",
+    "slot": "Head",
+    "cosmeticId": "mp_aserai_battle_crown",
+    "replaceItems": ["mp_southern_noble_helmet"]
+  },
+  {
+    "classId": "mp_heavy_cavalry_aserai",
+    "slot": "Body",
+    "cosmeticId": "mp_aserai_scale_armor_on_cloth",
+    "replaceItems": ["mp_stitched_leather_over_mail"]
   }
 ]

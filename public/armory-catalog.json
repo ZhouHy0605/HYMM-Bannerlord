@@ -1054,7 +1054,8 @@
         "mp_aserai_horseman_armor",
         "mp_southern_lord_helmet",
         "mp_a_aserai_scale_b_shoulder_d",
-        "mp_steppe_leather_vambraces"
+        "mp_steppe_leather_vambraces",
+        "mp_aserai_battle_crown"
       ],
       "requirements": {
         "mp_a_aserai_scale_b_shoulder_d": [
@@ -1111,7 +1112,8 @@
         "mp_aserai_battle_crown",
         "mp_woven_leather_bracers",
         "mp_brass_lamellar_shoulder",
-        "mp_wrapped_scarf"
+        "mp_wrapped_scarf",
+        "mp_aserai_scale_armor_on_cloth"
       ],
       "requirements": {},
       "defaults": {
@@ -3718,7 +3720,8 @@
       "name": "师匠级南方鳞甲",
       "slot": "Body",
       "replaces": [
-        "mp_eastern_plated_leather"
+        "mp_eastern_plated_leather",
+        "mp_stitched_leather_over_mail"
       ],
       "itemless": []
     },
@@ -3977,7 +3980,8 @@
       "name": "华丽沙漠战场王冠",
       "slot": "Head",
       "replaces": [
-        "mp_aserai_lord_helmet_a"
+        "mp_aserai_lord_helmet_a",
+        "mp_southern_noble_helmet"
       ],
       "itemless": []
     },

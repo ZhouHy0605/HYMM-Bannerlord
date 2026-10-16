@@ -138,7 +138,7 @@ public sealed class Transport : IDisposable
         if(heartbeat==null&&DateTime.UtcNow>=nextHeartbeat)
         {
             nextHeartbeat=DateTime.UtcNow.AddSeconds(5);
-            var snapshot=new{serverId=Config.ServerId,matchId=State.Active?.MatchId,blocked=State.Blocked!=null,version="arena-0.4.11",ackId=State.LastControlId,
+            var snapshot=new{serverId=Config.ServerId,matchId=State.Active?.MatchId,blocked=State.Blocked!=null,version="arena-0.4.12",ackId=State.LastControlId,
                 idleMapSupported=true,currentMap=CurrentMap,controlResult=State.ControlResult,controlError=State.ControlError};
             heartbeat=Task.Run(async()=>{using var content=Content(snapshot);using var response=await http.PostAsync("api/bridge/heartbeat",content).ConfigureAwait(false);
                 response.EnsureSuccessStatusCode();return JsonSerializer.Deserialize<ControlReply>(await response.Content.ReadAsStringAsync().ConfigureAwait(false),Json);});
