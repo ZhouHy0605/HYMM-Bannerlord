@@ -1,3 +1,4 @@
+import {matchSamples} from './audio-assets.js';
 const melodies={
  ready:[[523,0,.16],[659,.2,.16],[784,.4,.3],[523,.9,.16],[659,1.1,.16],[784,1.3,.35]],
  election:[[523,0,.18],[784,.24,.3]],
@@ -37,7 +38,7 @@ export function matchCue(previous,next){
 }
 export class MatchAudio {
  constructor(onChange=()=>{}){
-  this.onChange=onChange;this.context=null;this.pending=null;this.nodes=new Set();
+  this.onChange=onChange;this.context=null;this.pending=null;this.nodes=new Set();this.buffers=new Map();this.generation=0;this.identity=null;
   try{this.muted=localStorage.getItem('hymm-sound-muted')==='1';}catch{this.muted=false;}
   try{this.seen=new Set(JSON.parse(sessionStorage.getItem('hymm-sound-seen')||'[]'));}catch{this.seen=new Set();}
  }
@@ -48,18 +49,20 @@ export class MatchAudio {
   try{
    const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;
    this.context??=new Audio();await this.context.resume();
+   for(const kind of ['ready','win'])void this.loadSample(kind).catch(()=>{});
    if(this.pending&&Date.now()<this.pending.expires){this.play(this.pending.kind);this.pending=null;}
   }catch{}finally{this.onChange();}
  }
  async toggle(){
   if(this.muted){this.muted=false;await this.unlock();this.play('preview');}
   else if(!this.enabled){await this.unlock();this.play('preview');}
-  else{this.muted=true;this.pending=null;for(const n of this.nodes){try{n.stop();}catch{}}}
+  else{this.muted=true;this.generation++;this.pending=null;for(const n of this.nodes){try{n.stop();}catch{}}}
   try{localStorage.setItem('hymm-sound-muted',this.muted?'1':'0');}catch{}
   this.onChange();
  }
  update(previous,next){
   const m=next.current,identity=[next.me?.id,m?.id,m?.phase,m?.leg,m?.picks?.length,m?.ready?.includes(next.me?.id)].join(':');
+  if(this.identity!==identity){this.identity=identity;this.generation++;}
   if(this.pending?.identity!==identity)this.pending=null;
   const cue=matchCue(previous,next);if(!cue||this.seen.has(cue.key))return;
   this.seen.add(cue.key);if(this.seen.size>200)this.seen.delete(this.seen.values().next().value);
@@ -67,10 +70,36 @@ export class MatchAudio {
   if(this.muted)return;
   if(this.enabled)this.play(cue.kind);else this.pending={...cue,identity,expires:Date.now()+30000};
  }
- play(kind){
+ loadSample(kind){
+  const url=matchSamples[kind==='preview'?'ready':kind];
+  if(!url)return Promise.resolve(null);
+  if(!this.buffers.has(url)){
+   const ctx=this.context;
+   const loading=fetch(url,{signal:AbortSignal.timeout(5000)}).then(r=>{if(!r.ok)throw Error('Audio unavailable');return r.arrayBuffer();}).then(bytes=>ctx.decodeAudioData(bytes)).catch(error=>{this.buffers.delete(url);throw error;});
+   this.buffers.set(url,loading);
+  }
+  return this.buffers.get(url);
+ }
+ async play(kind){
+  if(!this.enabled)return;
+  const generation=++this.generation;
+  if(matchSamples[kind==='preview'?'ready':kind]){
+   let buffer;
+   try{buffer=await this.loadSample(kind);}catch{}
+   if(!this.enabled||generation!==this.generation)return;
+   if(buffer){
+    const ctx=this.context,source=ctx.createBufferSource(),gain=ctx.createGain();
+    source.buffer=buffer;gain.gain.value=.65;source.connect(gain);gain.connect(ctx.destination);
+    this.nodes.add(source);source.onended=()=>{this.nodes.delete(source);source.disconnect();gain.disconnect();};
+    source.start();return;
+   }
+  }
+  this.playMelody(kind);
+ }
+ playMelody(kind){
   if(!this.enabled)return;
   const ctx=this.context,start=ctx.currentTime+.02;
-  // Soft bell-like cues with attack/release envelopes, no remote audio downloads.
+  // Retain synthesized cues for other phases and for failed sample downloads.
   for(const [frequency,offset,duration] of melodies[kind]||[]){
    const oscillator=ctx.createOscillator(),gain=ctx.createGain();oscillator.type='sine';oscillator.frequency.value=frequency;
    gain.gain.setValueAtTime(0,start+offset);gain.gain.linearRampToValueAtTime(.12,start+offset+.015);

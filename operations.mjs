@@ -74,5 +74,5 @@ export function monitor(s,now=Date.now()){
 }
 export function adminView(s,now=Date.now()){
  return {now,maps:IDLE_MAPS,matches:s.matches.slice(0,20).map(m=>({...m,players:m.players.map(id=>({id,name:s.users[id]?.name||id})),failureLabel:FAILURE_LABELS[m.failureReason]||m.failureReason})),
-  servers:Object.values(s.servers||{}).map(r=>({...r,online:now-r.lastSeen<=90000,control:s.controls?.[r.id]||null,match:s.matches.find(m=>ACTIVE.includes(m.phase)&&occupied(m)===r.id)?.id||null})),controls:Object.values(s.controls||{}),audit:(s.audit||[]).slice(-100).reverse()};
+  servers:Object.values(s.servers||{}).map(r=>({...r,online:now-r.lastSeen<=90000,control:s.controls?.[r.id]||null,match:s.matches.find(m=>ACTIVE.includes(m.phase)&&occupied(m)===r.id)?.id||null})),controls:Object.values(s.controls||{}),audit:(s.audit||[]).slice(-20).reverse()};
 }

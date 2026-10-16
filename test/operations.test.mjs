@@ -9,6 +9,12 @@ test('admin room list returns latest 20 while retaining stored rooms and cancell
  assert.equal(view.matches.length,20);assert.equal(view.matches[0].number,35);assert.equal(view.matches.at(-1).number,16);
  assert.ok(view.matches.some(m=>m.phase==='cancelled'));assert.equal(s.matches.length,35);
 });
+
+test('admin audit returns latest 20 in reverse chronological order without deleting history',()=>{
+ const s=g.empty();s.audit=Array.from({length:37},(_,i)=>({id:'audit-'+i,at:i}));
+ const audit=op.adminView(s).audit;
+ assert.equal(audit.length,20);assert.equal(audit[0].id,'audit-36');assert.equal(audit.at(-1).id,'audit-17');assert.equal(s.audit.length,37);
+});
 test('idle map commands serialize with claims, require loaded-map acknowledgement and preserve scores',()=>{
  const s=g.empty(),map=g.MAPS[0].id,now=500000;
  op.heartbeat(s,{serverId:'s1',idleMapSupported:true},now);

@@ -3,6 +3,37 @@ import assert from 'node:assert/strict';
 import {matchCue,MatchAudio} from '../public/match-audio.js';
 const room=(phase,extra={})=>({id:'m1',phase,leg:0,players:['me','other'],ready:[],captains:['me','other'],turn:0,picks:[],teams:[['me'],['other']],...extra});
 const state=m=>({mode:'ranked',me:{id:'me'},current:m,matches:m?[m]:[]});
+
+function sampleContext(){
+ const played=[];let decodes=0;
+ return {state:'running',destination:{},played,get decodes(){return decodes;},
+  decodeAudioData:async bytes=>{decodes++;return {bytes};},
+  createGain:()=>({gain:{value:0},connect(){},disconnect(){}}),
+  createBufferSource:()=>{const source={connect(){},disconnect(){},start(){played.push(source);},stop(){source.stopped=true;source.onended?.();}};return source;}
+ };
+}
+
+test('sample cues are fetched and decoded once, preview uses ready, mute stops active sounds',async t=>{
+ const urls=[];t.mock.method(globalThis,'fetch',async url=>{urls.push(url);return {ok:true,arrayBuffer:async()=>new ArrayBuffer(4)};});
+ const audio=new MatchAudio();audio.context=sampleContext();audio.muted=false;
+ await audio.play('ready');await audio.play('preview');await audio.play('win');
+ assert.equal(urls.length,2);assert.match(urls[0],/ready\..*\.wav$/);assert.match(urls[1],/win\..*\.wav$/);
+ assert.equal(audio.context.decodes,2);assert.equal(audio.context.played.length,3);
+ assert.equal(audio.context.played[0].buffer,audio.context.played[1].buffer);
+ await audio.toggle();assert.ok(audio.context.played.every(s=>s.stopped));assert.equal(audio.nodes.size,0);
+});
+
+test('late downloads cannot play after ready confirmation or muting; failure retains synthesized cue',async t=>{
+ let complete;t.mock.method(globalThis,'fetch',()=>new Promise(resolve=>{complete=()=>resolve({ok:true,arrayBuffer:async()=>new ArrayBuffer(4)});}));
+ const audio=new MatchAudio();audio.context=sampleContext();audio.muted=false;
+ const playing=audio.play('ready');audio.update(null,state(room('ready',{ready:['me']})));complete();await playing;
+ assert.equal(audio.context.played.length,0);
+ audio.buffers.clear();const pending=audio.play('ready');await audio.toggle();complete();await pending;
+ assert.equal(audio.context.played.length,0);
+ t.mock.method(globalThis,'fetch',async()=>{throw Error('Offline');});
+ const offline=new MatchAudio();offline.context=sampleContext();offline.muted=false;const fallback=[];offline.playMelody=k=>fallback.push(k);
+ await offline.play('ready');assert.deepEqual(fallback,['ready']);assert.equal(offline.buffers.size,0);
+});
 test('ready and captain turns notify only the participant required to act',()=>{
  assert.equal(matchCue(null,state(room('ready'))).kind,'ready');
  assert.equal(matchCue(null,state(room('ready',{ready:['me']}))),null);
