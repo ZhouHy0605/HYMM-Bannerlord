@@ -52,6 +52,7 @@
 /game-bridge/tests/*
 !/game-bridge/tests/*.cs
 !/game-bridge/tests/*.csproj
+!/game-bridge/tests/integration.mjs
 !/test/
 /test/*
 !/test/*.mjs

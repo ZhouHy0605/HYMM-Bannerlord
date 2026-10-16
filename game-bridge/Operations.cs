@@ -4,7 +4,7 @@ internal static class Operations
 {
  public static void Tick()
  {
-  var link=SubModule.Link;var command=link?.Control;if(link==null||command==null||command.Type!="stop")return;
+  var link=SubModule.Link;var command=link?.Control;if(link==null||!link.IsDurable||command==null||command.Type!="stop")return;
   if(link.State.Active!=null&&link.State.Active.MatchId!=command.MatchId)return;
   if(!Preparation.Abort())return;
   if(Mission.Current!=null){

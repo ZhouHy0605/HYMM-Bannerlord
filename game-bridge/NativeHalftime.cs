@@ -14,6 +14,15 @@ internal static class NativeHalftime
     static readonly Dictionary<string,PropertyInfo> Totals=new[]{"KillCount","DeathCount","AssistCount","Score"}
         .ToDictionary(name=>name,name=>typeof(MissionPeer).GetProperty(name) is { } p&&p.GetSetMethod(true)!=null?p:throw new Exception("unsupported_personal_score_api"));
     static void Restore(MissionPeer peer,string name,int current,int saved){if(current!=saved)Totals[name].SetValue(peer,saved);}
+    public static void Hold(Mission mission)
+    {
+        var rounds=mission.GetMissionBehavior<MultiplayerRoundController>();
+        var timer=mission.GetMissionBehavior<MultiplayerTimerComponent>();
+        if(rounds==null||timer==null||rounds.IsMatchEnding||rounds.CurrentRoundState!=MultiplayerRoundState.Ended)throw new Exception("invalid_halftime_state");
+        // Hold immediately on the game thread, but do not exchange sides, reset
+        // scores or remove agents until the first-half result is safely stored.
+        timer.StartTimerAsServer(86400);
+    }
     public static void Reset(Mission mission,Action exchangeRoster)
     {
         var rounds=mission.GetMissionBehavior<MultiplayerRoundController>();
@@ -24,7 +33,7 @@ internal static class NativeHalftime
         _=Totals.Count; // Validate score-restoration compatibility before any native mutation.
         // Keep the native round controller in Ended until both ordered HTTP events
         // are acknowledged. A blocked bridge must never silently start leg two.
-        timer.StartTimerAsServer(86400);
+        Hold(mission);
         var totals=GameNetwork.NetworkPeers.Where(p=>!p.IsServerPeer).Select(p=>p.GetComponent<MissionPeer>()).OfType<MissionPeer>()
             .Select(p=>(peer:p,kills:p.KillCount,deaths:p.DeathCount,assists:p.AssistCount,score:p.Score)).ToArray();
         try

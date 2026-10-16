@@ -18,11 +18,11 @@ public sealed class SubModule : MBSubModuleBase
             diagnostics=BufferedDiagnosticLog.ToFile(Path.Combine(Path.GetDirectoryName(configPath)!,"bridge.log"));
             var config=JsonSerializer.Deserialize<Config>(File.ReadAllText(configPath),Transport.Json)!;
             Link=new Transport(config,Path.Combine(Path.GetDirectoryName(configPath)!,"bridge-state.json"),Log);
-            Log("Loaded v0.4.10; custom ranked map registration; native scoreboard ADR; native Skirmish round duration; disconnects do not interrupt play; arrival timeout="+config.ArrivalTimeoutSeconds+"s; asynchronous map preparation, in-place halftime, combat v2; explicit identity mappings="+config.GameIdToSteamId.Count);
+            Log("Loaded v0.4.11; custom ranked map registration; native scoreboard ADR; native Skirmish round duration; disconnects do not interrupt play; arrival timeout="+config.ArrivalTimeoutSeconds+"s; asynchronous map preparation, in-place halftime, combat v2; explicit identity mappings="+config.GameIdToSteamId.Count);
         }
         catch(Exception e){Log("DISABLED: "+e.Message);}
     }
-    protected override void OnApplicationTick(float dt){base.OnApplicationTick(dt);Recovery.Tick();Preparation.Tick();Link?.Tick();Operations.Tick();MissionRetirement.Tick();}
+    protected override void OnApplicationTick(float dt){base.OnApplicationTick(dt);Link?.Tick();Recovery.Tick();Preparation.Tick();Operations.Tick();MissionRetirement.Tick();}
     public override void OnBeforeMissionBehaviorInitialize(Mission mission)
     {
         base.OnBeforeMissionBehaviorInitialize(mission);
@@ -40,6 +40,7 @@ public sealed class SubModule : MBSubModuleBase
     }
     protected override void OnSubModuleUnloaded()
     {
+        Link?.Dispose();Link=null;
         diagnostics?.Dispose();diagnostics=null;
         base.OnSubModuleUnloaded();
     }
@@ -56,7 +57,7 @@ public sealed class ArenaBehavior : MissionBehavior
     DateTime arrivalDeadline;
     readonly HashSet<string> seen=new();
     readonly HashSet<NetworkCommunicator> admitted=new();
-    bool switchingSides;
+    bool switchingSides,halftimeResetPending;
     DateTime switchDeadline;
     bool roundEndingSubscribed;
     CombatLedger? ledger;
@@ -97,6 +98,14 @@ public sealed class ArenaBehavior : MissionBehavior
     {
         try
         {
+            if(!link.IsDurable)return;
+            if(halftimeResetPending&&!terminal&&link.Control==null&&link.State.Blocked==null)
+            {
+                halftimeResetPending=false;
+                NativeHalftime.Reset(Mission,Assign);
+                ledger=new CombatLedger(job!.Teams.SelectMany(t=>t));damage.Clear();horseDamage.Clear();spawns.BeginRound();
+                SubModule.Log("Persisted halftime applied; new leg=1");
+            }
             Assign(); // Free play skips this; ranked and blocked missions enforce the roster.
             if(link.Control!=null)return;
             if(terminal||link.State.Blocked!=null)return;
@@ -144,7 +153,7 @@ public sealed class ArenaBehavior : MissionBehavior
     bool CulturesMatch()=>job!=null&&MultiplayerOptions.OptionType.CultureTeam1.GetStrValue()==job.Cultures[0]&&MultiplayerOptions.OptionType.CultureTeam2.GetStrValue()==job.Cultures[1];
     void Assign()
     {
-        if(!Preparation.CanSelectTeam(Mission))return;
+        if(!link.IsDurable||halftimeResetPending||!Preparation.CanSelectTeam(Mission))return;
         if(FreePlay)return;
         if(correcting)return;
         var select=Mission.GetMissionBehavior<MultiplayerTeamSelectComponent>();if(select==null)return;
@@ -168,7 +177,7 @@ public sealed class ArenaBehavior : MissionBehavior
     Team Target(int side)=>side switch{0=>Mission.AttackerTeam,1=>Mission.DefenderTeam,_=>Mission.SpectatorTeam};
     internal void SelectTeam(NetworkCommunicator peer,bool autoAssign,bool spectator)
     {
-        if(!Preparation.CanSelectTeam(Mission))return;
+        if(!link.IsDurable||halftimeResetPending||!Preparation.CanSelectTeam(Mission))return;
         var mp=peer.GetComponent<MissionPeer>();
         if(peer.IsServerPeer||!peer.IsSynchronized||mp==null)return;
         var id=Identity(peer);
@@ -295,10 +304,10 @@ public sealed class ArenaBehavior : MissionBehavior
             live=false;switchingSides=true;switchDeadline=DateTime.UtcNow.AddSeconds(120);startEvent=null;
             try
             {
+                NativeHalftime.Hold(Mission);
                 job=link.BeginSecondLeg(job,Policy.OriginalScore(job,a,b),report);
-                NativeHalftime.Reset(Mission,Assign);
-                ledger=new CombatLedger(job.Teams.SelectMany(t=>t));damage.Clear();horseDamage.Clear();spawns.BeginRound();
-                SubModule.Log($"In-place switch {job.MatchId}; first score={a}:{b}; 12-player roster retained; new leg=1");
+                halftimeResetPending=true;
+                SubModule.Log($"Halftime persistence queued {job.MatchId}; first score={a}:{b}; waiting before side exchange");
             }
             catch(Exception e){SubModule.Log("Halftime failed: "+e.GetType().Name);Fail("halftime_switch_failed");}
             return;

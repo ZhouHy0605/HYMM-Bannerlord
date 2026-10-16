@@ -3,6 +3,7 @@ using System.Text.Json;
 
 void Check(bool v,string message){if(!v)throw new Exception(message);}
 OptimizationChecks.Run();
+StorageChecks.Run();
 PreparationChecks.Run();
 HalftimeChecks.Run();
 KillStreakChecks.Run();
@@ -93,33 +94,35 @@ var cfg=new Config{BaseUrl=args[0],Token=args[1],ServerId="test-game-1"};
 var statePath=args[2];
 using(var link=new Transport(cfg,statePath,Console.WriteLine))
 {
+    StorageChecks.WaitStored(link);
     var job=await link.Claim(args[3]);Check(job!=null,"HTTP claim");link.State.Active=job;link.Save();
     string start=link.Queue("started",job!);
     for(int i=0;i<100&&link.Pending(start);i++){link.Tick();await Task.Delay(30);}
     Check(!link.Pending(start)&&link.State.Blocked==null,"start acknowledged");
-    var combat=new CombatReport{Version=2,DrawRounds=1,Players=job!.Teams.SelectMany(t=>t).Select(id=>new CombatPlayer{Id=id,Kills=5,Deaths=2,Assists=3,Damage=480,Rounds=6,Spawns=6,HorseDamage=120,Classes=new CombatClasses{Cavalry=6}}).ToArray()};
+    var combat=new CombatReport{Version=2,DrawRounds=1,Players=job!.Teams.SelectMany(t=>t).Select(id=>new CombatPlayer{Id=id,Kills=5,Deaths=2,Assists=3,Damage=480,NativeScore=600,Rounds=6,Spawns=6,HorseDamage=120,Classes=new CombatClasses{Cavalry=6}}).ToArray()};
     var next=link.BeginSecondLeg(job!,new[]{3,2},combat);
     var started=link.Queue("started",next);
     Check(link.State.Outbox.Count==2&&link.State.Outbox[0].Leg==0&&link.State.Outbox[1].Leg==1,"first result precedes second start without a second claim");
     for(int i=0;i<100&&link.Pending(started);i++){link.Tick();Check(link.State.Active?.Leg==1,"old result acknowledgement cannot erase second-leg ownership");await Task.Delay(30);}
     Check(!link.Pending(started)&&link.State.Blocked==null,"in-place second leg authorized");
-    var report=new CombatReport{Version=2,Players=next.Teams.SelectMany(t=>t).Select(id=>new CombatPlayer{Id=id,Kills=5,Deaths=2,Assists=3,Damage=480,Rounds=4,Spawns=4,HorseDamage=120,Classes=new CombatClasses{Infantry=4}}).ToArray()};
+    var report=new CombatReport{Version=2,Players=next.Teams.SelectMany(t=>t).Select(id=>new CombatPlayer{Id=id,Kills=5,Deaths=2,Assists=3,Damage=480,NativeScore=400,Rounds=4,Spawns=4,HorseDamage=120,Classes=new CombatClasses{Infantry=4}}).ToArray()};
     link.Queue("finished",next,Policy.OriginalScore(next,3,1),combat:report);link.Queue("finished",next,Policy.OriginalScore(next,3,1),combat:report);
     Check(link.State.Outbox.Count==1,"deduplicate queued final result");
 }
 // Restart transport with a persisted result that was never sent.
 using(var restarted=new Transport(cfg,statePath,Console.WriteLine))
 {
+    StorageChecks.WaitStored(restarted);
     Check(restarted.State.Outbox.Count==1 && restarted.State.Outbox[0].Type=="finished","durable result preserved");
-    for(int i=0;i<100&&restarted.State.Outbox.Count>0;i++){restarted.Tick();await Task.Delay(30);}
+    for(int i=0;i<100&&(!restarted.IsDurable||restarted.State.Outbox.Count>0);i++){restarted.Tick();await Task.Delay(30);}
     Check(restarted.State.Active==null&&restarted.State.Outbox.Count==0&&restarted.State.Blocked==null,"result acknowledged after restart");
 }
 var interruptedHalf=new DurableState{Active=second,Outbox=new(){new BridgeEvent{Type="finished",MatchId=second.MatchId,Leg=0,EventId="first-finished"}}};
 File.WriteAllText(statePath,JsonSerializer.Serialize(interruptedHalf,Transport.Json));
 using(var restarted=new Transport(cfg,statePath,Console.WriteLine))
-    Check(restarted.State.Outbox.Count==2&&restarted.State.Outbox[1].Type=="failed"&&restarted.State.Outbox[1].Leg==1,"restart during halftime retains first result and marks second leg for review");
+    {StorageChecks.WaitStored(restarted);Check(restarted.State.Outbox.Count==2&&restarted.State.Outbox[1].Type=="failed"&&restarted.State.Outbox[1].Leg==1,"restart during halftime retains first result and marks second leg for review");}
 var interrupted=new DurableState{Active=new Job{MatchId="interrupted"}};
 File.WriteAllText(statePath,JsonSerializer.Serialize(interrupted,Transport.Json));
 using(var restarted=new Transport(cfg,statePath,Console.WriteLine))
-    Check(restarted.State.Outbox.Single().Type=="failed","interrupted mission goes to review");
+    {StorageChecks.WaitStored(restarted);Check(restarted.State.Outbox.Single().Type=="failed","interrupted mission goes to review");}
 Console.WriteLine("Bridge policy, real HTTP, durable replay and recovery checks passed");

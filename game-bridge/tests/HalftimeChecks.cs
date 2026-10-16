@@ -17,6 +17,8 @@ internal static class HalftimeChecks
         GameNetwork.NetworkPeers.Clear();GameNetwork.Messages.Clear();
         for(int i=0;i<12;i++)GameNetwork.NetworkPeers.Add(new(){Player=new(){Team=i<6?mission.AttackerTeam:mission.DefenderTeam,Gold=380,KillCount=i+1,DeathCount=i,AssistCount=i+2,Score=100+i,ControlledAgent=new()}});
         var spectator=new NetworkCommunicator{Player=new(){Team=new(BattleSideEnum.None),Gold=17}};GameNetwork.NetworkPeers.Add(spectator);
+        NativeHalftime.Hold(mission);
+        Check(timer.Duration==86400&&mission.Resets==0&&board.GetRoundScore(BattleSideEnum.Attacker)==3&&GameNetwork.NetworkPeers[0].Player.ControlledAgent!=null,"persistence hold changes only round timer, not scores, sides or agents");
         NativeHalftime.Reset(mission,()=>{
             Check(GameNetwork.NetworkPeers.All(p=>p.Player.ControlledAgent==null),"remove live agents through round cleanup before any side change, no suicide path");
             foreach(var peer in GameNetwork.NetworkPeers.Take(12))peer.Player.Team=peer.Player.Team==mission.AttackerTeam?mission.DefenderTeam:mission.AttackerTeam;

@@ -24,7 +24,7 @@ internal static class Preparation
     internal static bool CanSelectTeam(Mission mission)=>Mission.Current==mission&&mission.CurrentState==Mission.State.Continuing&&!mission.MissionEnded&&
         mission.GetMissionBehavior<MissionLobbyComponent>()?.CurrentMultiplayerState!=MissionLobbyComponent.MultiplayerGameState.Ending&&
         !MissionRetirement.IsRetiring(mission)&&manualId==null&&pending==null&&SubModule.Link?.Control==null;
-    public static bool CanPlayIdle(Transport link)=>link.State.Active==null&&link.State.Outbox.Count==0&&link.State.Blocked==null&&link.Control==null&&pending==null;
+    public static bool CanPlayIdle(Transport link)=>link.IsDurable&&link.State.Active==null&&link.State.Outbox.Count==0&&link.State.Blocked==null&&link.Control==null&&pending==null;
     internal static void StartIdle(string? selectedMap=null)
     {
         var manager=ServerSideIntermissionManager.Instance;
@@ -61,6 +61,7 @@ internal static class Preparation
     internal static void SwitchIdle(Transport link,StopCommand command)
     {
         void Finish(string? error){link.CompleteMapControl(command,error);manualId=null;manualPrevious=null;manualStarted=false;SubModule.Log("Idle map command "+command.Id+": "+(error??"loaded "+command.Map));}
+        if(!link.IsDurable)return;
         if(claiming!=null)return; // Resolve any in-flight reservation before native actions.
         if(link.State.Active!=null||link.State.Outbox.Count!=0||link.State.Blocked!=null||pending!=null||Recovery.HasPending){Finish("server_busy");return;}
         if(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()>command.ExpiresAt){Finish("command_expired");return;}
@@ -100,7 +101,7 @@ internal static class Preparation
     public static void Tick()
     {
         var link=SubModule.Link;
-        if(link==null||!GameNetwork.IsServer)return;
+        if(link==null||!GameNetwork.IsServer||!link.IsDurable)return;
         link.CurrentMap=Mission.Current==null?null:MultiplayerOptions.OptionType.Map.GetStrValue();
         try
         {
@@ -110,7 +111,7 @@ internal static class Preparation
             if(claiming?.IsCompleted==true)
             {
                 Job? job;try{job=claiming.GetAwaiter().GetResult();}finally{claiming=null;}
-                if(job!=null){link.State.Active=job;link.Save();Begin(job,link);}
+                if(job!=null){link.State.Active=job;link.Save();Begin(job,link);return;}
                 else if(CanPlayIdle(link)&&!Recovery.HasPending)StartIdle();
             }
             if(link.Control!=null){if(link.Control.Type=="idle-map")SwitchIdle(link,link.Control);return;}

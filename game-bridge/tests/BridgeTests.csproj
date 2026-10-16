@@ -3,6 +3,7 @@
   <PropertyGroup><ServerRoot Condition="'$(ServerRoot)' == ''">D:/steam/steamapps/common/Mount &amp; Blade II Dedicated Server</ServerRoot></PropertyGroup>
   <ItemGroup>
     <Compile Include="../ArmoryCache.cs" /><Compile Include="../BufferedDiagnosticLog.cs" />
+    <Compile Include="../StateWriter.cs" /><Compile Include="../StateSnapshots.cs" /><Compile Include="../Transport.cs" />
     <Compile Include="../Core.cs" Link="Core.cs" /><Compile Include="../Preparation.cs" Link="Preparation.cs" />
     <Compile Include="../MissionRetirement.cs" Link="MissionRetirement.cs" />
     <Compile Include="../Operations.cs" Link="Operations.cs" />

@@ -64,6 +64,10 @@ npm.cmd test
 dotnet run --project game-bridge/tests/BridgeTests.csproj -c Release '-p:ServerRoot=D:\Games\Mount & Blade II Dedicated Server'
 ```
 
+插件检查包含后台写入、慢磁盘/网络、快照隔离、重试恢复与原版接口适配测试。`node game-bridge/tests/integration.mjs` 另行启动临时本地网站和数据库，验证两轮结算及重复回传，不连接线上服务器；游戏程序集路径沿用项目配置。
+
+运行期的网络序列化、响应解析、恢复文件读取和状态保存由后台处理；游戏线程只复制数据、接收完成结果和调用游戏接口。切图、半场换边和占用释放会等待保存完成，但不会在游戏线程阻塞等待磁盘。配置文件仍在插件启动时读取；正常卸载会限时等待后台写入，强制终止前尚未保存的比赛需人工核查。
+
 桥接测试需要游戏程序集。自动化测试不能代替多人实服验收，见 [版本记录](docs/RELEASES.md)。
 
 ## 目录与版本管理
